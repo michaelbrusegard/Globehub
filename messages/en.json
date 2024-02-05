@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "signIn": "Sign In",
+    "description": "GlobeHub"
+  },
+  "layout": {
+    "signIn": "Sign In",
+    "searchPlaceholder": "Type to search...",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggleTheme": "Toggle Theme",
+    "copyright": "Copyright",
+    "allRightsReserved": "All rights reserved"
+  }
+}

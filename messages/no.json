@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "signIn": "Logg inn",
+    "description": "GlobeHub"
+  },
+  "layout": {
+    "signIn": "Logg inn",
+    "searchPlaceholder": "Skriv inn søk...",
+    "light": "Lys",
+    "dark": "Mørk",
+    "system": "System",
+    "toggleTheme": "Bytt tema",
+    "copyright": "Opphavsrett",
+    "allRightsReserved": "Alle rettigheter reservert"
+  }
+}

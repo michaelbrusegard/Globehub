@@ -1,0 +1,35 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# local env files
+.env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+# site map
+public/sitemap.xml
+public/robots.txt
+
+# docker
+Dockerfile*
+.dockerignore
+
+# git
+.git
+.gitignore
+
+# docs
+README.md
