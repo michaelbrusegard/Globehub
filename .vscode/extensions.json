@@ -5,6 +5,7 @@
     "lokalise.i18n-ally",
     "vivaxy.vscode-conventional-commits",
     "oven.bun-vscode",
-    "bradymholt.pgformatter"
+    "adpyke.vscode-sql-formatter",
+    "mtxr.sqltools"
   ]
 }
