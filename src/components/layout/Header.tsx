@@ -16,7 +16,13 @@ import { DarkModeDropdown } from '@/components/settings/DarkModeDropdown';
 function Header() {
   const t = useTranslations('layout');
   return (
-    <Navbar isBordered as='div'>
+    <Navbar
+      classNames={{
+        wrapper: 'max-w-7xl',
+      }}
+      isBordered
+      as='div'
+    >
       <NavbarBrand>
         <Logo />
       </NavbarBrand>
