@@ -5,7 +5,9 @@ Here is a list of documentation to get started:
 - [React](https://react.dev/reference/react) - Library for building user interfaces
 - [Next.js](https://nextjs.org/docs) - Framework for routing and server-side rendering
 - [Next-intl](https://next-intl-docs.vercel.app/) - Internationalization library
+- [Auth.js](https://authjs.dev/getting-started/introduction) - Authentication library
 - [Tailwind CSS](https://tailwindcss.com/docs) - Styling library
+- [Next-themes](https://github.com/pacocoursey/next-themes) - Dark mode
 - [NextUI](https://nextui.org/docs/guide/introduction) - Reusable UI components
 
 ### Other resources
@@ -26,7 +28,9 @@ First, install dependencies:
 bun install
 ```
 
-Then, run the development server:
+Then you need to copy the `.env.example` file and rename the copy to `.env`. This file contains the environment variables that are used in the project. You can find the values for the dev environment in the `#env` channel on Discord.
+
+Lastly, run the development server:
 
 ```bash
 bun dev
