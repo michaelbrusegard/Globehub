@@ -60,6 +60,8 @@ CREATE TABLE reviews (
     FOREIGN KEY ("destinationId") REFERENCES destinations(id)
 );
 
+CREATE INDEX idx_reviews_userId ON reviews ("userId");
+
 CREATE TABLE keywords (
     id SERIAL,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -74,4 +76,12 @@ CREATE TABLE destination_keywords (
     FOREIGN KEY ("keywordId") REFERENCES keywords(id)
 );
 
-CREATE INDEX idx_reviews_userId ON reviews ("userId");
+CREATE TABLE user_favorites (
+    "userId" INTEGER NOT NULL,
+    "destinationId" INTEGER NOT NULL,
+    PRIMARY KEY ("userId", "destinationId"),
+    FOREIGN KEY ("userId") REFERENCES users(id),
+    FOREIGN KEY ("destinationId") REFERENCES destinations(id)
+);
+
+CREATE INDEX idx_user_favorites_userId ON user_favorites ("userId");
