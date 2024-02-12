@@ -68,7 +68,7 @@ bun run db:reset
 
 ## Build
 
-Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the `uild is optimized for production.
+Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
 When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
 
 You can build the project with the following command:
