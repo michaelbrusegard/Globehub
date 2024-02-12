@@ -81,3 +81,7 @@ CREATE TABLE IF NOT EXISTS user_favorites (
     FOREIGN KEY ("userId") REFERENCES users(id),
     FOREIGN KEY ("destinationId") REFERENCES destinations(id)
 );
+
+CREATE INDEX IF NOT EXISTS idx_reviews_userId ON reviews ("userId");
+
+CREATE INDEX IF NOT EXISTS idx_user_favorites_userId ON user_favorites ("userId");

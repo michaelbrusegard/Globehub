@@ -39,7 +39,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Local database
+## Local database setup
 To run the database locally you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop).
 
 When you have Docker installed you can run the following command to start the database:
@@ -52,6 +52,18 @@ To stop the database you can run the following command:
 
 ```bash
 bun run db:stop
+```
+
+To seed the database (fill it with test data) you can run the following command:
+
+```bash
+bun run db:seed
+```
+
+To delete the data in the database you can run the following command:
+
+```bash
+bun run db:reset
 ```
 
 ## Build
