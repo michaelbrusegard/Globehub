@@ -1,3 +1,5 @@
+# GlobeHub
+
 ## Documentation
 
 Here is a list of documentation to get started:
@@ -40,6 +42,7 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Local database setup
+
 To run the database locally you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop).
 
 When you have Docker installed you can run the following command to start the database:
@@ -84,6 +87,7 @@ bun run start
 ```
 
 ### Docker
+
 To build the project with Docker you can run the following command:
 
 ```bash
