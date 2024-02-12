@@ -83,6 +83,31 @@ Then to serve the build locally, run:
 bun run start
 ```
 
+### Docker
+To build the project with Docker you can run the following command:
+
+```bash
+bun run docker:build
+```
+
+Then to run the Docker container you can run the following command:
+
+```bash
+bun run docker:run
+```
+
+To stop the Docker container you can run the following command:
+
+```bash
+bun run docker:stop
+```
+
+To remove the Docker container you can run the following command:
+
+```bash
+bun run docker:remove
+```
+
 ## Check linting and formatting
 
 To check linting and formatting you run the respective command:
