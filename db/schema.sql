@@ -65,8 +65,8 @@ CREATE TABLE keywords (
 );
 
 CREATE TABLE destination_keys (
-    "destId" INT NOT NULL,
-    "keyId" INT NOT NULL,
+    "destId" INTEGER NOT NULL,
+    "keyId" INTEGER NOT NULL,
     PRIMARY KEY ("destId", "keyId"),
     FOREIGN KEY ("destId") REFERENCES destinations(id),
     FOREIGN KEY ("keyId") REFERENCES keywords(id)
