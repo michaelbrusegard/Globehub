@@ -8,7 +8,17 @@
   ],
   "i18n-ally.localesPaths": ["messages"],
   "i18n-ally.keystyle": "nested",
-  "conventionalCommits.scopes": [
-    "db"
+  "conventionalCommits.scopes": ["db"],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "local",
+      "database": "database",
+      "username": "user",
+      "password": "password"
+    }
   ]
 }

@@ -6,6 +6,7 @@
     "vivaxy.vscode-conventional-commits",
     "oven.bun-vscode",
     "adpyke.vscode-sql-formatter",
-    "mtxr.sqltools"
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg"
   ]
 }
