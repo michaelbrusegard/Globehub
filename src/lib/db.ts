@@ -9,4 +9,35 @@ const sql = postgres({
   password: env.DATABASE_PASSWORD,
 });
 
-export { sql };
+type User = {
+  id: number;
+  name?: string;
+  email?: string;
+  emailVerified?: Date;
+  image?: string;
+  role: string;
+  createdAt: Date;
+};
+
+type Destination = {
+  id: number;
+  name: string;
+  description?: string;
+  location: [number, number];
+  images?: string[];
+};
+
+type Review = {
+  userId: number;
+  destinationId: number;
+  rating: number;
+  comment?: string;
+  image?: string;
+};
+
+type Keyword = {
+  id: number;
+  name: string;
+};
+
+export { sql, type User, type Destination, type Review, type Keyword };

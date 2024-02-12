@@ -1,13 +1,13 @@
-CREATE TABLE verification_token(
+CREATE TABLE IF NOT EXISTS verification_token (
     identifier TEXT NOT NULL,
     expires TIMESTAMPTZ NOT NULL,
     token TEXT NOT NULL,
     PRIMARY KEY (identifier, token)
 );
 
-CREATE TABLE accounts (
+CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL,
-    "userID" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     type VARCHAR(255) NOT NULL,
     provider VARCHAR(255) NOT NULL,
     "providerAccountId" VARCHAR(255) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE accounts (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE sessions (
+CREATE TABLE IF NOT EXISTS sessions (
     id SERIAL,
     "userId" INTEGER NOT NULL,
     expires TIMESTAMPTZ NOT NULL,
@@ -29,69 +29,55 @@ CREATE TABLE sessions (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL,
     name VARCHAR(255),
     email VARCHAR(255),
     "emailVerified" TIMESTAMPTZ,
     image TEXT,
-    Role VARCHAR(255) NOT NULL DEFAULT 'user',
+    role VARCHAR(255) NOT NULL DEFAULT 'user',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE destinations (
+CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     location POINT NOT NULL,
+    images TEXT [],
     PRIMARY KEY (id)
 );
 
-CREATE TABLE reviews (
+CREATE TABLE IF NOT EXISTS reviews (
     "userId" INTEGER NOT NULL,
-    "destId" INTEGER NOT NULL,
+    "destinationId" INTEGER NOT NULL,
     rating INTEGER NOT NULL,
     comment TEXT,
-    PRIMARY KEY ("userId", "destId"),
+    image TEXT,
+    PRIMARY KEY ("userId", "destinationId"),
     FOREIGN KEY ("userId") REFERENCES users(id),
-    FOREIGN KEY ("destId") REFERENCES destinations(id)
+    FOREIGN KEY ("destinationId") REFERENCES destinations(id)
 );
 
-CREATE TABLE keywords (
+CREATE TABLE IF NOT EXISTS keywords (
     id SERIAL,
     name VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE destination_keys (
-    "destId" INTEGER NOT NULL,
-    "keyId" INTEGER NOT NULL,
-    PRIMARY KEY ("destId", "keyId"),
-    FOREIGN KEY ("destId") REFERENCES destinations(id),
-    FOREIGN KEY ("keyId") REFERENCES keywords(id)
+CREATE TABLE IF NOT EXISTS destination_keywords (
+    "destinationId" INTEGER NOT NULL,
+    "keywordId" INTEGER NOT NULL,
+    PRIMARY KEY ("destinationId", "keywordId"),
+    FOREIGN KEY ("destinationId") REFERENCES destinations(id),
+    FOREIGN KEY ("keywordId") REFERENCES keywords(id)
 );
 
-CREATE TABLE user_favorites (
+CREATE TABLE IF NOT EXISTS user_favorites (
     "userId" INTEGER NOT NULL,
     "destinationId" INTEGER NOT NULL,
-    PRIMARY KEY ("userId", "destId"),
-    FOREIGN KEY ("userId") REFRENCES users(id),
-    FOREIGN KEY ("destId") REFRENCES destinations(id)
-);
-
-CREATE TABLE destination_images (
-    id SERIAL,
-    "destId" INTEGER NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY ("destId") REFRENCES destinations(id)
-);
-
-CREATE TABLE review_images (
-    id SERIAL,
-    "reviewId" INTEGER NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY ("reviewId") REFRENCES reviews(id)
+    PRIMARY KEY ("userId", "destinationId"),
+    FOREIGN KEY ("userId") REFERENCES users(id),
+    FOREIGN KEY ("destinationId") REFERENCES destinations(id)
 );

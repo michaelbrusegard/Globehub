@@ -8,12 +8,7 @@ export const env = createEnv({
    */
   server: {
     DATABASE_HOST: z.string(),
-    DATABASE_PORT: z
-      .string()
-      .transform(Number)
-      .refine((n) => !isNaN(n), {
-        message: 'DATABASE_PORT must be a valid number',
-      }),
+    DATABASE_PORT: z.string().transform(Number),
     DATABASE_USER: z.string(),
     DATABASE_PASSWORD: z.string(),
     DATABASE_NAME: z.string(),
