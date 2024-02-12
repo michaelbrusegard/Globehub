@@ -23,3 +23,6 @@ next-env.d.ts
 # site map
 public/sitemap.xml
 public/robots.txt
+
+# database
+/data
