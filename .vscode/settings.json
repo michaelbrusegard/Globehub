@@ -9,6 +9,7 @@
   "i18n-ally.localesPaths": ["messages"],
   "i18n-ally.keystyle": "nested",
   "conventionalCommits.scopes": [
-    "profile"
+    "profile",
+    "Editprofile "
   ]
 }
