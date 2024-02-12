@@ -8,7 +8,7 @@
   ],
   "i18n-ally.localesPaths": ["messages"],
   "i18n-ally.keystyle": "nested",
-  "conventionalCommits.scopes": ["db", "docker", "auth"],
+  "conventionalCommits.scopes": ["db", "docker", "auth", "profile"],
   "sqltools.connections": [
     {
       "previewLimit": 50,
@@ -20,6 +20,5 @@
       "username": "user",
       "password": "password"
     }
-  ],
-  "conventionalCommits.scopes": ["profile"]
+  ]
 }
