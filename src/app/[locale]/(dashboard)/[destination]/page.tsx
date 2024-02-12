@@ -1,25 +1,10 @@
-import { Button, Image } from '@nextui-org/react';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
-export default function LogIn({ params: { locale } }) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}
-    >
-      <Button color='primary' auto size='large' shadow>
-        <Image
-          src='/authenticator.png'
-          alt='Google Authenticator'
-          width={48}
-          height={48}
-          style={{ marginRight: '10px' }}
-        />
-        Google Authenticator
-      </Button>
-    </div>
-  );
+export default function Destination({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
+  return <div></div>;
 }
