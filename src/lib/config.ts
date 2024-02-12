@@ -6,14 +6,14 @@ const localePrefix = 'as-needed';
 
 const pathnames = {
   '/': '/',
-  '/[destination]': {
-    no: '/[destination]',
-  },
   '/signin': {
     no: '/logg-inn',
   },
   '/profile': {
     no: '/profil',
+  },
+  '/[destination]': {
+    no: '/[destination]',
   },
 } satisfies Pathnames<typeof locales>;
 
