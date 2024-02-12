@@ -20,5 +20,6 @@
       "username": "user",
       "password": "password"
     }
-  ]
+  ],
+  "conventionalCommits.scopes": ["profile"]
 }
