@@ -1,33 +1,35 @@
+import { Image } from '@nextui-org/react';
 import { unstable_setRequestLocale } from 'next-intl/server';
+import NextImage from 'next/image';
 
-export default function Home({
+import { type User, sql } from '@/lib/db';
+
+export default async function Home({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
   unstable_setRequestLocale(locale);
+  const data: User[] = await sql`SELECT * FROM users;`;
   return (
     <div className='h-[150vh]'>
       <h2>Landing Page</h2>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni delectus
-        cupiditate debitis! Fuga minus quod ea eligendi exercitationem. Sequi
-        quia possimus quaerat ipsa iste voluptatibus repudiandae atque cum sunt
-        vitae. Soluta repellendus fuga minima itaque voluptate ad exercitationem
-        dolore unde amet ex atque cum, consectetur dolores qui quas doloribus
-        perferendis architecto optio sed mollitia accusamus tenetur fugiat
-        eveniet quo? Autem! Dolores esse sint ratione consequatur cumque
-        necessitatibus quam corporis perferendis facere consectetur quidem et
-        ex, repudiandae tenetur neque qui. Sequi, odio praesentium. Blanditiis
-        quo facilis natus quia repellat velit eos. Commodi quo minima eveniet
-        voluptates ratione ipsam, a dolore aspernatur alias officiis ex cum
-        laborum, esse culpa laudantium atque! Iure culpa, tenetur ad impedit
-        optio reiciendis maiores delectus accusantium officiis? Quaerat
-        provident laboriosam voluptatibus cum nam asperiores culpa libero totam
-        sapiente quisquam sint exercitationem aliquam quidem, laudantium illo
-        ullam similique. Impedit assumenda dolores, quia blanditiis excepturi
-        qui architecto veritatis quas! Laboriosam illum, possimus nisi dolores,
-      </p>
+      {data.map((user) => {
+        return (
+          <>
+            <p key={user.id}>
+              {user.name} - {user.email}
+            </p>
+            <Image
+              // as={NextImage}
+              src={user.image}
+              alt='user profile photo'
+              height={500}
+              width={500}
+            />
+          </>
+        );
+      })}
     </div>
   );
 }

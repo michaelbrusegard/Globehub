@@ -9,7 +9,15 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "db:start": "docker-compose up -d",
+    "db:stop": "docker-compose down",
+    "db:seed": "bun run db/seed.ts",
+    "db:reset": "bun run db/reset.ts",
+    "docker:build": "docker build -t globe-hub .",
+    "docker:run": "docker run -p 3000:3000 globe-hub",
+    "docker:stop": "docker stop globe-hub",
+    "docker:remove": "docker rm globe-hub"
   },
   "lint-staged": {
     "*.{js,cjs,ts,tsx}": [
@@ -19,6 +27,7 @@
   "dependencies": {
     "@material-symbols/svg-400": "^0.14.6",
     "@nextui-org/react": "^2.2.9",
+    "@svgr/webpack": "^8.1.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "autoprefixer": "^10.4.17",
     "framer-motion": "^11.0.3",
@@ -28,13 +37,17 @@
     "next-intl": "^3.5.4",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.2.1",
+    "postgres": "^3.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sharp": "^0.33.2",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@svgr/webpack": "^8.1.0",
+    "@faker-js/faker": "^8.4.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
@@ -50,9 +63,6 @@
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
-    "tailwind-scrollbar": "^3.0.5",
-    "tailwindcss": "^3.3.5",
-    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.1.6"
   },
   "packageManager": "bun@1.0.25"

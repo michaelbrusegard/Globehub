@@ -1,3 +1,5 @@
+# GlobeHub
+
 ## Documentation
 
 Here is a list of documentation to get started:
@@ -5,8 +7,11 @@ Here is a list of documentation to get started:
 - [React](https://react.dev/reference/react) - Library for building user interfaces
 - [Next.js](https://nextjs.org/docs) - Framework for routing and server-side rendering
 - [Next-intl](https://next-intl-docs.vercel.app/) - Internationalization library
+- [Auth.js](https://authjs.dev/getting-started/introduction) - Authentication library
 - [Tailwind CSS](https://tailwindcss.com/docs) - Styling library
+- [Next-themes](https://github.com/pacocoursey/next-themes) - Dark mode
 - [NextUI](https://nextui.org/docs/guide/introduction) - Reusable UI components
+- [Postgres.js](https://github.com/porsager/postgres) - This is a PostgreSQL client used to interact with the database using SQL.
 
 ### Other resources
 
@@ -26,7 +31,9 @@ First, install dependencies:
 bun install
 ```
 
-Then, run the development server:
+Then you need to copy the `.env.example` file and rename the copy to `.env`. This file contains the environment variables that are used in the project. You can find the values for the dev environment in the `#env` channel on Discord.
+
+Lastly, run the development server:
 
 ```bash
 bun dev
@@ -34,8 +41,37 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Local database setup
+
+To run the database locally you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop).
+
+When you have Docker installed you can run the following command to start the database:
+
+```bash
+bun run db:start
+```
+
+To stop the database you can run the following command:
+
+```bash
+bun run db:stop
+```
+
+To seed the database (fill it with test data) you can run the following command:
+
+```bash
+bun run db:seed
+```
+
+To delete the data in the database you can run the following command:
+
+```bash
+bun run db:reset
+```
+
 ## Build
 
+Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
 When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
 
 You can build the project with the following command:
@@ -48,6 +84,32 @@ Then to serve the build locally, run:
 
 ```bash
 bun run start
+```
+
+### Docker
+
+To build the project with Docker you can run the following command:
+
+```bash
+bun run docker:build
+```
+
+Then to run the Docker container you can run the following command:
+
+```bash
+bun run docker:run
+```
+
+To stop the Docker container you can run the following command:
+
+```bash
+bun run docker:stop
+```
+
+To remove the Docker container you can run the following command:
+
+```bash
+bun run docker:remove
 ```
 
 ## Check linting and formatting
