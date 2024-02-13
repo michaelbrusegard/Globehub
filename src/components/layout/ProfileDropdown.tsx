@@ -32,6 +32,7 @@ function ProfileDropdown({
       classNames={{
         content: 'min-w-24',
       }}
+      offset={12}
       placement='bottom-end'
     >
       <DropdownTrigger>
@@ -56,7 +57,9 @@ function ProfileDropdown({
       <DropdownMenu as='div' aria-label={t.chooseOption}>
         <DropdownItem href='/profile'>{t.profile}</DropdownItem>
         <DropdownItem
-          href='#'
+          className='text-left'
+          color='danger'
+          as='button'
           onClick={() => {
             signOut();
           }}

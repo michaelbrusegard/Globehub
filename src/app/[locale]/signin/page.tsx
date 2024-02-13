@@ -37,26 +37,26 @@ export default function SignIn({
         </CardHeader>
         <Divider />
         <CardBody className='flex items-center justify-center gap-4'>
-          <SignInButton
-            signIn={async () => {
+          <form
+            action={async () => {
               'use server';
               await signIn('google', { redirectTo: '/' });
             }}
-            color='warning'
-            startContent={<GoogleLogo />}
           >
-            {t('signInWith', { provider: 'Google' })}
-          </SignInButton>
-          <SignInButton
-            signIn={async () => {
+            <SignInButton color='warning' startContent={<GoogleLogo />}>
+              {t('signInWith', { provider: 'Google' })}
+            </SignInButton>
+          </form>
+          <form
+            action={async () => {
               'use server';
               await signIn('github', { redirectTo: '/' });
             }}
-            color='secondary'
-            startContent={<GitHubLogo />}
           >
-            {t('signInWith', { provider: 'GitHub' })}
-          </SignInButton>
+            <SignInButton color='secondary' startContent={<GitHubLogo />}>
+              {t('signInWith', { provider: 'GitHub' })}
+            </SignInButton>
+          </form>
         </CardBody>
       </Card>
     </div>
