@@ -6,4 +6,12 @@
   * {
     @apply min-w-0;
   }
+
+  ::selection {
+    @apply bg-secondary/50;
+  }
+
+  ::-moz-selection {
+    @apply bg-secondary/50;
+  }
 }

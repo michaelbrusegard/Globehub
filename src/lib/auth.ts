@@ -1,10 +1,12 @@
+import PostgresAdapter from '@auth/pg-adapter';
 import NextAuth from 'next-auth';
 import type { NextAuthConfig, User } from 'next-auth';
 import github from 'next-auth/providers/github';
 import google from 'next-auth/providers/google';
+import type postgres from 'postgres';
 
-import { adapter } from '@/lib/adapter';
 import { defaultLocale, pathnames } from '@/lib/config';
+import { sql } from '@/lib/db';
 
 declare module 'next-auth' {
   interface Session {
@@ -14,13 +16,28 @@ declare module 'next-auth' {
   }
 }
 
+function createPgWrapper(sqlClient: postgres.Sql<Record<string, unknown>>) {
+  return {
+    async query(queryString: string, params: unknown[]) {
+      const processedParams = params.map((param) =>
+        param === undefined ? null : param,
+      );
+      const result = await sqlClient.unsafe(queryString, processedParams);
+      return { rows: result, rowCount: result.length };
+    },
+  };
+}
+
+const client = createPgWrapper(sql);
+
 export const authConfig = {
   debug: process.env.NODE_ENV === 'development',
-  adapter: adapter,
+  // @ts-expect-error - This is a valid adapter after the wrapper is used
+  adapter: PostgresAdapter(client),
   providers: [google, github],
   pages: {
     signIn: pathnames['/signin'][defaultLocale],
-    signOut: pathnames['/signout'][defaultLocale],
+    signOut: pathnames['/not-found'][defaultLocale],
     error: pathnames['/error'][defaultLocale],
     verifyRequest: '/not-found',
     newUser: '/not-found',

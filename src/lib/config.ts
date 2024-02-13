@@ -9,14 +9,14 @@ const pathnames = {
   '/signin': {
     no: '/logg-inn',
   },
-  '/signout': {
-    no: '/logg-ut',
+  '/profile': {
+    no: '/profil',
   },
   '/error': {
     no: '/feil',
   },
-  '/profile': {
-    no: '/profil',
+  '/not-found': {
+    no: '/ikke-funnet',
   },
   '/[destination]': {
     no: '/[destination]',
