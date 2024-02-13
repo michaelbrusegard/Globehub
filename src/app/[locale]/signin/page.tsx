@@ -1,10 +1,13 @@
-import { Button, Card, CardBody, CardHeader, Link } from '@nextui-org/react';
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import { Divider } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
+import { signIn } from '@/lib/auth';
+
 import { GitHubLogo } from '@/components/assets/GitHubLogo';
 import { GoogleLogo } from '@/components/assets/GoogleLogo';
+import { SignInButton } from '@/components/auth/SignInButton';
 import { Logo } from '@/components/layout/Logo';
 
 export async function generateMetadata({
@@ -34,28 +37,26 @@ export default function SignIn({
         </CardHeader>
         <Divider />
         <CardBody className='flex items-center justify-center gap-4'>
-          <Button
-            className='w-fit'
-            as={Link}
-            href='/api/auth/signin/google'
+          <SignInButton
+            signIn={async () => {
+              'use server';
+              await signIn('google');
+            }}
             color='warning'
-            variant='ghost'
-            size='lg'
             startContent={<GoogleLogo />}
           >
             {t('signInWith', { provider: 'Google' })}
-          </Button>
-          <Button
-            className='w-fit'
-            as={Link}
-            href='/api/auth/signin/github'
+          </SignInButton>
+          <SignInButton
+            signIn={async () => {
+              'use server';
+              await signIn('github');
+            }}
             color='secondary'
-            variant='ghost'
-            size='lg'
             startContent={<GitHubLogo />}
           >
             {t('signInWith', { provider: 'GitHub' })}
-          </Button>
+          </SignInButton>
         </CardBody>
       </Card>
     </div>

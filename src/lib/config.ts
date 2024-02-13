@@ -9,6 +9,12 @@ const pathnames = {
   '/signin': {
     no: '/logg-inn',
   },
+  '/signout': {
+    no: '/logg-ut',
+  },
+  '/error': {
+    no: '/feil',
+  },
   '/profile': {
     no: '/profil',
   },

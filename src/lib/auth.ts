@@ -3,8 +3,8 @@ import type { NextAuthConfig, User } from 'next-auth';
 import github from 'next-auth/providers/github';
 import google from 'next-auth/providers/google';
 
-import { sql } from '@/lib/db';
-import { PostgresAdapter } from '@/lib/postgresAdapter';
+import { adapter } from '@/lib/adapter';
+import { defaultLocale, pathnames } from '@/lib/config';
 
 declare module 'next-auth' {
   interface Session {
@@ -15,11 +15,21 @@ declare module 'next-auth' {
 }
 
 export const authConfig = {
-  adapter: PostgresAdapter(sql),
+  debug: process.env.NODE_ENV === 'development',
+  adapter: adapter,
   providers: [google, github],
+  pages: {
+    signIn: pathnames['/signin'][defaultLocale],
+    signOut: pathnames['/signout'][defaultLocale],
+    error: pathnames['/error'][defaultLocale],
+    verifyRequest: '/not-found',
+    newUser: '/not-found',
+  },
 } satisfies NextAuthConfig;
 
 export const {
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut,
 } = NextAuth(authConfig);

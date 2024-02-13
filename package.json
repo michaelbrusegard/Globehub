@@ -25,6 +25,7 @@
     ]
   },
   "dependencies": {
+    "@auth/pg-adapter": "^0.5.3",
     "@material-symbols/svg-400": "^0.14.6",
     "@nextui-org/react": "^2.2.9",
     "@svgr/webpack": "^8.1.0",
