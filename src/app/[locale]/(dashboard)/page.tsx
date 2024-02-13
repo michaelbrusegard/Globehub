@@ -21,7 +21,7 @@ export default async function Home({
               {user.name} - {user.email}
             </p>
             <Image
-              // as={NextImage}
+              as={NextImage}
               src={user.image}
               alt='user profile photo'
               height={500}

@@ -6,9 +6,7 @@ import type {
   VerificationToken,
 } from '@auth/core/adapters';
 
-import { sql } from '@/lib/db';
-
-function PostgresAdapter(): Adapter {
+function PostgresAdapter(sql): Adapter {
   return {
     async createVerificationToken(
       verificationToken: VerificationToken,
@@ -16,8 +14,7 @@ function PostgresAdapter(): Adapter {
       const { identifier, expires, token } = verificationToken;
       await sql`
         INSERT INTO verification_token (identifier, expires, token) 
-        VALUES (${identifier}, ${expires}, ${token})
-          `;
+        VALUES (${identifier}, ${expires}, ${token})`;
       return verificationToken;
     },
 

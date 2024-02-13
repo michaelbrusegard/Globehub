@@ -12,5 +12,8 @@
     "toggleTheme": "Bytt tema",
     "copyright": "Opphavsrett",
     "allRightsReserved": "Alle rettigheter reservert"
+  },
+  "signIn": {
+    "signInWith": "Logg inn med {provider}"
   }
 }

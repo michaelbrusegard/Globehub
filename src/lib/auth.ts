@@ -1,20 +1,25 @@
 import NextAuth from 'next-auth';
 import type { NextAuthConfig, User } from 'next-auth';
-import Google from 'next-auth/providers/google';
+import github from 'next-auth/providers/github';
+import google from 'next-auth/providers/google';
 
+import { sql } from '@/lib/db';
 import { PostgresAdapter } from '@/lib/postgresAdapter';
 
 declare module 'next-auth' {
   interface Session {
     user: {
-      picture?: string;
+      role: string;
     } & Omit<User, 'id'>;
   }
 }
 
 export const authConfig = {
-  adapter: PostgresAdapter(),
-  providers: [Google],
+  adapter: PostgresAdapter(sql),
+  providers: [google, github],
 } satisfies NextAuthConfig;
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth(authConfig);
