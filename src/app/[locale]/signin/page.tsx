@@ -40,7 +40,7 @@ export default function SignIn({
           <SignInButton
             signIn={async () => {
               'use server';
-              await signIn('google');
+              await signIn('google', { redirectTo: '/' });
             }}
             color='warning'
             startContent={<GoogleLogo />}
@@ -50,7 +50,7 @@ export default function SignIn({
           <SignInButton
             signIn={async () => {
               'use server';
-              await signIn('github');
+              await signIn('github', { redirectTo: '/' });
             }}
             color='secondary'
             startContent={<GitHubLogo />}

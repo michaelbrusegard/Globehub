@@ -14,6 +14,7 @@ import { useTheme } from 'next-themes';
 type DarkModeDropdownProps = {
   t: {
     toggleTheme: string;
+    selectTheme: string;
     light: string;
     dark: string;
     system: string;
@@ -35,7 +36,10 @@ function DarkModeDropdown({ t }: DarkModeDropdownProps) {
           <DarkMode className='absolute h-5 w-5 rotate-90 scale-0 fill-default-500 transition-transform dark:rotate-0 dark:scale-100' />
         </Button>
       </DropdownTrigger>
-      <DropdownMenu onAction={(key) => setTheme(String(key))}>
+      <DropdownMenu
+        onAction={(key) => setTheme(String(key))}
+        aria-label={t.selectTheme}
+      >
         <DropdownItem key='light'>{t.light}</DropdownItem>
         <DropdownItem key='dark'>{t.dark}</DropdownItem>
         <DropdownItem key='system'>{t.system}</DropdownItem>

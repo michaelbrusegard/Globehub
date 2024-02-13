@@ -1,16 +1,16 @@
 import Search from '@material-symbols/svg-400/outlined/search.svg';
 import {
-  Button,
   Input,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
+import * as React from 'react';
 
 import { Logo } from '@/components/layout/Logo';
+import { NavbarAuth } from '@/components/layout/NavbarAuth';
 import { DarkModeDropdown } from '@/components/settings/DarkModeDropdown';
 
 function Header() {
@@ -48,14 +48,15 @@ function Header() {
               dark: t('dark'),
               light: t('light'),
               system: t('system'),
+              selectTheme: t('selectTheme'),
               toggleTheme: t('toggleTheme'),
             }}
           />
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color='primary' href='/signin' variant='flat'>
-            {t('signIn')}
-          </Button>
+          <React.Suspense>
+            <NavbarAuth />
+          </React.Suspense>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

@@ -10,8 +10,13 @@
     "dark": "Mørk",
     "system": "System",
     "toggleTheme": "Bytt tema",
+    "selectTheme": "Velg tema",
     "copyright": "Opphavsrett",
-    "allRightsReserved": "Alle rettigheter reservert"
+    "allRightsReserved": "Alle rettigheter reservert",
+    "profile": "Profil",
+    "signOut": "Logg ut",
+    "profileMenu": "Profilmeny",
+    "chooseOption": "Velg et alternativ"
   },
   "signIn": {
     "signInWith": "Logg inn med {provider}"
