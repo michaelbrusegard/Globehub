@@ -41,9 +41,29 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Local database setup
+### Build
 
-To run the database locally you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop).
+Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
+
+When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
+
+You can build the project with the following command:
+
+```bash
+bun run build
+```
+
+Then to serve the build locally, run:
+
+```bash
+bun run start
+```
+
+## Docker
+
+To run a local version of the database, use a local storage bucket or run a dockerized build of the app you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop). This is useful for testing the app in a production-like environment, and to get data from the database to use in the app.
+
+### Local database setup
 
 When you have Docker installed you can run the following command to start the database:
 
@@ -69,48 +89,67 @@ To delete the data in the database you can run the following command:
 bun run db:reset
 ```
 
-## Build
-
-Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
-When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
-
-You can build the project with the following command:
+For accesing the logs of the database you can run the following command:
 
 ```bash
-bun run build
+bun run db:logs
 ```
 
-Then to serve the build locally, run:
+### Local storage bucket
+
+When you have Docker installed you can run the following command to start the storage bucket:
 
 ```bash
-bun run start
+bun run bucket:start
 ```
 
-### Docker
-
-To build the project with Docker you can run the following command:
+To stop the storage bucket:
 
 ```bash
-bun run docker:build
+bun run bucket:stop
 ```
 
-Then to run the Docker container you can run the following command:
+For accesing the logs of the storage bucket:
 
 ```bash
-bun run docker:run
+bun run bucket:logs
 ```
 
-To stop the Docker container you can run the following command:
+### Dockerized build
+
+To build and run the app in a docker container you can run the following command:
 
 ```bash
-bun run docker:stop
+bun run app:start
 ```
 
-To remove the Docker container you can run the following command:
+To stop the app you can run the following command:
 
 ```bash
-bun run docker:remove
+bun run app:stop
 ```
+
+For accesing the logs of the app:
+
+```bash
+bun run app:logs
+```
+
+To start all the services at once (database, storage bucket and app) you can run:
+
+```bash
+bun run docker:start
+```
+
+To put all the services down you can run:
+
+```bash
+bun run docker:down
+```
+
+This will stop all the services and remove the containers. To avoid removing the containers you must stop them individually.
+
+When developing the most useful setup is to run the database and the storage bucket locally and run the app development server with `bun dev`. This is because the app development server has hot reload and is faster than the dockerized build. The dockerized build is useful for testing the app in a production-like environment or for deploying the app.
 
 ## Check linting and formatting
 

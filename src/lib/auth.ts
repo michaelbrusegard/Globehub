@@ -1,51 +1,50 @@
-import {
-  type DefaultSession,
-  type NextAuthOptions,
-  getServerSession,
-} from 'next-auth';
+import PostgresAdapter from '@auth/pg-adapter';
+import NextAuth from 'next-auth';
+import type { NextAuthConfig, User } from 'next-auth';
+import github from 'next-auth/providers/github';
+import google from 'next-auth/providers/google';
+import type postgres from 'postgres';
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
+import { defaultLocale, pathnames } from '@/lib/config';
+import { sql } from '@/lib/db';
+
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession['user'];
+      role: string;
+    } & Omit<User, 'id'>;
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
-  },
-  providers: [],
-};
+function createPgWrapper(sqlClient: postgres.Sql<Record<string, unknown>>) {
+  return {
+    async query(queryString: string, params: unknown[]) {
+      const processedParams = params.map((param) =>
+        param === undefined ? null : param,
+      );
+      const result = await sqlClient.unsafe(queryString, processedParams);
+      return { rows: result, rowCount: result.length };
+    },
+  };
+}
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+const client = createPgWrapper(sql);
+
+export const authConfig = {
+  adapter: PostgresAdapter(client),
+  providers: [google, github],
+  pages: {
+    signIn: pathnames['/signin'][defaultLocale],
+    signOut: pathnames['/not-found'][defaultLocale],
+    error: pathnames['/error'][defaultLocale],
+    verifyRequest: '/not-found',
+    newUser: '/not-found',
+  },
+} satisfies NextAuthConfig;
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authConfig);
