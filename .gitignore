@@ -24,5 +24,6 @@ next-env.d.ts
 public/sitemap.xml
 public/robots.txt
 
-# database
-/data
+# data
+/db/data
+/store/data

@@ -31,7 +31,6 @@ function createPgWrapper(sqlClient: postgres.Sql<Record<string, unknown>>) {
 const client = createPgWrapper(sql);
 
 export const authConfig = {
-  // @ts-expect-error - This is a valid adapter after the wrapper is used
   adapter: PostgresAdapter(client),
   providers: [google, github],
   pages: {

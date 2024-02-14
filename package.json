@@ -10,14 +10,19 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "db:start": "docker-compose up -d",
-    "db:stop": "docker-compose down",
+    "db:start": "docker-compose up -d db",
+    "db:stop": "docker-compose stop db",
     "db:seed": "bun run db/seed.ts",
     "db:reset": "bun run db/reset.ts",
-    "docker:build": "docker build -t globe-hub .",
-    "docker:run": "docker run -p 3000:3000 globe-hub",
-    "docker:stop": "docker stop globe-hub",
-    "docker:remove": "docker rm globe-hub"
+    "db:logs": "docker-compose logs -f db",
+    "bucket:start": "docker-compose up -d bucket",
+    "bucket:stop": "docker-compose stop bucket",
+    "bucket:logs": "docker-compose logs -f bucket",
+    "app:start": "docker-compose up -d app",
+    "app:stop": "docker-compose stop app",
+    "app:logs": "docker-compose logs -f app",
+    "docker:start": "docker-compose up -d",
+    "docker:down": "docker-compose down"
   },
   "lint-staged": {
     "*.{js,cjs,ts,tsx}": [
