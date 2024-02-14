@@ -22,7 +22,7 @@ export default function EditableProfile() {
         </label>
         <input
           type='text'
-          id='first_name'
+          id='Brukernavn'
           className='block w-64 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm font-semibold text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
           placeholder='John Doe'
           required
@@ -35,7 +35,7 @@ export default function EditableProfile() {
         </label>
         <input
           type='text'
-          id='email'
+          id='E-post'
           className='block w-64 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm font-semibold text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
           placeholder='john.doe@hotmail.com'
           required
