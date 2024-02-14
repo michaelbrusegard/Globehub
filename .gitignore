@@ -25,5 +25,4 @@ public/sitemap.xml
 public/robots.txt
 
 # data
-/db/data
-/store/data
+/data

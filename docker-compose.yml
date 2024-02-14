@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - "5432:5432"
@@ -23,6 +23,6 @@ services:
       MINIO_ACCESS_KEY: ${BUCKET_ACCESS_KEY}
       MINIO_SECRET_KEY: ${BUCKET_SECRET_KEY}
     volumes:
-      - ./bucket/data:/data
+      - ./data/bucket:/data
     ports:
       - "9000:9000"
