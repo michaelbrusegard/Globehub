@@ -1,14 +1,16 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import { Divider } from '@nextui-org/react';
-import { useTranslations } from 'next-intl';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 
 import { signIn } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 
 import { GitHubLogo } from '@/components/assets/GitHubLogo';
 import { GoogleLogo } from '@/components/assets/GoogleLogo';
 import { SignInButton } from '@/components/auth/SignInButton';
 import { Logo } from '@/components/layout/Logo';
+import { Main } from '@/components/layout/Main';
 
 export async function generateMetadata({
   params: { locale },
@@ -22,15 +24,20 @@ export async function generateMetadata({
   };
 }
 
-export default function SignIn({
+export default async function SignIn({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
   unstable_setRequestLocale(locale);
-  const t = useTranslations('signIn');
+  const t = await getTranslations('signIn');
+  const session = await auth();
+
+  if (session?.user) {
+    redirect('/');
+  }
   return (
-    <div className='flex h-full w-full items-center justify-center'>
+    <Main className='flex h-full items-center justify-center'>
       <Card className='m-2 h-64 w-full max-w-md p-2 xs:m-8'>
         <CardHeader className='flex items-center justify-center p-4'>
           <Logo />
@@ -59,6 +66,6 @@ export default function SignIn({
           </form>
         </CardBody>
       </Card>
-    </div>
+    </Main>
   );
 }
