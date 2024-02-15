@@ -9,6 +9,7 @@ import { redirect } from '@/lib/navigation';
 import { validateProfile } from '@/lib/validation';
 
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
+import { Review } from '@/components/reviews/Review';
 
 const reviews = [
   {
@@ -45,7 +46,7 @@ export default async function Profile({
   } else {
     return (
       <>
-        <h1 className='my-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-black tracking-tight text-transparent lg:text-5xl'>
+        <h1 className='my-6 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-black tracking-tight text-transparent lg:text-5xl'>
           {t('myProfile')}
         </h1>
         <div className='mb-10 flex flex-col sm:flex-row'>
@@ -66,7 +67,7 @@ export default async function Profile({
           />
           <div className='flex flex-grow flex-row justify-between'>
             <div className='mt-4 space-y-1'>
-              <h2 className='ml-1 text-2xl font-semibold'>
+              <h2 className='ml-4 text-2xl font-semibold'>
                 {session.user.name}
               </h2>
               {session.user.bio ? (
@@ -123,32 +124,12 @@ export default async function Profile({
           Mine vurderinger
         </h2>
         <ul role='list' className='divide-y divide-gray-100'>
-          {reviews.map((reviews) => (
-            <li
-              key={reviews.text}
-              className='flex justify-between gap-x-6 py-5'
-            >
-              <div className='flex min-w-0 gap-x-4'>
-                {/* <img
-                  className='h-12 w-12 flex-none rounded-full bg-gray-50'
-                  src={session.user.image}
-                  alt=''
-                /> */}
-                <div className='min-w-0 flex-auto'>
-                  <p className='text-sm font-semibold leading-6'>
-                    {reviews.dest + '  ' + reviews.stars + '/5'}
-                  </p>
-                  <p className='mt-1 text-xs leading-5 text-gray-500'>
-                    {reviews.text}
-                  </p>
-                </div>
-              </div>
-              <div className='hidden shrink-0 sm:flex sm:flex-col sm:items-end'>
-                <p className='mt-1 text-xs leading-5 text-gray-500'>
-                  {reviews.date}
-                </p>
-              </div>
-            </li>
+          {reviews.map((review) => (
+            <Review
+              profilepic={session.user.image}
+              review={review}
+              key={review.text}
+            />
           ))}
         </ul>
       </>
