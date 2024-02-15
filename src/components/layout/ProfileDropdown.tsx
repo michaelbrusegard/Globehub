@@ -47,6 +47,8 @@ function ProfileDropdown({
           imgProps={{
             width: 32,
             height: 32,
+            fetchPriority: 'high',
+            loading: 'eager',
           }}
           isBordered
           size='sm'

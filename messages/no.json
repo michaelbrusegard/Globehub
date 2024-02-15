@@ -20,5 +20,16 @@
   },
   "signIn": {
     "signInWith": "Logg inn med {provider}"
+  },
+  "profile": {
+    "myProfile": "Min profil",
+    "edit": "Rediger",
+    "username": "Brukernavn",
+    "emptyBio": "Du har ikke skrevet en biografi ennå.",
+    "editBio": "Rediger biografi",
+    "cancel": "Avbryt",
+    "update": "Oppdater",
+    "writeBio": "Skriv din biografi her...",
+    "bioErrorMessage": "Biografien kan maks være 200 tegn lang."
   }
 }

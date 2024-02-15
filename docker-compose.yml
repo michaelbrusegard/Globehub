@@ -1,6 +1,9 @@
 version: "3.9"
 services:
   app:
+    depends_on:
+      - db
+      - bucket
     build: 
       context: .
       dockerfile: Dockerfile

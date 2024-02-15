@@ -7,10 +7,11 @@ async function seedUsers() {
     const name = faker.person.fullName();
     const email = faker.internet.email();
     const image = faker.image.avatar();
+    const bio = faker.lorem.paragraph(1);
 
     await sql`
-      INSERT INTO users (name, email, image)
-      VALUES (${name}, ${email}, ${image})
+      INSERT INTO users (name, email, image, bio)
+      VALUES (${name}, ${email}, ${image}, ${bio})
     `;
   }
 }

@@ -7,7 +7,7 @@ import {
   NavbarItem,
 } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
-import * as React from 'react';
+import { Suspense } from 'react';
 
 import { Logo } from '@/components/layout/Logo';
 import { NavbarAuth } from '@/components/layout/NavbarAuth';
@@ -54,9 +54,9 @@ function Header() {
           />
         </NavbarItem>
         <NavbarItem>
-          <React.Suspense>
+          <Suspense>
             <NavbarAuth />
-          </React.Suspense>
+          </Suspense>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

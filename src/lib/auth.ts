@@ -12,7 +12,8 @@ declare module 'next-auth' {
   interface Session {
     user: {
       role: string;
-    } & Omit<User, 'id'>;
+      bio: string;
+    } & User;
   }
 }
 
