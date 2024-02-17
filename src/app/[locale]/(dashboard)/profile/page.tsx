@@ -49,7 +49,7 @@ export default async function Profile({
         <h1 className='my-6 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-black tracking-tight text-transparent lg:text-5xl'>
           {t('myProfile')}
         </h1>
-        <div className='mb-10 flex flex-col sm:flex-row'>
+        <div className='mb-10 flex flex-col gap-0 sm:flex-row sm:gap-3'>
           <Avatar
             className='mx-auto h-40 w-40 flex-shrink-0 sm:mx-0'
             classNames={{
@@ -62,62 +62,61 @@ export default async function Profile({
               fetchPriority: 'high',
               loading: 'eager',
             }}
-            src={session.user.image!}
+            src={session.user.image}
             isBordered
           />
-          <div className='flex flex-grow flex-row justify-between'>
-            <div className='mt-4 space-y-1'>
-              <h2 className='ml-4 text-2xl font-semibold'>
-                {session.user.name}
-              </h2>
-              {session.user.bio ? (
-                <p className='ml-4'>{session.user.bio}</p>
-              ) : (
-                <p className='ml-4 italic text-default-400'>{t('emptyBio')}</p>
-              )}
-            </div>
-            <EditProfileModal
-              className='mt-4'
-              updateProfile={async (formData: FormData) => {
-                'use server';
-                if (!session.user) {
-                  throw new Error(
-                    'You must be signed in to perform this action',
+          <div className='mt-4 flex-grow'>
+            <div className='flex flex-row items-center justify-between'>
+              <h2 className='text-2xl font-semibold'>{session.user.name}</h2>
+              <EditProfileModal
+                updateProfile={async (formData: FormData) => {
+                  'use server';
+                  if (!session.user) {
+                    throw new Error(
+                      'You must be signed in to perform this action',
+                    );
+                  }
+
+                  const parsed = validateProfile(
+                    Object.fromEntries(formData) as { bio: string },
                   );
-                }
 
-                const parsed = validateProfile(
-                  Object.fromEntries(formData) as { bio: string },
-                );
+                  if (!parsed.success) {
+                    return;
+                  }
 
-                if (!parsed.success) {
-                  return;
-                }
-
-                try {
-                  await sql`
+                  try {
+                    await sql`
                     UPDATE users
                     SET bio = ${parsed.data.bio}
-                    WHERE id = ${session.user.id!}
+                    WHERE id = ${session.user.id}
                   `;
-                } catch (error) {
-                  throw new Error('Failed to update profile');
-                }
+                  } catch (error) {
+                    throw new Error('Failed to update profile');
+                  }
 
-                revalidatePath('/[locale]/(dashboard)/profile');
-              }}
-              profile={{
-                bio: session.user.bio,
-              }}
-              t={{
-                edit: t('edit'),
-                editBio: t('editBio'),
-                cancel: t('cancel'),
-                update: t('update'),
-                writeBio: t('writeBio'),
-                bioErrorMessage: t('bioErrorMessage'),
-              }}
-            />
+                  revalidatePath('/[locale]/(dashboard)/profile');
+                }}
+                profile={{
+                  bio: session.user.bio,
+                }}
+                t={{
+                  edit: t('edit'),
+                  editBio: t('editBio'),
+                  cancel: t('cancel'),
+                  update: t('update'),
+                  writeBio: t('writeBio'),
+                  bioErrorMessage: t('bioErrorMessage'),
+                }}
+              />
+            </div>
+            {session.user.bio ? (
+              <p className='mx-2 line-clamp-6 overflow-clip overflow-ellipsis sm:line-clamp-4'>
+                {session.user.bio}
+              </p>
+            ) : (
+              <p className='mx-2 italic text-default-400'>{t('emptyBio')}</p>
+            )}
           </div>
         </div>
         <h2 className='my-4 border-b border-divider pb-2 font-arimo text-3xl font-semibold tracking-tight'>

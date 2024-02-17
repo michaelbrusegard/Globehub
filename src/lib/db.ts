@@ -16,6 +16,7 @@ type User = {
   emailVerified?: Date;
   image?: string;
   role: string;
+  bio?: string;
   createdAt: Date;
 };
 

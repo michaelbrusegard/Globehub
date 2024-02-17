@@ -1,19 +1,16 @@
 import PostgresAdapter from '@auth/pg-adapter';
 import NextAuth from 'next-auth';
-import type { NextAuthConfig, User } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import github from 'next-auth/providers/github';
 import google from 'next-auth/providers/google';
 import type postgres from 'postgres';
 
 import { defaultLocale, pathnames } from '@/lib/config';
-import { sql } from '@/lib/db';
+import { type User, sql } from '@/lib/db';
 
 declare module 'next-auth' {
   interface Session {
-    user: {
-      role: string;
-      bio: string;
-    } & User;
+    user: User;
   }
 }
 

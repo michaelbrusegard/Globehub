@@ -18,7 +18,7 @@ import { validateProfile } from '@/lib/validation';
 type EditProfileModalProps = {
   className?: string;
   updateProfile: (formData: FormData) => void;
-  profile: { bio: string };
+  profile: { bio?: string };
   t: {
     edit: string;
     editBio: string;
@@ -32,7 +32,7 @@ type EditProfileModalProps = {
 type FormProps = {
   updateProfile: (formData: FormData) => void;
   onClose: () => void;
-  profile: { bio: string };
+  profile: { bio?: string };
   t: {
     cancel: string;
     update: string;
