@@ -9,6 +9,8 @@ import {
 } from '@nextui-org/react';
 import NextImage from 'next/image';
 
+import { Link } from '@/lib/navigation';
+
 type ProfileDropdownProps = {
   imageSrc: string;
   initials: string;
@@ -45,6 +47,8 @@ function ProfileDropdown({
           imgProps={{
             width: 32,
             height: 32,
+            fetchPriority: 'high',
+            loading: 'eager',
           }}
           isBordered
           size='sm'
@@ -55,7 +59,9 @@ function ProfileDropdown({
         />
       </DropdownTrigger>
       <DropdownMenu as='div' aria-label={t.chooseOption}>
-        <DropdownItem href='/profile'>{t.profile}</DropdownItem>
+        <DropdownItem as={Link} href='/profile'>
+          {t.profile}
+        </DropdownItem>
         <DropdownItem
           className='text-left'
           color='danger'

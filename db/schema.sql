@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS users (
     "emailVerified" TIMESTAMPTZ,
     image TEXT,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
+    bio TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 );
