@@ -13,11 +13,13 @@ export default async function Destination({
   const data: Destination[] = await sql`SELECT * FROM destinations;`;
 
   return (
-    <div className='grid grid-cols-3 items-stretch gap-4'>
-      <h1></h1>
-      {data.map((destination, index) => (
-        <Card key={index} destination={destination} />
-      ))}
+    <div>
+      <h1>&nbsp;</h1>
+      <div className='grid grid-cols-3 items-stretch gap-4'>
+        {data.map((destination, index) => (
+          <Card key={index} destination={destination} />
+        ))}
+      </div>
     </div>
   );
 }
