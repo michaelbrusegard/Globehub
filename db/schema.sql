@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS users (
     "emailVerified" TIMESTAMPTZ,
     image TEXT,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
-    bio TEXT,
+    bio VARCHAR(200),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 );
@@ -58,9 +58,13 @@ CREATE TABLE IF NOT EXISTS destinations (
 CREATE TABLE IF NOT EXISTS reviews (
     "userId" INTEGER NOT NULL,
     "destinationId" INTEGER NOT NULL,
-    rating INTEGER NOT NULL,
+    rating INTEGER NOT NULL CHECK (
+        rating >= 1
+        AND rating <= 10
+    ),
     comment TEXT,
     image TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY ("userId", "destinationId"),
     FOREIGN KEY ("userId") REFERENCES users(id),
     FOREIGN KEY ("destinationId") REFERENCES destinations(id)
