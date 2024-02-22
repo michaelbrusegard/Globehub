@@ -29,7 +29,7 @@ function TopDestinationsGridSkeleton() {
             index === randomSmNext && 'sm:col-span-5',
           )}
         >
-          <Skeleton className='h-[300px] w-full' />
+          <Skeleton className='h-[300px] w-full rounded-xl' />
         </div>
       ))}
     </div>
