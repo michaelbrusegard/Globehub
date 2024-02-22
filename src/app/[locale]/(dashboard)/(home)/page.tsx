@@ -1,5 +1,5 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { createSearchParamsCache, parseAsInteger } from 'nuqs/parsers';
+import { createSearchParamsCache, parseAsInteger } from 'nuqs/server';
 
 import { sql } from '@/lib/db';
 
