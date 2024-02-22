@@ -27,7 +27,7 @@ function Header() {
         <Logo />
       </NavbarBrand>
       <NavbarContent justify='end'>
-        <NavbarItem className='hidden md:block'>
+        {/* <NavbarItem className='hidden md:block'>
           <Input
             classNames={{
               base: 'max-w-full sm:max-w-[10rem] h-10',
@@ -41,7 +41,7 @@ function Header() {
             startContent={<Search className='h-5 w-5 fill-default-500' />}
             type='search'
           />
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <DarkModeDropdown
             t={{

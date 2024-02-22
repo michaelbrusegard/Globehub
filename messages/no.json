@@ -1,7 +1,12 @@
 {
   "meta": {
     "signIn": "Logg inn",
-    "description": "GlobeHub"
+    "title": "GlobeHub",
+    "description": "GlobeHub er en plattform for å finne og anmelde reisedestinasjoner.",
+    "myProfile": "Min profil"
+  },
+  "ui": {
+    "page": "side"
   },
   "layout": {
     "signIn": "Logg inn",
@@ -31,5 +36,9 @@
     "update": "Oppdater",
     "writeBio": "Skriv din biografi her...",
     "bioErrorMessage": "Biografien kan maks være 200 tegn lang."
+  },
+  "home": {
+    "title": "Topp destinasjoner",
+    "description": "Utforsk de mest populære destinasjonene i verden."
   }
 }

@@ -24,7 +24,7 @@ type Destination = {
   id: number;
   name: string;
   description?: string;
-  location: [number, number];
+  location: string;
   images?: string[];
 };
 
