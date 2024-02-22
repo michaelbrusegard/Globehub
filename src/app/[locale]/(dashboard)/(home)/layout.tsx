@@ -15,6 +15,7 @@ export default function HomeHeader({
   return (
     <>
       <h1 className='my-4'>{t('title')}</h1>
+      <p className='mx-10 my-4 text-content2-foreground'>{t('description')}</p>
       {children}
     </>
   );

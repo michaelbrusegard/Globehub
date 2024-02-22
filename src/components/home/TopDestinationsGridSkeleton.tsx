@@ -14,7 +14,7 @@ function TopDestinationsGridSkeleton() {
   const randomSmNext =
     randomSmNextMap[randomSm as keyof typeof randomSmNextMap];
   return (
-    <div className='grid min-w-full grid-cols-12 grid-rows-2 gap-2 px-8'>
+    <div className='grid h-[1532px] w-full grid-cols-12 grid-rows-2 gap-2 px-8 xs:h-[916px] sm:h-[608px]'>
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}

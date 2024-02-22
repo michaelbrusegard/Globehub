@@ -83,7 +83,7 @@ To seed the database (fill it with test data) you can run the following command:
 bun run db:seed
 ```
 
-To delete the data in the database you can run the following command:
+To delete the data in the database so you can reseed it you can run the following command:
 
 ```bash
 bun run db:reset

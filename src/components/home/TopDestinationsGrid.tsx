@@ -10,10 +10,15 @@ async function TopDestinationsGrid({
   page: number;
   pageSize: number;
 }) {
-  const destinations: Destination[] = await sql`
-    SELECT * FROM destinations
-    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
-  `;
+  const destinations: (Destination & { average_rating: number | null })[] =
+    await sql`
+      SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
+      FROM destinations
+      LEFT JOIN reviews ON destinations.id = reviews."destinationId"
+      GROUP BY destinations.id
+      ORDER BY average_rating DESC
+      LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
+    `;
 
   const randomSmNextMap = {
     0: 1,
@@ -26,7 +31,7 @@ async function TopDestinationsGrid({
   const randomSmNext =
     randomSmNextMap[randomSm as keyof typeof randomSmNextMap];
   return (
-    <div className='grid min-w-full grid-cols-12 grid-rows-2 gap-2 px-8'>
+    <div className='grid h-[1532px] w-full grid-cols-12 grid-rows-2 gap-2 px-8 xs:h-[916px] sm:h-[608px]'>
       {destinations.map((destination, index) => (
         <div
           key={destination.id}

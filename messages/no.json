@@ -39,6 +39,7 @@
   },
   "home": {
     "title": "Topp destinasjoner",
-    "description": "Utforsk de mest populære destinasjonene i verden."
+    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere.",
+    "noReviews": "Ingen anmeldelser"
   }
 }

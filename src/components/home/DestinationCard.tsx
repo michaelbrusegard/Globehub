@@ -1,17 +1,16 @@
-import LocationOn from '@material-symbols/svg-400/outlined/location_on.svg';
+import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
 import { Card, CardBody, CardHeader, Image, Link } from '@nextui-org/react';
+import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 
 import type { Destination } from '@/lib/db';
 
-function DestinationCard({ destination }: { destination: Destination }) {
-  const [longitude, latitude] = destination.location
-    .replace('(', '')
-    .replace(')', '')
-    .split(',');
-
-  const formattedLongitude = Number(longitude).toFixed(2) + '°';
-  const formattedLatitude = Number(latitude).toFixed(2) + '°';
+function DestinationCard({
+  destination,
+}: {
+  destination: Destination & { average_rating: number | null };
+}) {
+  const t = useTranslations('home');
   return (
     <Card
       className='group h-[300px] w-full py-4'
@@ -21,14 +20,24 @@ function DestinationCard({ destination }: { destination: Destination }) {
     >
       <CardHeader className='flex-col items-start px-4 pb-0 pt-2'>
         <h4 className='text-large font-bold'>{destination.name}</h4>
-        <small className='flex items-center gap-0.5 text-default-500'>
-          <LocationOn
-            className='inline size-5 fill-default-500'
+        <small className='flex gap-0.5 text-default-500'>
+          <HotelClass
+            className='size-4 self-center fill-default-500'
             aria-disabled='true'
           />
-          <span>
-            {formattedLongitude}, {formattedLatitude}
-          </span>
+
+          {destination.average_rating !== 0 ? (
+            <span className='self-end'>
+              {(() => {
+                const rating = (Number(destination.average_rating) / 2).toFixed(
+                  1,
+                );
+                return rating.endsWith('.0') ? rating.slice(0, -2) : rating;
+              })()}
+            </span>
+          ) : (
+            <span className='self-end italic'>{t('noReviews')}</span>
+          )}
         </small>
       </CardHeader>
       <CardBody className='overflow-hidden py-2'>

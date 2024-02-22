@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { sql } from '@/lib/db';
 
-const SEED_RECORD_COUNT = 16;
+const SEED_RECORD_COUNT = 32;
 const WORLD_REGION_KEYWORDS = [
   'Africa',
   'Asia',

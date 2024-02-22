@@ -17,6 +17,7 @@ function Header() {
   const t = useTranslations('layout');
   return (
     <Navbar
+      className='shadow-sm'
       classNames={{
         wrapper: 'max-w-7xl',
       }}
