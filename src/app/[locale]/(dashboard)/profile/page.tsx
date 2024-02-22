@@ -9,7 +9,8 @@ import { redirect } from '@/lib/navigation';
 import { validateProfile } from '@/lib/validation';
 
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
-import { Review } from '@/components/reviews/Review';
+
+// import { Review } from '@/components/reviews/Review';
 
 export async function generateMetadata({
   params: { locale },

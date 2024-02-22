@@ -1,6 +1,6 @@
-import Search from '@material-symbols/svg-400/outlined/search.svg';
+// import Search from '@material-symbols/svg-400/outlined/search.svg';
 import {
-  Input,
+  // Input,
   Navbar,
   NavbarBrand,
   NavbarContent,

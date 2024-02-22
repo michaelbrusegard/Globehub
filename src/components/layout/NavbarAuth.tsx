@@ -1,5 +1,5 @@
 import { Button, Link } from '@nextui-org/react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import { auth, signOut } from '@/lib/auth';
 
@@ -17,7 +17,7 @@ function getInitials(name: string) {
 }
 
 async function NavbarAuth() {
-  const t = useTranslations('layout');
+  const t = await getTranslations('layout');
   const session = await auth();
   const initials = session?.user ? getInitials(session.user.name!) : undefined;
   return session?.user ? (
