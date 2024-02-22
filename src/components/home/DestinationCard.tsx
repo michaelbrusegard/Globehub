@@ -16,7 +16,6 @@ function DestinationCard({ destination }: { destination: Destination }) {
     <Card
       className='group h-[300px] w-full py-4'
       isPressable
-      isHoverable
       as={Link}
       href={'/' + destination.id}
     >
@@ -39,6 +38,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
             as={NextImage}
             alt={destination.name}
             src={destination.images![0]}
+            sizes='(max-width: 768px) 100vw, 33vw'
             fill
             priority
             removeWrapper

@@ -43,11 +43,16 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
+    "userId" INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    ingress TEXT,
+    content TEXT,
+    exclusive_content TEXT,
     location POINT NOT NULL,
     images TEXT [],
-    PRIMARY KEY (id)
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (id),
+    FOREIGN KEY ("userId") REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS reviews (

@@ -31,7 +31,7 @@ const config = {
       },
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: 'loremflickr.com',
       },
     ],
   },
