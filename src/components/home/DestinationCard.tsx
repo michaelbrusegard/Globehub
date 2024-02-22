@@ -8,7 +8,7 @@ import type { Destination } from '@/lib/db';
 function DestinationCard({
   destination,
 }: {
-  destination: Destination & { average_rating: number | null };
+  destination: Destination & { averageRating: number | null };
 }) {
   const t = useTranslations('home');
   return (
@@ -26,10 +26,10 @@ function DestinationCard({
             aria-disabled='true'
           />
 
-          {destination.average_rating !== 0 ? (
+          {destination.averageRating !== 0 ? (
             <span className='self-end'>
               {(() => {
-                const rating = (Number(destination.average_rating) / 2).toFixed(
+                const rating = (Number(destination.averageRating) / 2).toFixed(
                   1,
                 );
                 return rating.endsWith('.0') ? rating.slice(0, -2) : rating;

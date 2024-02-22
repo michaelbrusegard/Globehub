@@ -14,9 +14,9 @@ export default async function Home({
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   unstable_setRequestLocale(locale);
-  const result: { count: number }[] =
+  const [result]: { count: number }[] =
     await sql`SELECT COUNT(*) as count FROM destinations;`;
-  const totalDestinations: number = result[0]!.count;
+  const totalDestinations = result!.count;
   const t = await getTranslations('ui');
 
   const searchParamsCache = createSearchParamsCache({

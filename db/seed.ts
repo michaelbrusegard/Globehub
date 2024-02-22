@@ -18,7 +18,6 @@ const KEYWORDS = [
   'Mountain',
   'Landmark',
   'Culture',
-  'Ski',
   'Skyline',
 ];
 
@@ -79,7 +78,7 @@ async function seedDestinations() {
     );
 
     const [destination]: Array<{ id: number }> = await sql`
-      INSERT INTO destinations ("userId", name, ingress, content, exclusive_content, location, images)
+      INSERT INTO destinations (user_id, name, ingress, content, exclusive_content, location, images)
       VALUES (${userId}, ${name}, ${ingress}, ${content}, ${exclusiveContent}, POINT(${latitude}, ${longitude}), ARRAY[${images.join(',')}])
       RETURNING id
     `;
@@ -96,7 +95,7 @@ async function seedDestinations() {
         const keywordId = keywordRecord.id;
 
         await sql`
-          INSERT INTO destination_keywords ("destinationId", "keywordId")
+          INSERT INTO destination_keywords (destination_id, keyword_id)
           VALUES (${destinationId}, ${keywordId})
         `;
       }
@@ -116,7 +115,7 @@ async function seedReviews() {
         const image = faker.image.urlLoremFlickr({ category: 'date' });
 
         await sql`
-          INSERT INTO reviews ("userId", "destinationId", rating, comment, image)
+          INSERT INTO reviews (user_id, destination_id, rating, comment, image)
           VALUES (${user.id}, ${destination.id}, ${rating}, ${comment}, ${image})
         `;
       }
@@ -132,7 +131,7 @@ async function seedUserFavorites() {
     for (const destination of destinations) {
       if (Math.random() < 0.1) {
         await sql`
-          INSERT INTO user_favorites ("userId", "destinationId")
+          INSERT INTO user_favorites (user_id, destination_id)
           VALUES (${user.id}, ${destination.id})
         `;
       }

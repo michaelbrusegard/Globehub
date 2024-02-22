@@ -14,8 +14,4 @@
   ::-moz-selection {
     @apply bg-secondary/50;
   }
-
-  h1 {
-    @apply bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-black tracking-tight text-transparent lg:text-5xl;
-  }
 }

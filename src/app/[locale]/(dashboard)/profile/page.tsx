@@ -34,11 +34,13 @@ export default async function Profile({
   const session = await auth();
 
   if (!session?.user) {
-    redirect('/');
+    redirect('/signin');
   } else {
     return (
       <>
-        <h1 className='my-4'>{t('myProfile')}</h1>
+        <h1 className='my-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
+          {t('myProfile')}
+        </h1>
         <div className='mb-10 flex flex-col gap-0 sm:flex-row sm:gap-3'>
           <Avatar
             className='mx-auto h-40 w-40 flex-shrink-0 sm:mx-0'
@@ -75,15 +77,11 @@ export default async function Profile({
                     return;
                   }
 
-                  try {
-                    await sql`
+                  await sql`
                     UPDATE users
                     SET bio = ${parsed.data.bio}
                     WHERE id = ${session.user.id}
                   `;
-                  } catch (error) {
-                    throw new Error('Failed to update profile');
-                  }
 
                   revalidatePath('/[locale]/(dashboard)/profile');
                 }}

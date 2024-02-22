@@ -7,13 +7,13 @@ const sql = postgres({
   database: env.DATABASE_NAME,
   username: env.DATABASE_USER,
   password: env.DATABASE_PASSWORD,
+  transform: postgres.toCamel,
 });
 
 type User = {
   id: number;
   name?: string;
   email?: string;
-  emailVerified?: Date;
   image?: string;
   role: string;
   bio?: string;
@@ -22,10 +22,14 @@ type User = {
 
 type Destination = {
   id: number;
+  userId: number;
   name: string;
-  description?: string;
+  ingress: string;
+  content: string;
+  exclusiveContent: string;
   location: string;
   images?: string[];
+  createdAt: Date;
 };
 
 type Review = {

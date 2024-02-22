@@ -10,15 +10,19 @@ async function TopDestinationsGrid({
   page: number;
   pageSize: number;
 }) {
-  const destinations: (Destination & { average_rating: number | null })[] =
+  const destinations: (Destination & { averageRating: number | null })[] =
     await sql`
       SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
       FROM destinations
-      LEFT JOIN reviews ON destinations.id = reviews."destinationId"
+      LEFT JOIN reviews ON destinations.id = reviews.destination_id
       GROUP BY destinations.id
       ORDER BY average_rating DESC
       LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
     `;
+
+  if (!destinations) {
+    throw new Error('Destinations not found');
+  }
 
   const randomSmNextMap = {
     0: 1,
