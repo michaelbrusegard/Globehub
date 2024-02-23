@@ -9,10 +9,11 @@ import { ProfileDropdown } from '@/components/layout/ProfileDropdown';
 async function NavbarAuth() {
   const t = await getTranslations('layout');
   const session = await auth();
-  return session?.user ? (
+  const user = session?.user;
+  return user ? (
     <ProfileDropdown
-      initials={getInitials(session.user.name!)}
-      imageSrc={session.user.image!}
+      initials={getInitials(user.name!)}
+      imageSrc={user.image!}
       signOut={async () => {
         'use server';
         await signOut();

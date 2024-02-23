@@ -32,8 +32,9 @@ export default async function Profile({
   unstable_setRequestLocale(locale);
   const t = await getTranslations('profile');
   const session = await auth();
+  const user = session?.user;
 
-  if (!session?.user) {
+  if (!user) {
     redirect('/signin');
   } else {
     return (
@@ -54,16 +55,16 @@ export default async function Profile({
               fetchPriority: 'high',
               loading: 'eager',
             }}
-            src={session.user.image}
+            src={user.image}
             isBordered
           />
           <div className='mt-4 flex-grow'>
             <div className='flex flex-row items-center justify-between'>
-              <h2 className='text-2xl font-semibold'>{session.user.name}</h2>
+              <h2 className='text-2xl font-semibold'>{user.name}</h2>
               <EditProfileModal
                 updateProfile={async (formData: FormData) => {
                   'use server';
-                  if (!session.user) {
+                  if (!user) {
                     throw new Error(
                       'You must be signed in to perform this action',
                     );
@@ -80,13 +81,13 @@ export default async function Profile({
                   await sql`
                     UPDATE users
                     SET bio = ${parsed.data.bio}
-                    WHERE id = ${session.user.id}
+                    WHERE id = ${user.id}
                   `;
 
                   revalidatePath('/[locale]/(dashboard)/profile');
                 }}
                 profile={{
-                  bio: session.user.bio,
+                  bio: user.bio,
                 }}
                 t={{
                   edit: t('edit'),
@@ -98,9 +99,9 @@ export default async function Profile({
                 }}
               />
             </div>
-            {session.user.bio ? (
+            {user.bio ? (
               <p className='mx-2 line-clamp-6 overflow-clip overflow-ellipsis sm:line-clamp-4'>
-                {session.user.bio}
+                {user.bio}
               </p>
             ) : (
               <p className='mx-2 italic text-default-400'>{t('emptyBio')}</p>
@@ -113,7 +114,7 @@ export default async function Profile({
         <ul role='list' className='divide-y divide-gray-100'>
           {reviews.map((review) => (
             <Review
-              profilepic={session.user.image}
+              profilepic={user.image}
               review={review}
               key={review.text}
             />
