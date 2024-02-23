@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { type Destination, type User, sql } from '@/lib/db';
 
-import { AuthorAvatar } from '@/components/destination/AuthorAvatar';
+import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
 
 export async function generateMetadata({
@@ -63,14 +63,14 @@ export default async function Destination({
       <h1 className='mb-12 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
         {destination.name}
       </h1>
-      <AuthorAvatar
+      <AuthorPopover
         className='hidden md:mb-12 md:inline-flex'
         author={author}
         destination={destination}
       />
       <ImageCarousel destination={destination} />
       <div className='mx-auto max-w-2xl'>
-        <AuthorAvatar
+        <AuthorPopover
           className='mb-6 inline-flex md:hidden'
           author={author}
           destination={destination}

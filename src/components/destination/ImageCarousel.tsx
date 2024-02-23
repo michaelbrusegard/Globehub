@@ -151,45 +151,43 @@ function ImageCarousel({ destination }: ImageCarouselProps) {
   }, [mainApi, onSelect, tweenParallax, setTweenNodes, setTweenFactor]);
 
   return (
-    <div className='overflow-hidden'>
-      <div className='mx-auto mb-8 max-w-3xl md:mb-16'>
-        <div ref={mainRef}>
-          <div className='-ml-4 flex touch-manipulation'>
-            {destination.images.map((imageSrc, index) => (
-              <div className='w-full flex-none pl-4' key={index}>
-                <div className='overflow-hidden rounded-sm'>
-                  <div className='parallax'>
-                    <Image
-                      className='h-auto w-full'
-                      shadow='sm'
-                      radius='none'
-                      as={NextImage}
-                      alt={destination.name + '' + index}
-                      src={imageSrc}
-                      priority
-                      width={1300}
-                      height={630}
-                    />
-                  </div>
+    <div className='mx-auto mb-8 max-w-3xl overflow-hidden md:mb-16'>
+      <div ref={mainRef}>
+        <div className='-ml-4 flex touch-manipulation'>
+          {destination.images.map((imageSrc, index) => (
+            <div className='w-full flex-none pl-4' key={index}>
+              <div className='overflow-hidden rounded-sm'>
+                <div className='parallax'>
+                  <Image
+                    className='h-auto w-full'
+                    shadow='sm'
+                    radius='none'
+                    as={NextImage}
+                    alt={destination.name + '' + index}
+                    src={imageSrc}
+                    priority
+                    width={1300}
+                    height={630}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-        <div className='mt-3 overflow-hidden' ref={thumbsRef}>
-          <div className='flex flex-row gap-3 p-1'>
-            {destination.images.map((imageSrc, index) => (
-              <Thumb
-                key={index}
-                onClick={() => {
-                  onThumbClick(index);
-                }}
-                selected={index === selectedIndex}
-                index={index}
-                imageSrc={imageSrc}
-              />
-            ))}
-          </div>
+      </div>
+      <div className='mt-3 flex justify-center overflow-hidden' ref={thumbsRef}>
+        <div className='flex flex-row gap-3 p-1'>
+          {destination.images.map((imageSrc, index) => (
+            <Thumb
+              key={index}
+              onClick={() => {
+                onThumbClick(index);
+              }}
+              selected={index === selectedIndex}
+              index={index}
+              imageSrc={imageSrc}
+            />
+          ))}
         </div>
       </div>
     </div>
