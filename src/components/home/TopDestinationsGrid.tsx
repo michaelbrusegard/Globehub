@@ -35,7 +35,12 @@ async function TopDestinationsGrid({
   const randomSmNext =
     randomSmNextMap[randomSm as keyof typeof randomSmNextMap];
   return (
-    <div className='grid h-[1532px] w-full grid-cols-12 grid-rows-2 gap-2 px-8 xs:h-[916px] sm:h-[608px]'>
+    <div
+      className={cn(
+        'grid w-full grid-cols-12 grid-rows-2 gap-2 px-8',
+        destinations.length === 5 && 'h-[1532px] xs:h-[916px] sm:h-[608px]',
+      )}
+    >
       {destinations.map((destination, index) => (
         <div
           key={destination.id}

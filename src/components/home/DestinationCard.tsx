@@ -27,7 +27,7 @@ function DestinationCard({
           />
 
           {destination.averageRating !== 0 ? (
-            <span className='self-end'>
+            <span className='self-end' aria-label={t('rating')}>
               {(() => {
                 const rating = (Number(destination.averageRating) / 2).toFixed(
                   1,
@@ -46,7 +46,7 @@ function DestinationCard({
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
             alt={destination.name}
-            src={destination.images![0]}
+            src={destination.images[0]}
             sizes='(max-width: 768px) 100vw, 33vw'
             fill
             priority

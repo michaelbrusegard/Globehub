@@ -57,8 +57,7 @@ async function seedDestinations() {
   for (let i = 0; i < SEED_RECORD_COUNT; i++) {
     const name = faker.location.city();
     const userId = Math.ceil(Math.random() * SEED_RECORD_COUNT);
-    const ingress = faker.lorem.sentence();
-    const content = faker.lorem.paragraph();
+    const content = faker.lorem.paragraphs(5, '<br/>\n');
     const exclusiveContent = faker.lorem.paragraph();
     const latitude = faker.location.latitude();
     const longitude = faker.location.longitude();
@@ -73,15 +72,18 @@ async function seedDestinations() {
     );
     const category =
       toCamelCase(regionKeyword!) + ',' + toCamelCase(otherKeywords[0]!);
-    const images = Array.from({ length: Math.ceil(Math.random() * 6) }, () =>
-      faker.image.urlLoremFlickr({ category: category }),
+    const images = Array.from(
+      { length: Math.floor(Math.random() * 8) + 3 },
+      () => faker.image.urlLoremFlickr({ category: category }),
     );
 
+    const imagesArrayString = `{${images.map((image) => `"${image.replace(/"/g, '""')}"`).join(',')}}`;
+
     const [destination]: Array<{ id: number }> = await sql`
-      INSERT INTO destinations (user_id, name, ingress, content, exclusive_content, location, images)
-      VALUES (${userId}, ${name}, ${ingress}, ${content}, ${exclusiveContent}, POINT(${latitude}, ${longitude}), ARRAY[${images.join(',')}])
-      RETURNING id
-    `;
+        INSERT INTO destinations (user_id, name, content, exclusive_content, location, images)
+        VALUES (${userId}, ${name}, ${content}, ${exclusiveContent}, POINT(${latitude}, ${longitude}), ${imagesArrayString})
+        RETURNING id
+      `;
 
     const destinationId = destination!.id;
 

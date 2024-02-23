@@ -45,12 +45,11 @@ CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
     user_id INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
-    ingress TEXT NOT NULL,
-    content TEXT NOT NULL,
     exclusive_content TEXT NOT NULL,
     location POINT NOT NULL,
-    images TEXT [],
+    images TEXT [] NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    views INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

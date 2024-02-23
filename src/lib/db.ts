@@ -24,12 +24,12 @@ type Destination = {
   id: number;
   userId: number;
   name: string;
-  ingress: string;
   content: string;
   exclusiveContent: string;
   location: string;
-  images?: string[];
+  images: string[];
   createdAt: Date;
+  views: number;
 };
 
 type Review = {

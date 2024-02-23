@@ -40,6 +40,11 @@
   "home": {
     "title": "Topp destinasjoner",
     "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere.",
-    "noReviews": "Ingen anmeldelser"
+    "noReviews": "Ingen anmeldelser",
+    "rating": "Vurdering"
+  },
+  "destination": {
+    "readTime": "{count, plural, =0 {mindre enn ett minutt} one {# minutt} other {# minutter}} lesing",
+    "views": "{count, plural, =0 {ingen visninger} one {# visning} other {# visninger}}"
   }
 }
