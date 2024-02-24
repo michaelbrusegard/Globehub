@@ -3,7 +3,7 @@ services:
   app:
     depends_on:
       - db
-      - bucket
+      - s3
     build: 
       context: .
       dockerfile: Dockerfile
@@ -20,12 +20,13 @@ services:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - "5432:5432"
-  bucket:
-    image: minio/minio
+  s3:
+    image: bitnami/minio:2024
     environment:
-      MINIO_ACCESS_KEY: ${BUCKET_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${BUCKET_SECRET_KEY}
+      MINIO_ROOT_USER: ${STORAGE_USER}
+      MINIO_ROOT_PASSWORD: ${STORAGE_PASSWORD}
+      MINIO_DEFAULT_BUCKETS: ${STORAGE_NAME}
     volumes:
-      - ./data/bucket:/data
+      - ./data/s3:/bitnami/minio/data
     ports:
       - "9000:9000"

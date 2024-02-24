@@ -8,12 +8,18 @@ export const env = createEnv({
    */
   server: {
     DATABASE_HOST: z.string(),
-    DATABASE_PORT: z.string().transform(Number),
+    DATABASE_PORT: z.string(),
     DATABASE_USER: z.string(),
     DATABASE_PASSWORD: z.string(),
     DATABASE_NAME: z.string(),
-    BUCKET_ACCESS_KEY: z.string(),
-    BUCKET_SECRET_KEY: z.string(),
+    STORAGE_HOST: z.string(),
+    STORAGE_PORT: z.string(),
+    STORAGE_USER: z.string(),
+    STORAGE_PASSWORD: z.string(),
+    STORAGE_NAME: z.string().refine((value) => {
+      const commaCount = (value.match(/,/g) ?? []).length;
+      return commaCount === 1;
+    }),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
@@ -43,8 +49,11 @@ export const env = createEnv({
     DATABASE_USER: process.env.DATABASE_USER,
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
     DATABASE_NAME: process.env.DATABASE_NAME,
-    BUCKET_ACCESS_KEY: process.env.BUCKET_ACCESS_KEY,
-    BUCKET_SECRET_KEY: process.env.BUCKET_SECRET_KEY,
+    STORAGE_HOST: process.env.STORAGE_HOST,
+    STORAGE_PORT: process.env.STORAGE_PORT,
+    STORAGE_USER: process.env.STORAGE_USER,
+    STORAGE_PASSWORD: process.env.STORAGE_PASSWORD,
+    STORAGE_NAME: process.env.STORAGE_NAME,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,

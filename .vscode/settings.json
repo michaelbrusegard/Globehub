@@ -14,7 +14,8 @@
     "auth",
     "profile",
     "home",
-    "destination"
+    "destination",
+    "s3"
   ],
   "sqltools.connections": [
     {

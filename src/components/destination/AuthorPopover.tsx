@@ -24,7 +24,7 @@ function AuthorPopover({ className, author, destination }: AuthorAvatarProps) {
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
   return (
-    <Popover showArrow placement='bottom'>
+    <Popover showArrow shouldBlockScroll placement='bottom'>
       <PopoverTrigger className={className}>
         <UserAvatar
           classNames={{
