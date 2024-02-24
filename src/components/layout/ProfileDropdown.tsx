@@ -66,9 +66,7 @@ function ProfileDropdown({
           className='text-left'
           color='danger'
           as='button'
-          onClick={() => {
-            signOut();
-          }}
+          onClick={signOut}
         >
           {t.signOut}
         </DropdownItem>

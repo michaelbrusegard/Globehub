@@ -1,7 +1,9 @@
+import { Button } from '@nextui-org/react';
 import { getFormatter, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { type Destination, type User, sql } from '@/lib/db';
+import { PutObjectCommand, destinationsBucket, s3 } from '@/lib/s3';
 
 import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
@@ -86,6 +88,26 @@ export default async function Destination({
         </div>
       </div>
       <div className='mx-auto max-w-2xl'>{destination.content}</div>
+      <form
+        action={async () => {
+          'use server';
+          console.log('test s3');
+          const params = {
+            Bucket: destinationsBucket,
+            Key: 'test.txt',
+            Body: 'test',
+          };
+          try {
+            const command = new PutObjectCommand(params);
+            const response = await s3.send(command);
+            console.log('File uploaded successfully', response);
+          } catch (err) {
+            console.error('Error uploading file', err);
+          }
+        }}
+      >
+        <Button type='submit'>test s3</Button>
+      </form>
     </article>
   );
 }
