@@ -8,7 +8,9 @@ import {
   unstable_setRequestLocale,
 } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import Markdown from 'react-markdown';
 
+import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
 import { PutObjectCommand, destinationsBucket, s3 } from '@/lib/s3';
 import { formatRating } from '@/lib/utils';
@@ -42,6 +44,8 @@ export default async function Destination({
   unstable_setRequestLocale(params.locale);
   const t = await getTranslations('destination');
   const format = await getFormatter();
+  const session = await auth();
+  const user = session?.user;
 
   const [destination]: (Destination & {
     averageRating: number | null;
@@ -81,65 +85,81 @@ export default async function Destination({
 
   return (
     <article className='mt-12'>
-      <h1 className='mb-12 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
-        {destination.name}
-      </h1>
-      <AuthorPopover
-        className='hidden md:mb-12 md:inline-flex'
-        author={author}
-        destination={destination}
-      />
-      <ImageCarousel destination={destination} />
-      <div className='mx-auto max-w-2xl'>
+      <section>
+        <h1 className='mb-12 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
+          {destination.name}
+        </h1>
         <AuthorPopover
-          className='mb-6 inline-flex md:hidden'
+          className='hidden md:mb-12 md:inline-flex'
           author={author}
           destination={destination}
         />
-        <div className='mb-6 flex gap-0.5 text-default-500'>
-          {destination.averageRating !== 0 ? (
-            <>
-              <span
-                className='self-end text-2xl font-semibold'
-                aria-label={t('rating') + ': ' + rating}
-              >
-                {rating}
-                <small className='mx-2 inline-flex self-end fill-secondary'>
-                  {Array(Math.floor(Number(rating))).fill(
-                    <StarFill className='size-5' />,
-                  )}
-                  {Number(rating) % 1 >= 0.5 && (
-                    <StarHalfFill className='size-5' />
-                  )}
-                  {Array(
-                    5 -
-                      Math.floor(Number(rating)) -
-                      (Number(rating) % 1 >= 0.5 ? 1 : 0),
-                  ).fill(<Star className='size-5' />)}
-                </small>
+        <ImageCarousel className='mb-4' destination={destination} />
+        <div className='mx-auto max-w-2xl'>
+          <AuthorPopover
+            className='mb-6 inline-flex md:hidden'
+            author={author}
+            destination={destination}
+          />
+          <div className='mb-6 flex gap-0.5 text-default-500'>
+            {destination.averageRating !== 0 ? (
+              <>
+                <span
+                  className='self-end text-2xl font-semibold'
+                  aria-label={t('rating') + ': ' + rating}
+                >
+                  {rating}
+                  <small className='mx-2 inline-flex self-end fill-secondary'>
+                    {Array(Math.floor(Number(rating))).fill(
+                      <StarFill className='size-5' />,
+                    )}
+                    {Number(rating) % 1 >= 0.5 && (
+                      <StarHalfFill className='size-5' />
+                    )}
+                    {Array(
+                      5 -
+                        Math.floor(Number(rating)) -
+                        (Number(rating) % 1 >= 0.5 ? 1 : 0),
+                    ).fill(<Star className='size-5' />)}
+                  </small>
+                </span>
+                <span className='self-center'>
+                  {destination.reviewCount}&nbsp;
+                  <small>{t('reviews')}</small>
+                </span>
+              </>
+            ) : (
+              <span className='self-end text-xl font-semibold italic'>
+                {t('noReviews')}
               </span>
-              <span className='self-center'>
-                {destination.reviewCount}&nbsp;
-                <small>{t('reviews')}</small>
-              </span>
-            </>
+            )}
+          </div>
+          <div className='mb-6 text-lg'>
+            <time dateTime={destination.createdAt.toISOString()}>
+              {format.dateTime(destination.createdAt, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+        </div>
+      </section>
+      <div className='mx-auto max-w-2xl space-y-8'>
+        <section className='prose dark:prose-invert'>
+          <Markdown>{destination.content}</Markdown>
+        </section>
+        <section className='prose dark:prose-invert'>
+          <h1>{t('exclusiveTitle')}</h1>
+          {user ? (
+            <Markdown>{destination.exclusiveContent}</Markdown>
           ) : (
-            <span className='self-end text-xl font-semibold italic'>
-              {t('noReviews')}
+            <span className='italic text-default-500'>
+              {t('exlusiveNotLoggedInDescription')}
             </span>
           )}
-        </div>
-        <div className='mb-6 text-lg'>
-          <time dateTime={destination.createdAt.toISOString()}>
-            {format.dateTime(destination.createdAt, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </time>
-        </div>
+        </section>
       </div>
-      <div className='mx-auto max-w-2xl'>{destination.content}</div>
       <form
         action={async () => {
           'use server';

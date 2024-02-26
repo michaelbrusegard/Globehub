@@ -48,6 +48,8 @@
     "views": "{count, plural, =0 {ingen visninger} one {# visning} other {# visninger}}",
     "noReviews": "Ingen anmeldelser",
     "rating": "Vurdering",
-    "reviews": "Anmeldelser"
+    "reviews": "Anmeldelser",
+    "exclusiveTitle": "Ekslusive tips",
+    "exlusiveNotLoggedInDescription": "Få eksklusive tips og anbefalinger for å gjøre ditt neste reisemål uforglemmelig ved å logge inn."
   }
 }

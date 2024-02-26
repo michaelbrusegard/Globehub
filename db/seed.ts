@@ -57,7 +57,7 @@ async function seedDestinations() {
   for (let i = 0; i < SEED_RECORD_COUNT; i++) {
     const name = faker.location.city();
     const userId = Math.ceil(Math.random() * SEED_RECORD_COUNT);
-    const content = faker.lorem.paragraphs(5, '<br/>\n');
+    const content = faker.lorem.paragraphs(10);
     const exclusiveContent = faker.lorem.paragraph();
     const latitude = faker.location.latitude();
     const longitude = faker.location.longitude();

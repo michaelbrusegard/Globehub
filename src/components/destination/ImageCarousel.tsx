@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 const TWEEN_FACTOR_BASE = 0.5;
 
 type ImageCarouselProps = {
+  className?: string;
   destination: Destination;
 };
 type ThumbProps = {
@@ -51,7 +52,7 @@ function Thumb({ selected, imageSrc, index, onClick }: ThumbProps) {
   );
 }
 
-function ImageCarousel({ destination }: ImageCarouselProps) {
+function ImageCarousel({ className, destination }: ImageCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mainRef, mainApi] = useEmblaCarousel({}, [
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -151,7 +152,7 @@ function ImageCarousel({ destination }: ImageCarouselProps) {
   }, [mainApi, onSelect, tweenParallax, setTweenNodes, setTweenFactor]);
 
   return (
-    <div className='mx-auto mb-8 max-w-3xl overflow-hidden md:mb-16'>
+    <div className={cn('mx-auto max-w-3xl overflow-hidden', className)}>
       <div ref={mainRef}>
         <div className='-ml-4 flex touch-manipulation'>
           {destination.images.map((imageSrc, index) => (
