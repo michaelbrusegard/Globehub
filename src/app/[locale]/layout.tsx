@@ -1,4 +1,3 @@
-import { scrollShadow } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { Arimo, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';

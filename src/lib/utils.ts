@@ -16,4 +16,11 @@ function getInitials(name: string) {
   return initials.toUpperCase();
 }
 
-export { cn, getInitials };
+function formatRating(rating: number): string {
+  const formattedRating = (rating / 2).toFixed(1);
+  return formattedRating.endsWith('.0')
+    ? formattedRating.slice(0, -2)
+    : formattedRating;
+}
+
+export { cn, getInitials, formatRating };

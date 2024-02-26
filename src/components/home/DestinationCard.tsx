@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 
 import type { Destination } from '@/lib/db';
+import { formatRating } from '@/lib/utils';
 
 function DestinationCard({
   destination,
@@ -11,6 +12,10 @@ function DestinationCard({
   destination: Destination & { averageRating: number | null };
 }) {
   const t = useTranslations('home');
+  const rating =
+    destination.averageRating !== 0
+      ? formatRating(destination.averageRating!)
+      : null;
   return (
     <Card
       className='group h-[300px] w-full py-4'
@@ -27,13 +32,8 @@ function DestinationCard({
           />
 
           {destination.averageRating !== 0 ? (
-            <span className='self-end' aria-label={t('rating')}>
-              {(() => {
-                const rating = (Number(destination.averageRating) / 2).toFixed(
-                  1,
-                );
-                return rating.endsWith('.0') ? rating.slice(0, -2) : rating;
-              })()}
+            <span className='self-end' aria-label={t('rating') + ': ' + rating}>
+              {rating}
             </span>
           ) : (
             <span className='self-end italic'>{t('noReviews')}</span>
