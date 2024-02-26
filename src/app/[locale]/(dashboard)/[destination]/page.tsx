@@ -104,18 +104,18 @@ export default async function Destination({
                 aria-label={t('rating') + ': ' + rating}
               >
                 {rating}
-                <small className='mx-2 inline-flex fill-secondary'>
+                <small className='mx-2 inline-flex self-end fill-secondary'>
                   {Array(Math.floor(Number(rating))).fill(
                     <StarFill className='size-5' />,
                   )}
-                  {Number(rating) % 1 >= 0.5 ? (
+                  {Number(rating) % 1 >= 0.5 && (
                     <StarHalfFill className='size-5' />
-                  ) : (
-                    <Star className='size-5' />
                   )}
-                  {Array(5 - Math.ceil(Number(rating))).fill(
-                    <Star className='size-5' />,
-                  )}
+                  {Array(
+                    5 -
+                      Math.floor(Number(rating)) -
+                      (Number(rating) % 1 >= 0.5 ? 1 : 0),
+                  ).fill(<Star className='size-5' />)}
                 </small>
               </span>
               <span className='self-center'>
