@@ -1,4 +1,6 @@
-import { Link, cn } from '@nextui-org/react';
+import { Link } from '@nextui-org/react';
+
+import { cn } from '@/lib/utils';
 
 function Logo({ className }: { className?: string }) {
   return (

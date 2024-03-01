@@ -61,7 +61,7 @@ bun run start
 
 ## Docker
 
-To run a local version of the database, use a local storage bucket or run a dockerized build of the app you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop). This is useful for testing the app in a production-like environment, and to get data from the database to use in the app.
+To run a local version of the database, use the local storage or run a dockerized build of the app you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop). This is useful for testing the app in a production-like environment, and to get data from the database to use in the app.
 
 ### Local database setup
 
@@ -83,7 +83,7 @@ To seed the database (fill it with test data) you can run the following command:
 bun run db:seed
 ```
 
-To delete the data in the database you can run the following command:
+To delete the data in the database so you can reseed it you can run the following command:
 
 ```bash
 bun run db:reset
@@ -95,24 +95,24 @@ For accesing the logs of the database you can run the following command:
 bun run db:logs
 ```
 
-### Local storage bucket
+### Local storage
 
-When you have Docker installed you can run the following command to start the storage bucket:
+When you have Docker installed you can run the following command to start the S3 storage:
 
 ```bash
-bun run bucket:start
+bun run s3:start
 ```
 
-To stop the storage bucket:
+To stop the storage:
 
 ```bash
-bun run bucket:stop
+bun run s3:stop
 ```
 
-For accesing the logs of the storage bucket:
+For accesing the logs of the storage:
 
 ```bash
-bun run bucket:logs
+bun run s3:logs
 ```
 
 ### Dockerized build
@@ -135,7 +135,7 @@ For accesing the logs of the app:
 bun run app:logs
 ```
 
-To start all the services at once (database, storage bucket and app) you can run:
+To start all the services at once (database, storage and app) you can run:
 
 ```bash
 bun run docker:start
@@ -149,7 +149,7 @@ bun run docker:down
 
 This will stop all the services and remove the containers. To avoid removing the containers you must stop them individually.
 
-When developing the most useful setup is to run the database and the storage bucket locally and run the app development server with `bun dev`. This is because the app development server has hot reload and is faster than the dockerized build. The dockerized build is useful for testing the app in a production-like environment or for deploying the app.
+When developing the most useful setup is to run the database and the storage locally and run the app development server with `bun dev`. This is because the app development server has hot reload and is faster than the dockerized build. The dockerized build is useful for testing the app in a production-like environment or for deploying the app.
 
 ## Check linting and formatting
 

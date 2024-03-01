@@ -36,29 +36,37 @@ CREATE TABLE IF NOT EXISTS users (
     "emailVerified" TIMESTAMPTZ,
     image TEXT,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
-    bio TEXT,
+    bio VARCHAR(200),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
+    user_id INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    exclusive_content TEXT NOT NULL,
     location POINT NOT NULL,
-    images TEXT [],
-    PRIMARY KEY (id)
+    images TEXT [] NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    views INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
-    "userId" INTEGER NOT NULL,
-    "destinationId" INTEGER NOT NULL,
-    rating INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    destination_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL CHECK (
+        rating >= 1
+        AND rating <= 10
+    ),
     comment TEXT,
     image TEXT,
-    PRIMARY KEY ("userId", "destinationId"),
-    FOREIGN KEY ("userId") REFERENCES users(id),
-    FOREIGN KEY ("destinationId") REFERENCES destinations(id)
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, destination_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (destination_id) REFERENCES destinations(id)
 );
 
 CREATE TABLE IF NOT EXISTS keywords (
@@ -68,21 +76,21 @@ CREATE TABLE IF NOT EXISTS keywords (
 );
 
 CREATE TABLE IF NOT EXISTS destination_keywords (
-    "destinationId" INTEGER NOT NULL,
-    "keywordId" INTEGER NOT NULL,
-    PRIMARY KEY ("destinationId", "keywordId"),
-    FOREIGN KEY ("destinationId") REFERENCES destinations(id),
-    FOREIGN KEY ("keywordId") REFERENCES keywords(id)
+    destination_id INTEGER NOT NULL,
+    keyword_id INTEGER NOT NULL,
+    PRIMARY KEY (destination_id, keyword_id),
+    FOREIGN KEY (destination_id) REFERENCES destinations(id),
+    FOREIGN KEY (keyword_id) REFERENCES keywords(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_favorites (
-    "userId" INTEGER NOT NULL,
-    "destinationId" INTEGER NOT NULL,
-    PRIMARY KEY ("userId", "destinationId"),
-    FOREIGN KEY ("userId") REFERENCES users(id),
-    FOREIGN KEY ("destinationId") REFERENCES destinations(id)
+    user_id INTEGER NOT NULL,
+    destination_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, destination_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (destination_id) REFERENCES destinations(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_reviews_userId ON reviews ("userId");
+CREATE INDEX IF NOT EXISTS idx_reviews_userId ON reviews (user_id);
 
-CREATE INDEX IF NOT EXISTS idx_user_favorites_userId ON user_favorites ("userId");
+CREATE INDEX IF NOT EXISTS idx_user_favorites_userId ON user_favorites (user_id);

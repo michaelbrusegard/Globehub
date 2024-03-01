@@ -1,7 +1,12 @@
 {
   "meta": {
     "signIn": "Logg inn",
-    "description": "GlobeHub"
+    "title": "GlobeHub",
+    "description": "GlobeHub er en plattform for å finne og anmelde reisedestinasjoner.",
+    "myProfile": "Min profil"
+  },
+  "ui": {
+    "page": "side"
   },
   "layout": {
     "signIn": "Logg inn",
@@ -31,5 +36,20 @@
     "update": "Oppdater",
     "writeBio": "Skriv din biografi her...",
     "bioErrorMessage": "Biografien kan maks være 200 tegn lang."
+  },
+  "home": {
+    "title": "Topp destinasjoner",
+    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere.",
+    "noReviews": "Ingen anmeldelser",
+    "rating": "Vurdering"
+  },
+  "destination": {
+    "readTime": "{count, plural, =0 {mindre enn ett minutt} one {# minutt} other {# minutter}} lesing",
+    "views": "{count, plural, =0 {ingen visninger} one {# visning} other {# visninger}}",
+    "noReviews": "Ingen anmeldelser",
+    "rating": "Vurdering",
+    "reviews": "Anmeldelser",
+    "exclusiveTitle": "Ekslusive tips",
+    "exlusiveNotLoggedInDescription": "Få eksklusive tips og anbefalinger for å gjøre ditt neste reisemål uforglemmelig ved å logge inn."
   }
 }

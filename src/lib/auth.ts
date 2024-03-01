@@ -35,8 +35,8 @@ export const authConfig = {
     signIn: pathnames['/signin'][defaultLocale],
     signOut: pathnames['/not-found'][defaultLocale],
     error: pathnames['/error'][defaultLocale],
-    verifyRequest: '/not-found',
-    newUser: '/not-found',
+    verifyRequest: pathnames['/not-found'][defaultLocale],
+    newUser: pathnames['/not-found'][defaultLocale],
   },
 } satisfies NextAuthConfig;
 

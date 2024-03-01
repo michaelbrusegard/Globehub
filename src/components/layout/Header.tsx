@@ -1,6 +1,6 @@
-import Search from '@material-symbols/svg-400/outlined/search.svg';
+// import Search from '@material-symbols/svg-400/outlined/search.svg';
 import {
-  Input,
+  // Input,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -17,6 +17,7 @@ function Header() {
   const t = useTranslations('layout');
   return (
     <Navbar
+      className='shadow-sm'
       classNames={{
         wrapper: 'max-w-7xl',
       }}
@@ -27,7 +28,7 @@ function Header() {
         <Logo />
       </NavbarBrand>
       <NavbarContent justify='end'>
-        <NavbarItem className='hidden md:block'>
+        {/* <NavbarItem className='hidden md:block'>
           <Input
             classNames={{
               base: 'max-w-full sm:max-w-[10rem] h-10',
@@ -41,7 +42,7 @@ function Header() {
             startContent={<Search className='h-5 w-5 fill-default-500' />}
             type='search'
           />
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <DarkModeDropdown
             t={{

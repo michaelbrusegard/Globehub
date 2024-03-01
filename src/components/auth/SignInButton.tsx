@@ -1,7 +1,9 @@
 'use client';
 
-import { Button, type ButtonProps, cn } from '@nextui-org/react';
+import { Button, type ButtonProps } from '@nextui-org/react';
 import { useFormStatus } from 'react-dom';
+
+import { cn } from '@/lib/utils';
 
 function SignInButton({ className, startContent, ...props }: ButtonProps) {
   const { pending } = useFormStatus();

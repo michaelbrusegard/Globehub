@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
 
-import { auth } from '@/lib/auth';
+// import { auth } from '@/lib/auth';
 import { defaultLocale, localePrefix, locales, pathnames } from '@/lib/config';
 
 export default createMiddleware({
