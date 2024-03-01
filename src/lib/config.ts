@@ -12,6 +12,9 @@ const pathnames = {
   '/profile': {
     no: '/profil',
   },
+  '/edit': {
+    no: '/rediger',
+  },
   '/error': {
     no: '/feil',
   },

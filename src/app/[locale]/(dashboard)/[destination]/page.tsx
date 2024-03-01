@@ -21,7 +21,7 @@ import { ImageCarousel } from '@/components/destination/ImageCarousel';
 export async function generateMetadata({
   params,
 }: {
-  params: { article: string; destination: string; locale: string };
+  params: { destination: string; locale: string };
 }) {
   const [result]: { name: string }[] = await sql`
     SELECT name 
@@ -91,13 +91,15 @@ export default async function Destination({
         </h1>
         <AuthorPopover
           className='hidden md:mb-12 md:inline-flex'
+          user={user}
           author={author}
           destination={destination}
         />
         <ImageCarousel className='mb-4' destination={destination} />
         <div className='mx-auto max-w-2xl'>
           <AuthorPopover
-            className='mb-6 inline-flex md:hidden'
+            className='mb-6 flex md:hidden'
+            user={user}
             author={author}
             destination={destination}
           />
@@ -109,7 +111,7 @@ export default async function Destination({
                   aria-label={t('rating') + ': ' + rating}
                 >
                   {rating}
-                  <small className='mx-2 inline-flex self-end fill-secondary'>
+                  <small className='mx-2 flex self-end fill-secondary'>
                     {Array(Math.floor(Number(rating))).fill(
                       <StarFill className='size-5' />,
                     )}

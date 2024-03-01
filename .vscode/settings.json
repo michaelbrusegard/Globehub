@@ -15,7 +15,8 @@
     "profile",
     "home",
     "destination",
-    "s3"
+    "s3",
+    "editDestination"
   ],
   "sqltools.connections": [
     {
