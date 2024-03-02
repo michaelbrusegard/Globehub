@@ -1,4 +1,4 @@
-import { Input, Textarea } from '@nextui-org/react';
+import { Button, Input, Textarea } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'meta' });
 
   return {
-    title: t('writeDestination'),
+    title: t('editDestination'),
   };
 }
 
@@ -23,7 +23,7 @@ export default async function Edit({
   params: { destination: string; locale: string };
 }) {
   unstable_setRequestLocale(params.locale);
-  const t = await getTranslations('writeDestination');
+  const t = await getTranslations('destination.write');
   const session = await auth();
   const user = session?.user;
 
@@ -46,27 +46,57 @@ export default async function Edit({
   if (!author) {
     throw new Error('Author not found');
   }
-  // && user.id === author.id
-  if (!(user && user.role === 'admin')) {
+
+  if (!(user && (user.role === 'admin' || user.id === author.id))) {
     notFound();
   }
 
   return (
     <form
-      action={async (data: FormData) => {
+      className='my-4 space-y-4'
+      action={async (formData: FormData) => {
         'use server';
 
-        if (!(user && user.role === 'admin' && user.id === author.id)) {
+        if (!(user && (user.role === 'admin' || user.id === author.id))) {
           throw new Error('Unauthorized');
         }
       }}
     >
+      <h1 className='mb-10 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
+        {t('editDestination')}
+      </h1>
       <Input
+        labelPlacement='outside'
         name='title'
         size='lg'
         label={t('title')}
         defaultValue={destination.name}
+        isRequired
       />
+      <Textarea
+        labelPlacement='outside'
+        minRows={12}
+        name='content'
+        size='lg'
+        defaultValue={destination.content}
+        label={t('content')}
+        isRequired
+      />
+      <Textarea
+        labelPlacement='outside'
+        minRows={12}
+        name='exclusiveContent'
+        size='lg'
+        defaultValue={destination.exclusiveContent}
+        label={t('exclusiveContent')}
+        isRequired
+      />
+      {/* <div>
+        <Button color='danger' variant='light' type='button' onPress={onClose}>
+          {t.cancel}
+        </Button>
+        <SubmitButton t={{ update: t.update }} />
+      </div> */}
     </form>
   );
 }

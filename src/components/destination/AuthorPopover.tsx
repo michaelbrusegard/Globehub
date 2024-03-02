@@ -17,7 +17,7 @@ import { cn, getInitials } from '@/lib/utils';
 
 import { UserCard } from '@/components/destination/UserCard';
 
-type AuthorAvatarProps = {
+type AuthorPopoverProps = {
   className?: string;
   user: User | undefined;
   author: User;
@@ -29,7 +29,7 @@ function AuthorPopover({
   user,
   author,
   destination,
-}: AuthorAvatarProps) {
+}: AuthorPopoverProps) {
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
   return (
@@ -72,14 +72,17 @@ function AuthorPopover({
           <UserCard user={author} />
         </PopoverContent>
       </Popover>
-      {user && user.role === 'admin' && (
+      {user && (user.role === 'admin' || user.id === author.id) && (
         <Button
           as={Link}
           href={'/' + destination.id + '/edit'}
-          color='primary'
+          color='warning'
           radius='sm'
           startContent={
-            <EditSquare className='size-5 fill-foreground' aria-hidden='true' />
+            <EditSquare
+              className='size-5 fill-warning-foreground'
+              aria-hidden='true'
+            />
           }
         >
           {t('edit')}

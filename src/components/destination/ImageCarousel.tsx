@@ -152,12 +152,14 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
   }, [mainApi, onSelect, tweenParallax, setTweenNodes, setTweenFactor]);
 
   return (
-    <div className={cn('mx-auto max-w-3xl overflow-hidden', className)}>
+    <div
+      className={cn('mx-auto max-w-3xl overflow-hidden rounded-md', className)}
+    >
       <div ref={mainRef}>
         <div className='-ml-4 flex touch-manipulation'>
           {destination.images.map((imageSrc, index) => (
             <div className='w-full flex-none pl-4' key={index}>
-              <div className='overflow-hidden rounded-sm'>
+              <div className='overflow-hidden rounded-md'>
                 <div className='parallax'>
                   <Image
                     className='h-auto w-full'
