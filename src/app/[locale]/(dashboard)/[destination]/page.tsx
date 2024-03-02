@@ -8,6 +8,7 @@ import { type Destination, type User, sql } from '@/lib/db';
 
 import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { AverageRating } from '@/components/destination/AverageRating';
+import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
 import { Time } from '@/components/destination/Time';
 
@@ -80,6 +81,12 @@ export default async function Destination({
     WHERE id = ${destination.id}
   `;
 
+  const parts = destination.location.replace(/[()]/g, '').split(',');
+  const coordinates: [number, number] = [
+    parseFloat(parts[0]!),
+    parseFloat(parts[1]!),
+  ];
+
   return (
     <article className='mt-12'>
       <section>
@@ -139,11 +146,11 @@ export default async function Destination({
           />
         </div>
       </section>
-      <div className='mx-auto max-w-2xl space-y-8'>
-        <section className='prose dark:prose-invert'>
+      <div className='prose mx-auto max-w-2xl space-y-8 dark:prose-invert'>
+        <section>
           <Markdown>{destination.content}</Markdown>
         </section>
-        <section className='prose dark:prose-invert'>
+        <section>
           <h1>{t('exclusiveTitle')}</h1>
           {user ? (
             <Markdown>{destination.exclusiveContent}</Markdown>
@@ -152,6 +159,10 @@ export default async function Destination({
               {t('exlusiveNotLoggedInDescription')}
             </span>
           )}
+        </section>
+        <section>
+          <h1>{t('map')}</h1>
+          <Map coordinates={coordinates} popup='test' />
         </section>
       </div>
     </article>

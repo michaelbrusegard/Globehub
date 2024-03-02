@@ -55,6 +55,7 @@
     "edit": "Rediger",
     "worldRegion": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
     "modified": "Sist endret",
+    "map": "Kart",
     "write": {
       "title": "Tittel",
       "content": "Innhold",
