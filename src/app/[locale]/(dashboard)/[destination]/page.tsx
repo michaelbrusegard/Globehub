@@ -162,7 +162,10 @@ export default async function Destination({
         </section>
         <section>
           <h1>{t('map')}</h1>
-          <Map coordinates={coordinates} popup='test' />
+          <Map
+            coordinates={coordinates}
+            popup={destination.name + '\n' + destination.location}
+          />
         </section>
       </div>
     </article>
