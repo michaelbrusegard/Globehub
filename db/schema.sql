@@ -41,14 +41,26 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY (id)
 );
 
+CREATE TYPE world_region AS ENUM (
+    'africa',
+    'asia',
+    'europe',
+    'northAmerica',
+    'oceania',
+    'southAmerica'
+);
+
 CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
     user_id INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
     exclusive_content TEXT NOT NULL,
     location POINT NOT NULL,
+    world_region world_region NOT NULL,
     images TEXT [] NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMPTZ DEFAULT NULL,
     views INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -64,6 +76,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     comment TEXT,
     image TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (user_id, destination_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (destination_id) REFERENCES destinations(id)
