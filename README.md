@@ -1,3 +1,5 @@
+# GlobeHub
+
 ## Documentation
 
 Here is a list of documentation to get started:
@@ -5,8 +7,11 @@ Here is a list of documentation to get started:
 - [React](https://react.dev/reference/react) - Library for building user interfaces
 - [Next.js](https://nextjs.org/docs) - Framework for routing and server-side rendering
 - [Next-intl](https://next-intl-docs.vercel.app/) - Internationalization library
+- [Auth.js](https://authjs.dev/getting-started/introduction) - Authentication library
 - [Tailwind CSS](https://tailwindcss.com/docs) - Styling library
+- [Next-themes](https://github.com/pacocoursey/next-themes) - Dark mode
 - [NextUI](https://nextui.org/docs/guide/introduction) - Reusable UI components
+- [Postgres.js](https://github.com/porsager/postgres) - This is a PostgreSQL client used to interact with the database using SQL.
 
 ### Other resources
 
@@ -26,7 +31,9 @@ First, install dependencies:
 bun install
 ```
 
-Then, run the development server:
+Then you need to copy the `.env.example` file and rename the copy to `.env`. This file contains the environment variables that are used in the project. You can find the values for the dev environment in the `#env` channel on Discord.
+
+Lastly, run the development server:
 
 ```bash
 bun dev
@@ -34,7 +41,9 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Build
+### Build
+
+Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
 
 When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
 
@@ -49,6 +58,98 @@ Then to serve the build locally, run:
 ```bash
 bun run start
 ```
+
+## Docker
+
+To run a local version of the database, use the local storage or run a dockerized build of the app you need to have Docker installed on your machine. You can download it [here](https://www.docker.com/products/docker-desktop). This is useful for testing the app in a production-like environment, and to get data from the database to use in the app.
+
+### Local database setup
+
+When you have Docker installed you can run the following command to start the database:
+
+```bash
+bun run db:start
+```
+
+To stop the database you can run the following command:
+
+```bash
+bun run db:stop
+```
+
+To seed the database (fill it with test data) you can run the following command:
+
+```bash
+bun run db:seed
+```
+
+To delete the data in the database so you can reseed it you can run the following command:
+
+```bash
+bun run db:reset
+```
+
+For accesing the logs of the database you can run the following command:
+
+```bash
+bun run db:logs
+```
+
+### Local storage
+
+When you have Docker installed you can run the following command to start the S3 storage:
+
+```bash
+bun run s3:start
+```
+
+To stop the storage:
+
+```bash
+bun run s3:stop
+```
+
+For accesing the logs of the storage:
+
+```bash
+bun run s3:logs
+```
+
+### Dockerized build
+
+To build and run the app in a docker container you can run the following command:
+
+```bash
+bun run app:start
+```
+
+To stop the app you can run the following command:
+
+```bash
+bun run app:stop
+```
+
+For accesing the logs of the app:
+
+```bash
+bun run app:logs
+```
+
+To start all the services at once (database, storage and app) you can run:
+
+```bash
+bun run docker:start
+```
+
+To put all the services down you can run:
+
+```bash
+bun run docker:down
+```
+
+This will stop all the services and remove the containers. To avoid removing the containers you must stop them individually.
+
+When developing the most useful setup is to run the database and the storage locally and run the app development server with `bun dev`. This is because the app development server has hot reload and is faster than the dockerized build. The dockerized build is useful for testing the app in a production-like environment or for deploying the app.
 
 ## Check linting and formatting
 

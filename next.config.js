@@ -19,6 +19,22 @@ const config = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cloudflare-ipfs.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+      },
+    ],
+  },
 };
 
 export default withNextIntl(config);

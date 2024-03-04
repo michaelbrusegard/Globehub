@@ -1,5 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
 
+// import { auth } from '@/lib/auth';
 import { defaultLocale, localePrefix, locales, pathnames } from '@/lib/config';
 
 export default createMiddleware({
@@ -8,6 +9,10 @@ export default createMiddleware({
   locales,
   pathnames,
 });
+
+// export default auth((req) => {
+//   return intlMiddleware(req);
+// });
 
 export const config = {
   matcher: ['/', '/no/:path*', '/((?!api|_next|.*\\..*).*)'],

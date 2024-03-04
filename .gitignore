@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+package-lock.json
 
 # next.js
 /.next/
@@ -22,3 +23,6 @@ next-env.d.ts
 # site map
 public/sitemap.xml
 public/robots.txt
+
+# data
+/data

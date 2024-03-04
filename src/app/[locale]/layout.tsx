@@ -31,8 +31,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'meta' });
   return {
     title: {
-      template: '%s | GlobeHub',
-      default: 'GlobeHub',
+      template: '%s | ' + t('title'),
+      default: t('title'),
     },
     description: t('description'),
     icons: [

@@ -1,22 +1,23 @@
-import Search from '@material-symbols/svg-400/outlined/search.svg';
+// import Search from '@material-symbols/svg-400/outlined/search.svg';
 import {
-  Button,
-  Input,
-  Link,
+  // Input,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 import { Logo } from '@/components/layout/Logo';
+import { NavbarAuth } from '@/components/layout/NavbarAuth';
 import { DarkModeDropdown } from '@/components/settings/DarkModeDropdown';
 
 function Header() {
   const t = useTranslations('layout');
   return (
     <Navbar
+      className='shadow-sm'
       classNames={{
         wrapper: 'max-w-7xl',
       }}
@@ -27,7 +28,7 @@ function Header() {
         <Logo />
       </NavbarBrand>
       <NavbarContent justify='end'>
-        <NavbarItem className='hidden md:block'>
+        {/* <NavbarItem className='hidden md:block'>
           <Input
             classNames={{
               base: 'max-w-full sm:max-w-[10rem] h-10',
@@ -41,21 +42,22 @@ function Header() {
             startContent={<Search className='h-5 w-5 fill-default-500' />}
             type='search'
           />
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <DarkModeDropdown
             t={{
               dark: t('dark'),
               light: t('light'),
               system: t('system'),
+              selectTheme: t('selectTheme'),
               toggleTheme: t('toggleTheme'),
             }}
           />
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color='primary' href='/signin' variant='flat'>
-            {t('signIn')}
-          </Button>
+          <Suspense>
+            <NavbarAuth />
+          </Suspense>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

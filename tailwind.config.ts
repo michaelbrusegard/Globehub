@@ -1,4 +1,5 @@
 import { nextui } from '@nextui-org/react';
+import tailwindTypography from '@tailwindcss/typography';
 import tailwindScrollbar from 'tailwind-scrollbar';
 import { type Config } from 'tailwindcss';
 import tailwindAnimate from 'tailwindcss-animate';
@@ -30,6 +31,7 @@ const config = {
     }),
     tailwindAnimate,
     tailwindScrollbar({ nocompatible: true }),
+    tailwindTypography,
   ],
 } satisfies Config;
 
