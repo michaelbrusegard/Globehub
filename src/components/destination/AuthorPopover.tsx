@@ -15,6 +15,7 @@ import { type User } from '@/lib/db';
 import type { Destination } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
+import { FavoriteButton } from '@/components/destination/FavoriteButton';
 import { UserCard } from '@/components/destination/UserCard';
 
 type AuthorPopoverProps = {
@@ -22,6 +23,8 @@ type AuthorPopoverProps = {
   user: User | undefined;
   author: User;
   destination: Destination;
+  favorite: boolean;
+  updateFavorite: (favorite: boolean) => void;
 };
 
 function AuthorPopover({
@@ -29,6 +32,8 @@ function AuthorPopover({
   user,
   author,
   destination,
+  favorite,
+  updateFavorite,
 }: AuthorPopoverProps) {
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
@@ -72,22 +77,30 @@ function AuthorPopover({
           <UserCard user={author} />
         </PopoverContent>
       </Popover>
-      {user && (user.role === 'admin' || user.id === author.id) && (
-        <Button
-          as={Link}
-          href={'/' + destination.id + '/edit'}
-          color='warning'
-          radius='sm'
-          startContent={
-            <EditSquare
-              className='size-5 fill-warning-foreground'
-              aria-hidden='true'
-            />
-          }
-        >
-          {t('edit')}
-        </Button>
-      )}
+      <div>
+        <FavoriteButton
+          user={user}
+          destination={destination}
+          favorite={favorite}
+          updateFavorite={updateFavorite}
+        ></FavoriteButton>
+        {user && (user.role === 'admin' || user.id === author.id) && (
+          <Button
+            as={Link}
+            href={'/' + destination.id + '/edit'}
+            color='warning'
+            radius='sm'
+            startContent={
+              <EditSquare
+                className='size-5 fill-warning-foreground'
+                aria-hidden='true'
+              />
+            }
+          >
+            {t('edit')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
