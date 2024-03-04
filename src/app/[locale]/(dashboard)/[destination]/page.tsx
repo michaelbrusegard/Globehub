@@ -11,6 +11,7 @@ import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
 import { Time } from '@/components/destination/Time';
+import { Weather } from '@/components/destination/Weather';
 
 export async function generateMetadata({
   params,
@@ -146,7 +147,7 @@ export default async function Destination({
           />
         </div>
       </section>
-      <div className='prose mx-auto max-w-2xl space-y-8 dark:prose-invert'>
+      <div className='prose mx-auto mb-10 max-w-2xl space-y-8 dark:prose-invert'>
         <section>
           <Markdown>{destination.content}</Markdown>
         </section>
@@ -166,6 +167,10 @@ export default async function Destination({
             coordinates={coordinates}
             popup={destination.name + '\n' + destination.location}
           />
+        </section>
+        <section>
+          <h1>{t('weather')}</h1>
+          <Weather locale={params.locale} coordinates={coordinates} />
         </section>
       </div>
     </article>

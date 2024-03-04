@@ -37,7 +37,7 @@
 }
 
 .leaflet-popup-content-wrapper {
-  @apply !z-10 !inline-flex !w-full !flex-col !items-center !justify-center !rounded-large !bg-content1 !p-1 !text-sm !text-content1-foreground subpixel-antialiased !shadow-medium outline-none;
+  @apply !inline-flex !w-full !flex-col !items-center !justify-center !rounded-large !bg-content1 !p-1 !text-sm !text-content1-foreground subpixel-antialiased !shadow-medium outline-none;
 }
 
 .leaflet-popup-tip {
@@ -53,5 +53,5 @@
 }
 
 .leaflet-control-attribution a {
-  @apply !inline-flex items-center rounded-medium !text-xs !text-primary !no-underline outline-none transition-opacity tap-highlight-transparent hover:!opacity-80 focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-focus active:!opacity-disabled;
+  @apply !z-10 !inline-flex items-center rounded-medium !text-xs !text-primary !no-underline outline-none transition-opacity tap-highlight-transparent hover:!opacity-80 focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-focus active:!opacity-disabled;
 }

@@ -56,6 +56,7 @@
     "worldRegion": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
     "modified": "Sist endret",
     "map": "Kart",
+    "weather": "Vær",
     "write": {
       "title": "Tittel",
       "content": "Innhold",

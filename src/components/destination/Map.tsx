@@ -4,7 +4,7 @@ import LocationOn from '@material-symbols/svg-400/outlined/location_on-fill.svg'
 import { useEventHandlers } from '@react-leaflet/core';
 import { type LeafletMouseEvent, type Map as MapType, divIcon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import {
   MapContainer,
@@ -81,6 +81,13 @@ function MinimapControl({ zoom }: { zoom?: number }) {
   const parentMap = useMap();
   const mapZoom = zoom ?? 0;
 
+  useEffect(() => {
+    const element = document.getElementById('minimap');
+    if (element) {
+      element.tabIndex = -1;
+    }
+  }, []);
+
   const minimap = useMemo(
     () => (
       <MapContainer
@@ -92,6 +99,7 @@ function MinimapControl({ zoom }: { zoom?: number }) {
         scrollWheelZoom={false}
         attributionControl={false}
         zoomControl={false}
+        id='minimap'
       >
         <TileLayer
           className='dark:brightness-[.6] dark:contrast-[3] dark:hue-rotate-[200deg] dark:invert dark:saturate-[.3] dark:filter'
