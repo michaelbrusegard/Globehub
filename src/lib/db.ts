@@ -20,6 +20,14 @@ type User = {
   createdAt: Date;
 };
 
+type WorldRegion =
+  | 'africa'
+  | 'asia'
+  | 'europe'
+  | 'northAmerica'
+  | 'oceania'
+  | 'southAmerica';
+
 type Destination = {
   id: number;
   userId: number;
@@ -27,8 +35,10 @@ type Destination = {
   content: string;
   exclusiveContent: string;
   location: string;
+  worldRegion: WorldRegion;
   images: string[];
   createdAt: Date;
+  modifiedAt: Date;
   views: number;
 };
 
@@ -38,6 +48,8 @@ type Review = {
   rating: number;
   comment?: string;
   image?: string;
+  createdAt: Date;
+  modifiedAt: Date | null;
 };
 
 type Keyword = {

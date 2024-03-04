@@ -3,7 +3,8 @@
     "signIn": "Logg inn",
     "title": "GlobeHub",
     "description": "GlobeHub er en plattform for å finne og anmelde reisedestinasjoner.",
-    "myProfile": "Min profil"
+    "myProfile": "Min profil",
+    "editDestination": "Rediger destinasjon"
   },
   "ui": {
     "page": "side"
@@ -50,6 +51,18 @@
     "rating": "Vurdering",
     "reviews": "Anmeldelser",
     "exclusiveTitle": "Ekslusive tips",
-    "exlusiveNotLoggedInDescription": "Få eksklusive tips og anbefalinger for å gjøre ditt neste reisemål uforglemmelig ved å logge inn."
+    "exlusiveNotLoggedInDescription": "Få eksklusive tips og anbefalinger for å gjøre ditt neste reisemål uforglemmelig ved å logge inn.",
+    "edit": "Rediger",
+    "worldRegion": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
+    "modified": "Sist endret",
+    "map": "Kart",
+    "weather": "Vær",
+    "write": {
+      "title": "Tittel",
+      "content": "Innhold",
+      "exclusiveContent": "Eksklusivt innhold",
+      "update": "Oppdater",
+      "editDestination": "Rediger destinasjon"
+    }
   }
 }
