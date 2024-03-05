@@ -10,7 +10,7 @@ function FavoriteListElement({
   key: number;
 }) {
   return (
-    <Card id={key.toString()}>
+    <Card id={String(key)}>
       <CardBody>
         <div className='flex w-full flex-row items-center justify-center'>
           <div className='w-3/5'>
