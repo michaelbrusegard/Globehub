@@ -28,7 +28,12 @@ export default async function Home({
 
   return (
     <div className='flex flex-col items-center'>
-      <TopDestinationsGrid page={page} pageSize={pageSize} />
+      <TopDestinationsGrid
+        page={page}
+        pageSize={pageSize}
+        //keywords={['Adventure']}
+        //worldRegion={'asia'}
+      />
       <DestinationsPagination
         className='my-6'
         t={{ page: t('page') }}

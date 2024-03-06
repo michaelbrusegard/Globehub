@@ -6,16 +6,31 @@ import { DestinationCard } from '@/components/home/DestinationCard';
 async function TopDestinationsGrid({
   page,
   pageSize,
+  keywords,
+  worldRegion,
 }: {
   page: number;
   pageSize: number;
+  keywords?: string[];
+  worldRegion?: string;
 }) {
   const destinations: (Destination & { averageRating: number | null })[] =
     await sql`
       SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
       FROM destinations
       LEFT JOIN reviews ON destinations.id = reviews.destination_id
+      ${
+        keywords
+          ? sql`
+      LEFT JOIN destination_keywords ON destinations.id = destination_keywords.destination_id
+      LEFT JOIN keywords ON destination_keywords.keyword_id = keywords.id
+      WHERE keywords.name = ANY(${keywords})
+      ${worldRegion ? sql`AND destinations.world_region = ${worldRegion}` : sql``}
       GROUP BY destinations.id
+      HAVING COUNT(DISTINCT keywords.name) = ${keywords.length}`
+          : sql`
+      GROUP BY destinations.id`
+      }
       ORDER BY average_rating DESC
       LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
     `;
