@@ -4,6 +4,7 @@ import { createSearchParamsCache, parseAsInteger } from 'nuqs/server';
 import { sql } from '@/lib/db';
 
 import { DestinationsPagination } from '@/components/home/DestinationsPagination';
+import { SearchBar } from '@/components/home/SearchBar';
 import { TopDestinationsGrid } from '@/components/home/TopDestinationsGrid';
 
 export default async function Home({
@@ -27,7 +28,8 @@ export default async function Home({
   const pageSize = 5;
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col'>
+      <SearchBar />
       <TopDestinationsGrid
         page={page}
         pageSize={pageSize}
