@@ -78,12 +78,14 @@ function AuthorPopover({
         </PopoverContent>
       </Popover>
       <div>
-        <FavoriteButton
-          user={user}
-          destination={destination}
-          favorite={favorite}
-          updateFavorite={updateFavorite}
-        ></FavoriteButton>
+        {user && (
+          <FavoriteButton
+            user={user}
+            destination={destination}
+            favorite={favorite}
+            updateFavorite={updateFavorite}
+          ></FavoriteButton>
+        )}
         {user && (user.role === 'admin' || user.id === author.id) && (
           <Button
             as={Link}
