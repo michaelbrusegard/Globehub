@@ -26,7 +26,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
   );
 
   return (
-    <div className='p-2'>
+    <div className='mb-2'>
       <div className='flex space-x-2'>
         <Autocomplete
           label='Select filters'
@@ -46,7 +46,6 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
             ))}
           </AutocompleteSection>
         </Autocomplete>
-        <SortBy />
       </div>
       <div className='w-95 flex-wrap'>
         {activeFilters?.map((filter) => (
@@ -73,7 +72,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
 const SortBy: React.FC = () => {
   return (
     <div>
-      <Dropdown className=''>
+      <Dropdown>
         <DropdownTrigger>
           <Button
             radius='sm'
