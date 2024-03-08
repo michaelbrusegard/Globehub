@@ -28,22 +28,26 @@ export default async function Home({
   const pageSize = 5;
 
   return (
-    <div className='flex flex-col'>
-      <SearchBar />
-      <TopDestinationsGrid
-        page={page}
-        pageSize={pageSize}
-        //keywords={['Adventure']}
-        //worldRegion={'asia'}
-      />
-      <DestinationsPagination
-        className='my-6'
-        t={{ page: t('page') }}
-        showControls
-        total={Math.ceil(totalDestinations / pageSize)}
-        initialPage={page}
-        color='secondary'
-      />
+    <div>
+      <div className=''>
+        <SearchBar />
+      </div>
+      <div className='flex flex-col items-center'>
+        <TopDestinationsGrid
+          page={page}
+          pageSize={pageSize}
+          //keywords={['Adventure']}
+          //worldRegion={'asia'}
+        />
+        <DestinationsPagination
+          className='my-6'
+          t={{ page: t('page') }}
+          showControls
+          total={Math.ceil(totalDestinations / pageSize)}
+          initialPage={page}
+          color='secondary'
+        />
+      </div>
     </div>
   );
 }
