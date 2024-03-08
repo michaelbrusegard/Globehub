@@ -11,21 +11,19 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react';
-import React from 'react';
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 
 import { type Keyword } from '@/lib/db';
 
-interface KeywordProps {
+type KeywordProps = {
   keywords: Keyword[];
-}
-
-interface ActiveFilterProps {
-  filters: string[];
-  setActiveFilters: React.Dispatch<React.SetStateAction<string[]>>;
-}
+};
 
 const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
-  const [activeFilters, setActiveFilters] = React.useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useQueryState(
+    'filters',
+    parseAsArrayOf<string>(parseAsString, ';'),
+  );
 
   return (
     <div className='p-2'>
@@ -34,17 +32,9 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
           label='Select filters'
           size='sm'
           onSelectionChange={(selected: React.Key) => {
-            if (selected === null) {
-              return;
-            }
-            const selectedkeyword = selected.toString();
-            if (
-              selectedkeyword &&
-              !activeFilters.some((filter) => filter === selectedkeyword)
-            ) {
-              setActiveFilters([...activeFilters, selectedkeyword]);
-            }
-            return selected;
+            activeFilters
+              ? void setActiveFilters([...activeFilters, selected as string])
+              : void setActiveFilters([selected as string]);
           }}
           disableSelectorIconRotation={true}
         >
@@ -58,18 +48,29 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
         </Autocomplete>
         <SortBy />
       </div>
-      <div className='flex'>
-        <SelectedFilters
-          filters={activeFilters}
-          setActiveFilters={setActiveFilters}
-        />
+      <div className='w-95 flex-wrap'>
+        {activeFilters?.map((filter) => (
+          <Chip
+            key={filter.toString()}
+            style={{ margin: '5px' }}
+            size='lg'
+            onClose={() => {
+              void setActiveFilters((prev) => {
+                return prev
+                  ? prev.filter((prevFilter) => prevFilter !== filter)
+                  : null;
+              });
+            }}
+          >
+            {filter}
+          </Chip>
+        ))}
       </div>
     </div>
   );
 };
 
 const SortBy: React.FC = () => {
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['Sort by']));
   return (
     <div>
       <Dropdown className=''>
@@ -80,45 +81,19 @@ const SortBy: React.FC = () => {
             style={{ fontSize: '15px' }}
             variant='flat'
           >
-            {selectedKeys}
+            {'Sort by'}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label='Sort by'
           disallowEmptySelection
           selectionMode='single'
-          onSelectionChange={(newSelectedKeys) => {
-            setSelectedKeys(newSelectedKeys);
-            return newSelectedKeys;
-          }}
         >
           <DropdownItem key='Rating'>Rating</DropdownItem>
           <DropdownItem key='Name'>Name</DropdownItem>
           <DropdownItem key='Something'>Something</DropdownItem>
         </DropdownMenu>
       </Dropdown>
-    </div>
-  );
-};
-
-const SelectedFilters: React.FC<ActiveFilterProps> = ({
-  filters,
-  setActiveFilters,
-}) => {
-  return (
-    <div className='w-95 flex-wrap'>
-      {filters.map((filter) => (
-        <Chip
-          key={filter.toString()}
-          style={{ margin: '5px' }}
-          size='lg'
-          onClose={() => {
-            setActiveFilters(filters.filter((f) => f !== filter));
-          }}
-        >
-          {filter}
-        </Chip>
-      ))}
     </div>
   );
 };

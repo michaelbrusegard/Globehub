@@ -1,9 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
 
 import { type Keyword, sql } from '@/lib/db';
 
-import { AddFilter, SortBy } from '@/components/home/Filter.client';
+import { AddFilter } from '@/components/home/Filter.client';
 
 async function SearchBar() {
   const keywords: Keyword[] = await sql`
