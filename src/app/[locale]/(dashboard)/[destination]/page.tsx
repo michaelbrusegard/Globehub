@@ -89,20 +89,29 @@ export default async function Destination({
     parseFloat(parts[1]!),
   ];
 
-  interface SqlResult {
+  type SqlResult = {
     exists: boolean;
+  };
+
+  async function getFavorite() {
+    if (user) {
+      return (
+        (
+          (await sql`
+      SELECT EXISTS (
+        SELECT 1 
+        FROM user_favorites 
+        WHERE user_id = ${user?.id} AND destination_id = ${destination?.id}
+      ) as "exists"
+  `) as SqlResult[]
+        )[0]?.exists ?? false
+      );
+    } else {
+      return false;
+    }
   }
 
-  const favorite: boolean =
-    (
-      (await sql`
-    SELECT EXISTS (
-      SELECT 1 
-      FROM user_favorites 
-      WHERE user_id = ${user?.id} AND destination_id = ${destination.id}
-    ) as "exists"
-`) as SqlResult[]
-    )[0]?.exists ?? false;
+  const favorite: boolean = await getFavorite();
   return (
     <article className='mt-12'>
       <section>
@@ -124,12 +133,12 @@ export default async function Destination({
             if (!favorite) {
               await sql`
                 INSERT INTO user_favorites (user_id, destination_id)
-                VALUES (${user.id}, ${destination.id})
+                VALUES (${user?.id}, ${destination.id})
               `;
             } else {
               await sql`
                 DELETE FROM user_favorites
-                WHERE user_id = ${user.id} AND destination_id = ${destination.id}
+                WHERE user_id = ${user?.id} AND destination_id = ${destination.id}
               `;
             }
 

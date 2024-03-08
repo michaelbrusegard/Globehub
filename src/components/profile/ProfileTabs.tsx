@@ -32,9 +32,14 @@ function ProfileTabs({
           </Card>
         </Tab>
         <Tab key='favorites' title='Favoritter'>
-          {favorites.map((destination, index) => (
-            <FavoriteListElement key={index} destination={destination} />
-          ))}
+          <div className='flex-column flex w-full flex-wrap'>
+            {favorites.map((destination, index) => (
+              <FavoriteListElement
+                key={destination.id}
+                destination={destination}
+              />
+            ))}
+          </div>
         </Tab>
       </Tabs>
     </div>
