@@ -55,6 +55,8 @@
     "worldRegion": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
     "modified": "Sist endret",
     "map": "Kart",
+    "memberSince": "Medlem siden",
+    "articlesWritten": "{count, plural, =0 {Ingen artikler skrevet} one {# artikkel skrevet} other {# artikler skrevet}}",
     "weather": {
       "title": "Vær",
       "weatherNotAvailable": "Værdata er ikke tilgjengelig for denne destinasjonen.",

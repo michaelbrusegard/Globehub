@@ -96,7 +96,7 @@ async function Weather({ locale, coordinates, destinationId }: WeatherProps) {
             </li>
             <li>
               <Humidity
-                className='mr-2 inline size-4 fill-foreground'
+                className='mr-2 inline size-5 fill-foreground'
                 aria-hidden='true'
               />
               <span className='text-primary-600'>{data.main.humidity}%</span>{' '}
@@ -165,7 +165,7 @@ async function Weather({ locale, coordinates, destinationId }: WeatherProps) {
             </li>
             <li>
               <Mist
-                className='mr-2 inline size-4 fill-foreground'
+                className='mr-2 inline size-5 fill-foreground'
                 aria-hidden='true'
               />
               <span className='text-primary-600'>
