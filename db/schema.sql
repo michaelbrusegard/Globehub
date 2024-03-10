@@ -66,6 +66,14 @@ CREATE TABLE IF NOT EXISTS destinations (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS weather_caches (
+    destination_id INTEGER NOT NULL,
+    weather_data JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (destination_id),
+    FOREIGN KEY (destination_id) REFERENCES destinations(id)
+);
+
 CREATE TABLE IF NOT EXISTS reviews (
     user_id INTEGER NOT NULL,
     destination_id INTEGER NOT NULL,

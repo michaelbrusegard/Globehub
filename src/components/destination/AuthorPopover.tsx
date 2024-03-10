@@ -1,5 +1,7 @@
 import EditSquare from '@material-symbols/svg-400/outlined/edit_square.svg';
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Link,
   Popover,
@@ -75,7 +77,10 @@ function AuthorPopover({
       {user && (user.role === 'admin' || user.id === author.id) && (
         <Button
           as={Link}
-          href={'/' + destination.id + '/edit'}
+          href={{
+            pathname: '/[destination]/edit',
+            params: { destination: destination.id },
+          }}
           color='warning'
           radius='sm'
           startContent={

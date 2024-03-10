@@ -117,7 +117,7 @@ export default async function Destination({
                 />
                 <span className='self-center'>
                   {destination.reviewCount + ' '}
-                  <small>{t('reviews')}</small>
+                  <small>{t('reviews.title')}</small>
                 </span>
               </>
             ) : (
@@ -147,11 +147,11 @@ export default async function Destination({
           />
         </div>
       </section>
-      <div className='prose mx-auto mb-10 max-w-2xl space-y-8 dark:prose-invert'>
-        <section>
+      <div className='mx-auto mb-10 max-w-2xl space-y-8'>
+        <section className='prose dark:prose-invert'>
           <Markdown>{destination.content}</Markdown>
         </section>
-        <section>
+        <section className='prose dark:prose-invert'>
           <h1>{t('exclusiveTitle')}</h1>
           {user ? (
             <Markdown>{destination.exclusiveContent}</Markdown>
@@ -161,7 +161,7 @@ export default async function Destination({
             </span>
           )}
         </section>
-        <section>
+        <section className='prose dark:prose-invert'>
           <h1>{t('map')}</h1>
           <Map
             coordinates={coordinates}
@@ -169,8 +169,17 @@ export default async function Destination({
           />
         </section>
         <section>
-          <h1>{t('weather')}</h1>
-          <Weather locale={params.locale} coordinates={coordinates} />
+          <span className='prose dark:prose-invert'>
+            <h1 className='mb-2'>{t('weather.title')}</h1>
+          </span>
+          <Weather
+            locale={params.locale}
+            coordinates={coordinates}
+            destinationId={destination.id}
+          />
+        </section>
+        <section className='prose dark:prose-invert'>
+          <h1>{t('reviews.title')}</h1>
         </section>
       </div>
     </article>
