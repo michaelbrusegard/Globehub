@@ -12,7 +12,7 @@ export default function ProfileLoading() {
         <Skeleton className='mx-auto h-40 w-40 flex-shrink-0 rounded-full sm:mx-0' />
         <div className='mt-4 flex-grow'>
           <div className='flex flex-row items-center justify-between'>
-            <Skeleton className='my-2 h-6 w-full max-w-80 rounded-full' />
+            <Skeleton className='my-2 h-6 w-full max-w-80 rounded-lg' />
             <Button variant='bordered' isDisabled>
               {t('edit')}
             </Button>

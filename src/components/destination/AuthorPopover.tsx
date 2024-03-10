@@ -1,7 +1,5 @@
 import EditSquare from '@material-symbols/svg-400/outlined/edit_square.svg';
 import {
-  Autocomplete,
-  AutocompleteItem,
   Button,
   Link,
   Popover,
