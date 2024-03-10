@@ -60,7 +60,7 @@ export default async function Profile({
           />
           <div className='mt-4 flex-grow'>
             <div className='flex flex-row items-center justify-between'>
-              <h2 className='text-2xl font-semibold'>{user.name}</h2>
+              <h2 className='truncate text-2xl font-semibold'>{user.name}</h2>
               <EditProfileModal
                 updateProfile={async (formData: FormData) => {
                   'use server';
