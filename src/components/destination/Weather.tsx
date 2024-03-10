@@ -66,7 +66,7 @@ async function Weather({ locale, coordinates, destinationId }: WeatherProps) {
 
   return (
     <>
-      <div className='mb-4 flex flex-col items-center justify-around gap-6 text-default-500 sm:flex-row'>
+      <div className='mb-4 flex flex-col justify-around gap-6 text-default-500 sm:flex-row'>
         <div>
           <span className='flex items-center gap-1 text-3xl font-semibold text-secondary'>
             <WeatherIcon

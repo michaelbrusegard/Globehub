@@ -75,10 +75,10 @@ function AuthorPopover({
       {user && (user.role === 'admin' || user.id === author.id) && (
         <Button
           as={Link}
-          href={{
-            pathname: '/[destination]/edit',
-            params: { destination: destination.id },
-          }}
+          // href={{
+          //   pathname: '/[destination]/edit',
+          //   params: { destination: destination.id },
+          // }}
           color='warning'
           radius='sm'
           startContent={
