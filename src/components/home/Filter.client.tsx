@@ -10,6 +10,8 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Select,
+  SelectItem,
 } from '@nextui-org/react';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 
@@ -25,16 +27,22 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
     parseAsArrayOf<string>(parseAsString, ';'),
   );
 
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   return (
     <div className='mb-2'>
-      <div className='flex space-x-2'>
+      <div className='flex items-center space-x-2'>
         <Autocomplete
-          label='Select filters'
+          label='Velg filtre'
           size='sm'
           onSelectionChange={(selected: React.Key) => {
-            activeFilters
-              ? void setActiveFilters([...activeFilters, selected as string])
-              : void setActiveFilters([selected as string]);
+            if (selected && selected !== '') {
+              activeFilters
+                ? void setActiveFilters([...activeFilters, selected as string])
+                : void setActiveFilters([selected as string]);
+            }
           }}
           disableSelectorIconRotation={true}
         >
@@ -46,6 +54,10 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
             ))}
           </AutocompleteSection>
         </Autocomplete>
+        <WorldRegion />
+        <Button color='primary' onClick={handleReload}>
+          Søk
+        </Button>
       </div>
       <div className='w-95 flex-wrap'>
         {activeFilters?.map((filter) => (
@@ -57,7 +69,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
               void setActiveFilters((prev) => {
                 return prev
                   ? prev.filter((prevFilter) => prevFilter !== filter)
-                  : null;
+                  : [];
               });
             }}
           >
@@ -65,6 +77,52 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
           </Chip>
         ))}
       </div>
+    </div>
+  );
+};
+
+const WorldRegion: React.FC = () => {
+  const worldRegions = [
+    { key: 'africa', value: 'Afrika' },
+    { key: 'asia', value: 'Asia' },
+    { key: 'europe', value: 'Europa' },
+    { key: 'northAmerica', value: 'Nord-Amerika' },
+    { key: 'southAmerica', value: 'Sør-Amerika' },
+    { key: 'oceania', value: 'Oseania' },
+  ];
+  // <DropdownItem key='africa'>Afrika</DropdownItem>
+  // <DropdownItem key='asia'>Asia</DropdownItem>
+  //<DropdownItem key='europe'>Europa</DropdownItem>
+  // <DropdownItem key='northAmerica'>Nord-Amerika</DropdownItem>
+  //<DropdownItem key='southAmerica'>Sør-Amerika</DropdownItem>
+  // <DropdownItem key='oceania'>Oseania</DropdownItem>
+
+  const [worldRegion, setWorldRegion] = useQueryState(
+    'world_region',
+    parseAsString.withDefault(''),
+  );
+
+  const handleWorldRegionChange = (selectedValue: {
+    target: { value: string | ((old: string) => string | null) | null };
+  }) => {
+    void setWorldRegion(selectedValue.target.value);
+  };
+
+  return (
+    <div className='flex w-full max-w-xs flex-wrap gap-4 md:flex-nowrap'>
+      <Select
+        label='Velg verdensdel'
+        size='sm'
+        value={worldRegion}
+        onChange={handleWorldRegionChange}
+        defaultSelectedKeys={worldRegion ? [worldRegion] : undefined}
+      >
+        {worldRegions.map((worldRegions) => (
+          <SelectItem key={worldRegions.key} value={worldRegions.key}>
+            {worldRegions.value}
+          </SelectItem>
+        ))}
+      </Select>
     </div>
   );
 };
