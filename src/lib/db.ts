@@ -10,12 +10,14 @@ const sql = postgres({
   transform: postgres.toCamel,
 });
 
+type Role = 'user' | 'admin';
+
 type User = {
   id: number;
   name?: string;
   email?: string;
   image?: string;
-  role: string;
+  role: Role;
   bio?: string;
   createdAt: Date;
 };

@@ -82,12 +82,6 @@ export default async function Destination({
     WHERE id = ${destination.id}
   `;
 
-  const parts = destination.location.replace(/[()]/g, '').split(',');
-  const coordinates: [number, number] = [
-    parseFloat(parts[0]!),
-    parseFloat(parts[1]!),
-  ];
-
   return (
     <article className='mt-12'>
       <section>
@@ -130,9 +124,9 @@ export default async function Destination({
             <Chip
               className='mb-2 mr-2'
               color='secondary'
-              key={t('worldRegion', { region: destination.worldRegion })}
+              key={destination.worldRegion}
             >
-              {t('worldRegion', { region: destination.worldRegion })}
+              {t('write.worldRegionEnum', { region: destination.worldRegion })}
             </Chip>
             {destination.keywords.map((keyword) => (
               <Chip className='mb-2 mr-2' key={keyword}>
@@ -164,7 +158,7 @@ export default async function Destination({
         <section className='prose dark:prose-invert'>
           <h1>{t('map')}</h1>
           <Map
-            coordinates={coordinates}
+            location={destination.location}
             popup={destination.name + '\n' + destination.location}
           />
         </section>
@@ -174,7 +168,7 @@ export default async function Destination({
           </span>
           <Weather
             locale={params.locale}
-            coordinates={coordinates}
+            location={destination.location}
             destinationId={destination.id}
           />
         </section>

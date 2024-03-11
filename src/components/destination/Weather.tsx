@@ -19,7 +19,7 @@ import {
 
 type WeatherProps = {
   locale: string;
-  coordinates: [number, number];
+  location: string;
   destinationId: number;
 };
 
@@ -29,9 +29,11 @@ function getWindDirection(deg: number) {
   return directions[index];
 }
 
-async function Weather({ locale, coordinates, destinationId }: WeatherProps) {
+async function Weather({ locale, location, destinationId }: WeatherProps) {
   const t = await getTranslations('destination.weather');
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${env.OPEN_WEATHER_API_KEY}&units=metric&lang=${locale}`;
+  const coordinates = location.slice(1, -1).split(',');
+  const [longitude, latitude] = coordinates;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${env.OPEN_WEATHER_API_KEY}&units=metric&lang=${locale}`;
 
   let [weather]: WeatherCache[] = await sql`
     SELECT * FROM weather_caches WHERE destination_id = ${destinationId} AND created_at > NOW() - INTERVAL '1 hour'

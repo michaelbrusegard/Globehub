@@ -52,7 +52,6 @@
     "exclusiveTitle": "Ekslusive tips",
     "exlusiveNotLoggedInDescription": "Få eksklusive tips og anbefalinger for å gjøre ditt neste reisemål uforglemmelig ved å logge inn.",
     "edit": "Rediger",
-    "worldRegion": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
     "modified": "Sist endret",
     "map": "Kart",
     "memberSince": "Medlem siden",
@@ -76,7 +75,11 @@
       "exclusiveContent": "Eksklusivt innhold",
       "update": "Oppdater",
       "editDestination": "Rediger destinasjon",
-      "cancel": "Avbryt"
+      "cancel": "Avbryt",
+      "latitude": "Breddegrad",
+      "longitude": "Lengdegrad",
+      "worldRegionEnum": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
+      "worldRegion": "Verdensdel"
     },
     "reviews": {
       "title": "Anmeldelser"

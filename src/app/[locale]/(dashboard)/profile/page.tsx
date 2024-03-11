@@ -64,6 +64,7 @@ export default async function Profile({
               <EditProfileModal
                 updateProfile={async (formData: FormData) => {
                   'use server';
+
                   if (!user) {
                     throw new Error(
                       'You must be signed in to perform this action',

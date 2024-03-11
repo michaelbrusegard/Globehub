@@ -1,7 +1,4 @@
-import EditSquare from '@material-symbols/svg-400/outlined/edit_square.svg';
 import {
-  Button,
-  Link,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -15,6 +12,7 @@ import { type User } from '@/lib/db';
 import type { Destination } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
+import { EditButton } from '@/components/destination/EditButton';
 import { UserCard } from '@/components/destination/UserCard';
 
 type AuthorPopoverProps = {
@@ -73,23 +71,12 @@ function AuthorPopover({
         </PopoverContent>
       </Popover>
       {user && (user.role === 'admin' || user.id === author.id) && (
-        <Button
-          as={Link}
-          // href={{
-          //   pathname: '/[destination]/edit',
-          //   params: { destination: destination.id },
-          // }}
-          color='warning'
-          radius='sm'
-          startContent={
-            <EditSquare
-              className='size-5 fill-warning-foreground'
-              aria-hidden='true'
-            />
-          }
-        >
-          {t('edit')}
-        </Button>
+        <EditButton
+          destinationId={destination.id}
+          t={{
+            edit: t('edit'),
+          }}
+        />
       )}
     </div>
   );
