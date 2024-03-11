@@ -26,7 +26,17 @@ type AuthorPopoverProps = {
   destination: Destination;
 };
 
-async function AuthorPopover({
+type ButtonProps = {
+  user: User | undefined;
+  author: User;
+  destination: Destination;
+  t: {
+    edit: string;
+    favorite: string;
+  };
+};
+
+function AuthorPopover({
   className,
   user,
   author,
@@ -35,35 +45,12 @@ async function AuthorPopover({
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
 
-  type SqlResult = {
-    exists: boolean;
-  };
-
-  async function getFavorite() {
-    if (user) {
-      return (
-        (
-          (await sql`
-      SELECT EXISTS (
-        SELECT 1 
-        FROM user_favorites 
-        WHERE user_id = ${user?.id} AND destination_id = ${destination?.id}
-      ) as "exists"
-  `) as SqlResult[]
-        )[0]?.exists ?? false
-      );
-    } else {
-      return false;
-    }
-  }
-
-  const favorite: boolean = await getFavorite();
-
   return (
-    <div className={cn('w-full items-center justify-between', className)}>
+    <div className={cn('w-full', className)}>
       <Popover showArrow shouldBlockScroll placement='bottom'>
         <PopoverTrigger>
           <UserAvatar
+            className='justify-start'
             classNames={{
               name: 'text-xl font-bold',
               description: 'text-sm',
@@ -99,48 +86,79 @@ async function AuthorPopover({
           <UserCard user={author} />
         </PopoverContent>
       </Popover>
-      <div>
-        {user && (
-          <FavoriteButton
-            destination={destination}
-            favorite={favorite}
-            updateFavorite={async (favorite: boolean) => {
-              'use server';
-              if (!user) {
-                throw new Error('You must be signed in to perform this action');
-              }
-              if (!favorite) {
-                await sql`
+      <Buttons
+        user={user}
+        author={author}
+        destination={destination}
+        t={{
+          edit: t('edit'),
+          favorite: t('favorite'),
+        }}
+      />
+    </div>
+  );
+}
+
+async function Buttons({ user, author, destination, t }: ButtonProps) {
+  if (!user) {
+    return null;
+  }
+
+  const [result]: { exists: boolean }[] = await sql`
+    SELECT EXISTS (
+      SELECT 1 
+      FROM user_favorites 
+      WHERE user_id = ${user.id} AND destination_id = ${destination?.id}
+    ) as "exists"
+  `;
+
+  if (!result) {
+    return null;
+  }
+
+  return (
+    <div className='space-x-2'>
+      <FavoriteButton
+        favorite={result.exists}
+        t={{ favorite: t.favorite }}
+        updateFavorite={async () => {
+          'use server';
+
+          if (!user) {
+            throw new Error('You must be signed in to perform this action');
+          }
+
+          if (!result.exists) {
+            await sql`
                   INSERT INTO user_favorites (user_id, destination_id)
-                  VALUES (${user?.id}, ${destination.id})
+                  VALUES (${user.id}, ${destination.id})
                 `;
-              } else {
-                await sql`
+          } else {
+            await sql`
                   DELETE FROM user_favorites
-                  WHERE user_id = ${user?.id} AND destination_id = ${destination.id}
+                  WHERE user_id = ${user.id} AND destination_id = ${destination.id}
                 `;
-              }
-              revalidatePath(`/[locale]/(dashboard)/${destination.id}`);
-            }}
-          ></FavoriteButton>
-        )}
-        {user && (user.role === 'admin' || user.id === author.id) && (
-          <Button
-            as={Link}
-            href={'/' + destination.id + '/edit'}
-            color='warning'
-            radius='sm'
-            startContent={
-              <EditSquare
-                className='size-5 fill-warning-foreground'
-                aria-hidden='true'
-              />
-            }
-          >
-            {t('edit')}
-          </Button>
-        )}
-      </div>
+          }
+
+          revalidatePath(`/[locale]/(dashboard)/${destination.id}`);
+        }}
+      />
+      {(user.role === 'admin' || user.id === author.id) && (
+        <Button
+          as={Link}
+          href={'/' + destination.id + '/edit'}
+          color='warning'
+          radius='sm'
+          startContent={
+            <EditSquare
+              className='size-5 fill-warning-foreground'
+              aria-hidden='true'
+            />
+          }
+        >
+          {t.edit}
+        </Button>
+      )}
     </div>
   );
 }

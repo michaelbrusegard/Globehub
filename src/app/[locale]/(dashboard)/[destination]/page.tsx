@@ -95,7 +95,7 @@ export default async function Destination({
           {destination.name}
         </h1>
         <AuthorPopover
-          className='hidden md:mb-12 md:inline-flex'
+          className='hidden justify-between md:mb-12 md:flex'
           user={user}
           author={author}
           destination={destination}
@@ -103,7 +103,7 @@ export default async function Destination({
         <ImageCarousel className='mb-4' destination={destination} />
         <div className='mx-auto max-w-2xl'>
           <AuthorPopover
-            className='mb-6 flex md:hidden'
+            className='mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-center md:hidden '
             user={user}
             author={author}
             destination={destination}
