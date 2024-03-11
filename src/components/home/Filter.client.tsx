@@ -29,7 +29,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
 
   return (
     <div className='mb-2'>
-      <div className='flex items-center space-x-2'>
+      <div className='flex flex-col space-y-2 sm:flex-row sm:gap-2 sm:space-y-0'>
         <Autocomplete
           label='Velg filtre'
           size='sm'
@@ -51,7 +51,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
           </AutocompleteSection>
         </Autocomplete>
         <WorldRegion />
-        <Button color='primary' onClick={handleReload}>
+        <Button color='primary' onClick={handleReload} radius='sm' size='lg'>
           Søk
         </Button>
       </div>
