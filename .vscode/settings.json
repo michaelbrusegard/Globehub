@@ -16,7 +16,8 @@
     "home",
     "destination",
     "s3",
-    "editDestination"
+    "editDestination",
+    "favourites"
   ],
   "sqltools.connections": [
     {

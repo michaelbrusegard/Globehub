@@ -1,4 +1,4 @@
-import { Chip } from '@nextui-org/react';
+import { Chip, cn } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
@@ -89,7 +89,7 @@ export default async function Destination({
           {destination.name}
         </h1>
         <AuthorPopover
-          className='hidden md:mb-12 md:inline-flex'
+          className='hidden justify-between md:mb-12 md:flex'
           user={user}
           author={author}
           destination={destination}
@@ -97,7 +97,10 @@ export default async function Destination({
         <ImageCarousel className='mb-4' destination={destination} />
         <div className='mx-auto max-w-2xl'>
           <AuthorPopover
-            className='mb-6 flex md:hidden'
+            className={cn(
+              'mb-6 flex justify-between gap-2 sm:flex-row sm:items-center md:hidden',
+              (user?.role === 'admin' || user?.id === author.id) && 'flex-col',
+            )}
             user={user}
             author={author}
             destination={destination}

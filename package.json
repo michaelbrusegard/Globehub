@@ -15,6 +15,7 @@
     "db:seed": "bun run db/seed.ts",
     "db:reset": "bun run db/reset.ts",
     "db:logs": "docker-compose logs -f db",
+    "db:admin": "bun run db/admin.ts",
     "s3:start": "docker-compose up -d s3",
     "s3:stop": "docker-compose stop s3",
     "s3:logs": "docker-compose logs -f s3",
