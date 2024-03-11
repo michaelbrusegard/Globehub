@@ -1,7 +1,4 @@
-import EditSquare from '@material-symbols/svg-400/outlined/edit_square.svg';
 import {
-  Button,
-  Link,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -16,6 +13,7 @@ import { type User } from '@/lib/db';
 import { type Destination, sql } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
+import { EditButton } from '@/components/destination/EditButton';
 import { FavoriteButton } from '@/components/destination/FavoriteButton';
 import { UserCard } from '@/components/destination/UserCard';
 
@@ -99,6 +97,16 @@ async function AuthorPopover({
           <UserCard user={author} />
         </PopoverContent>
       </Popover>
+<<<<<<< src/components/destination/AuthorPopover.tsx
+      {user && (user.role === 'admin' || user.id === author.id) && (
+        <EditButton
+          destinationId={destination.id}
+          t={{
+            edit: t('edit'),
+          }}
+        />
+      )}
+=======
       <div>
         {user && (
           <FavoriteButton
@@ -141,6 +149,7 @@ async function AuthorPopover({
           </Button>
         )}
       </div>
+>>>>>>> src/components/destination/AuthorPopover.tsx
     </div>
   );
 }

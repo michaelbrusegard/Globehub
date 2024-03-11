@@ -23,7 +23,8 @@ const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
-    AUTH_SECRET: z.string().optional(),
+    AUTH_URL: z.string(),
+    AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string().optional(),
     AUTH_GOOGLE_SECRET: z.string().optional(),
     AUTH_GITHUB_ID: z.string().optional(),
@@ -56,6 +57,7 @@ const env = createEnv({
     STORAGE_PASSWORD: process.env.STORAGE_PASSWORD,
     STORAGE_NAME: process.env.STORAGE_NAME,
     NODE_ENV: process.env.NODE_ENV,
+    AUTH_URL: process.env.AUTH_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,

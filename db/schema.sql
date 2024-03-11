@@ -29,19 +29,21 @@ CREATE TABLE IF NOT EXISTS sessions (
     PRIMARY KEY (id)
 );
 
+CREATE TYPE roles AS ENUM ('admin', 'user');
+
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL,
     name VARCHAR(255),
     email VARCHAR(255),
     "emailVerified" TIMESTAMPTZ,
     image TEXT,
-    role VARCHAR(255) NOT NULL DEFAULT 'user',
+    role roles NOT NULL DEFAULT 'user',
     bio VARCHAR(200),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 );
 
-CREATE TYPE world_region AS ENUM (
+CREATE TYPE world_regions AS ENUM (
     'africa',
     'asia',
     'europe',
@@ -53,17 +55,25 @@ CREATE TYPE world_region AS ENUM (
 CREATE TABLE IF NOT EXISTS destinations (
     id SERIAL,
     user_id INTEGER NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    exclusive_content TEXT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    content VARCHAR(10000) NOT NULL,
+    exclusive_content VARCHAR(10000) NOT NULL,
     location POINT NOT NULL,
-    world_region world_region NOT NULL,
-    images TEXT [] NOT NULL,
+    world_region world_regions NOT NULL,
+    images VARCHAR(255) [] NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMPTZ DEFAULT NULL,
     views INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS weather_caches (
+    destination_id INTEGER NOT NULL,
+    weather_data JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (destination_id),
+    FOREIGN KEY (destination_id) REFERENCES destinations(id)
 );
 
 CREATE TABLE IF NOT EXISTS reviews (

@@ -17,7 +17,7 @@ import {
 } from 'react-leaflet';
 
 type MapProps = {
-  coordinates: [number, number];
+  location: string;
   popup: string;
 };
 
@@ -117,7 +117,11 @@ function MinimapControl({ zoom }: { zoom?: number }) {
     </div>
   );
 }
-function Map({ coordinates, popup }: MapProps) {
+function Map({ location, popup }: MapProps) {
+  const coordinates = location.slice(1, -1).split(',');
+  const [longitude, latitude] = coordinates.map((coordinate) =>
+    parseFloat(coordinate),
+  );
   const animateRef = useRef(true);
   const markerIcon = divIcon({
     html: renderToString(
@@ -134,7 +138,7 @@ function Map({ coordinates, popup }: MapProps) {
   return (
     <MapContainer
       className='aspect-video w-full rounded-md focus:outline-none focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus dark:bg-[#303030]'
-      center={coordinates}
+      center={[latitude!, longitude!]}
       zoom={10}
     >
       <TileLayer
@@ -144,7 +148,7 @@ function Map({ coordinates, popup }: MapProps) {
       />
       <SetViewOnClick animateRef={animateRef} />
       <MinimapControl />
-      <Marker position={coordinates} icon={markerIcon}>
+      <Marker position={[latitude!, longitude!]} icon={markerIcon}>
         <Popup className='!mb-10'>{popup}</Popup>
       </Marker>
     </MapContainer>

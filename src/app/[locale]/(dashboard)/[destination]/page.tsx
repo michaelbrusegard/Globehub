@@ -82,16 +82,10 @@ export default async function Destination({
     WHERE id = ${destination.id}
   `;
 
-  const parts = destination.location.replace(/[()]/g, '').split(',');
-  const coordinates: [number, number] = [
-    parseFloat(parts[0]!),
-    parseFloat(parts[1]!),
-  ];
-
   return (
     <article className='mt-12'>
       <section>
-        <h1 className='mb-12 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
+        <h1 className='mb-14 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
           {destination.name}
         </h1>
         <AuthorPopover
@@ -117,7 +111,7 @@ export default async function Destination({
                 />
                 <span className='self-center'>
                   {destination.reviewCount + ' '}
-                  <small>{t('reviews')}</small>
+                  <small>{t('reviews.title')}</small>
                 </span>
               </>
             ) : (
@@ -130,9 +124,9 @@ export default async function Destination({
             <Chip
               className='mb-2 mr-2'
               color='secondary'
-              key={t('worldRegion', { region: destination.worldRegion })}
+              key={destination.worldRegion}
             >
-              {t('worldRegion', { region: destination.worldRegion })}
+              {t('write.worldRegionEnum', { region: destination.worldRegion })}
             </Chip>
             {destination.keywords.map((keyword) => (
               <Chip className='mb-2 mr-2' key={keyword}>
@@ -147,11 +141,11 @@ export default async function Destination({
           />
         </div>
       </section>
-      <div className='prose mx-auto mb-10 max-w-2xl space-y-8 dark:prose-invert'>
-        <section>
+      <div className='mx-auto mb-10 max-w-2xl space-y-8'>
+        <section className='prose dark:prose-invert'>
           <Markdown>{destination.content}</Markdown>
         </section>
-        <section>
+        <section className='prose dark:prose-invert'>
           <h1>{t('exclusiveTitle')}</h1>
           {user ? (
             <Markdown>{destination.exclusiveContent}</Markdown>
@@ -161,16 +155,25 @@ export default async function Destination({
             </span>
           )}
         </section>
-        <section>
+        <section className='prose dark:prose-invert'>
           <h1>{t('map')}</h1>
           <Map
-            coordinates={coordinates}
+            location={destination.location}
             popup={destination.name + '\n' + destination.location}
           />
         </section>
         <section>
-          <h1>{t('weather')}</h1>
-          <Weather locale={params.locale} coordinates={coordinates} />
+          <span className='prose dark:prose-invert'>
+            <h1 className='mb-2'>{t('weather.title')}</h1>
+          </span>
+          <Weather
+            locale={params.locale}
+            location={destination.location}
+            destinationId={destination.id}
+          />
+        </section>
+        <section className='prose dark:prose-invert'>
+          <h1>{t('reviews.title')}</h1>
         </section>
       </div>
     </article>

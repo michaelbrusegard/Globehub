@@ -12,14 +12,17 @@ const pathnames = {
   '/profile': {
     no: '/profil',
   },
-  '/edit': {
-    no: '/rediger',
+  '/new': {
+    no: '/ny',
   },
   '/error': {
     no: '/feil',
   },
   '/not-found': {
     no: '/ikke-funnet',
+  },
+  '/[destination]/edit': {
+    no: '/[destination]/rediger',
   },
   '/[destination]': {
     no: '/[destination]',

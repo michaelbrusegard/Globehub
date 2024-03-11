@@ -14,6 +14,18 @@
   ::-moz-selection {
     @apply bg-secondary/50;
   }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .leaflet-bar {
@@ -54,4 +66,9 @@
 
 .leaflet-control-attribution a {
   @apply !z-10 !inline-flex items-center rounded-medium !text-xs !text-primary !no-underline outline-none transition-opacity tap-highlight-transparent hover:!opacity-80 focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-focus active:!opacity-disabled;
+}
+
+.leaflet-pane,
+.leaflet-top {
+  @apply !z-0;
 }

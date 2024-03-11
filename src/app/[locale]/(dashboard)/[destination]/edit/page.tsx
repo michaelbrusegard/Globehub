@@ -1,9 +1,11 @@
-import { Input, Textarea } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
+import { validateDestination } from '@/lib/validation';
+
+import { FormFields } from '@/components/destination/FormFields';
 
 export async function generateMetadata({
   params: { locale },
@@ -17,7 +19,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Edit({
+export default async function DestinationEdit({
   params,
 }: {
   params: { destination: string; locale: string };
@@ -51,54 +53,102 @@ export default async function Edit({
     notFound();
   }
 
-  return (
-    <form
-      className='my-4'
-      // action={async (formData: FormData) => {
-      //   'use server';
+  const worldRegions: {
+    enumlabel: string;
+  }[] = await sql`
+    SELECT enumlabel 
+    FROM pg_enum 
+    WHERE enumtypid = (
+      SELECT oid 
+      FROM pg_type 
+      WHERE typname = 'world_regions'
+    )
+  `;
 
-      //   if (!(user && (user.role === 'admin' || user.id === author.id))) {
-      //     throw new Error('Unauthorized');
-      //   }
-      // }}
-    >
-      <h1 className='mb-10 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
+  if (!worldRegions) {
+    throw new Error('World regions not found');
+  }
+
+  const worldRegionTranslations = worldRegions.reduce(
+    (acc: Record<string, string>, region) => {
+      acc[region.enumlabel] = t('worldRegionEnum', {
+        region: region.enumlabel,
+      });
+      return acc;
+    },
+    {},
+  );
+
+  return (
+    <>
+      <h1 className='mb-10 mt-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
         {t('editDestination')}
       </h1>
-      <div className='space-y-4'>
-        <Input
-          labelPlacement='outside'
-          name='title'
-          size='lg'
-          label={t('title')}
-          defaultValue={destination.name}
-          isRequired
+      <form
+        action={async (formData: FormData) => {
+          'use server';
+
+          if (!(user && (user.role === 'admin' || user.id === author.id))) {
+            throw new Error('Unauthorized');
+          }
+
+          const parsed = validateDestination(
+            Object.fromEntries(formData) as {
+              title: string;
+              content: string;
+              exclusiveContent: string;
+              latitude: string;
+              longitude: string;
+              worldRegion: string;
+            },
+            Object.keys(worldRegionTranslations),
+          );
+
+          if (!parsed.success) {
+            return;
+          }
+
+          const [updatedDestination] = await sql`
+            UPDATE destinations
+            SET
+              name = ${parsed.data.title},
+              content = ${parsed.data.content},
+              exclusive_content = ${parsed.data.exclusiveContent},
+              location = POINT(${parsed.data.longitude}, ${parsed.data.latitude}),
+              world_region = ${parsed.data.worldRegion},
+              modified_at = NOW()
+            WHERE id = ${destination.id}
+            RETURNING *
+          `;
+
+          if (
+            updatedDestination &&
+            destination.location !== updatedDestination.location
+          ) {
+            await sql`
+            DELETE FROM weather_caches
+            WHERE destination_id = ${destination.id}
+          `;
+          }
+
+          redirect(`/${destination.id}`);
+        }}
+      >
+        <FormFields
+          destination={destination}
+          worldRegions={worldRegionTranslations}
+          t={{
+            title: t('title'),
+            content: t('content'),
+            exclusiveContent: t('exclusiveContent'),
+            cancel: t('cancel'),
+            submit: t('update'),
+            latitude: t('latitude'),
+            longitude: t('longitude'),
+            worldRegion: t('worldRegion'),
+          }}
         />
-        <Textarea
-          labelPlacement='outside'
-          minRows={12}
-          name='content'
-          size='lg'
-          defaultValue={destination.content}
-          label={t('content')}
-          isRequired
-        />
-        <Textarea
-          labelPlacement='outside'
-          minRows={12}
-          name='exclusiveContent'
-          size='lg'
-          defaultValue={destination.exclusiveContent}
-          label={t('exclusiveContent')}
-          isRequired
-        />
-        {/* <div>
-        <Button color='danger' variant='light' type='button' onPress={onClose}>
-          {t.cancel}
-        </Button>
-        <SubmitButton t={{ update: t.update }} />
-      </div> */}
-      </div>
-    </form>
+      </form>
+    </>
   );
 }

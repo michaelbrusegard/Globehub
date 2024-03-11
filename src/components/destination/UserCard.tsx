@@ -5,10 +5,20 @@ import {
   CardFooter,
   CardHeader,
 } from '@nextui-org/react';
+import { getFormatter, getTranslations } from 'next-intl/server';
 
+import { sql } from '@/lib/db';
 import type { User } from '@/lib/db';
 
-function UserCard({ user }: { user: User }) {
+async function UserCard({ user }: { user: User }) {
+  const t = await getTranslations('destination');
+  const format = await getFormatter();
+  const [result]: { count: number }[] = await sql`
+    SELECT COUNT(*)
+    FROM destinations
+    WHERE user_id = ${user.id}
+  `;
+
   return (
     <Card shadow='none' className='max-w-[300px] border-none bg-transparent'>
       <CardHeader className='justify-between'>
@@ -18,7 +28,16 @@ function UserCard({ user }: { user: User }) {
             <h4 className='text-small font-semibold leading-none text-default-600'>
               {user.name}
             </h4>
-            <h5 className='text-small tracking-tight text-default-500'>🎉</h5>
+            <h5 className='text-xs tracking-tight text-default-500'>
+              {t('memberSince')}{' '}
+              {format.dateTime(user.createdAt, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+              <br />
+              {result ? t('articlesWritten', { count: result.count }) : null}
+            </h5>
           </div>
         </div>
       </CardHeader>

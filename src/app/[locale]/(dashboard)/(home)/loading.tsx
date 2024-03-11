@@ -2,7 +2,7 @@ import { Pagination } from '@nextui-org/react';
 
 import { TopDestinationsGridSkeleton } from '@/components/home/TopDestinationsGridSkeleton';
 
-export default function NewsSkeleton() {
+export default function HomeLoading() {
   return (
     <>
       <div className='flex flex-col items-center'>
