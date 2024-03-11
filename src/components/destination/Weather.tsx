@@ -57,14 +57,23 @@ async function Weather({ locale, location, destinationId }: WeatherProps) {
     }
   }
 
-  if (!weather)
+  function WeatherNotAvailable() {
     return (
       <span className='italic text-default-500'>
         {t('weatherNotAvailable')}
       </span>
     );
+  }
+
+  if (!weather) {
+    return <WeatherNotAvailable />;
+  }
 
   const data = JSON.parse(weather.weatherData) as WeatherData;
+
+  if (!data.weather) {
+    return <WeatherNotAvailable />;
+  }
 
   return (
     <>

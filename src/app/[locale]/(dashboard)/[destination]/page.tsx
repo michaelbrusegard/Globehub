@@ -85,7 +85,7 @@ export default async function Destination({
   return (
     <article className='mt-12'>
       <section>
-        <h1 className='mb-12 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
+        <h1 className='mb-14 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
           {destination.name}
         </h1>
         <AuthorPopover
