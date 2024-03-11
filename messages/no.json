@@ -36,7 +36,8 @@
     "cancel": "Avbryt",
     "update": "Oppdater",
     "writeBio": "Skriv din biografi her...",
-    "bioErrorMessage": "Biografien kan maks være 200 tegn lang."
+    "bioErrorMessage": "Biografien kan maks være 200 tegn lang.",
+    "reviews": "Vurderinger"
   },
   "home": {
     "title": "Topp destinasjoner",
@@ -63,6 +64,7 @@
       "exclusiveContent": "Eksklusivt innhold",
       "update": "Oppdater",
       "editDestination": "Rediger destinasjon"
-    }
+    },
+    "favorite": "Favoritt"
   }
 }
