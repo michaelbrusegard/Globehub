@@ -38,7 +38,7 @@ const AddFilter: React.FC<KeywordProps> = ({ keywords }) => {
           label='Velg filtre'
           size='sm'
           onSelectionChange={(selected: React.Key) => {
-            if (selected && selected !== '') {
+            if (selected && !activeFilters?.includes(selected as string)) {
               activeFilters
                 ? void setActiveFilters([...activeFilters, selected as string])
                 : void setActiveFilters([selected as string]);
