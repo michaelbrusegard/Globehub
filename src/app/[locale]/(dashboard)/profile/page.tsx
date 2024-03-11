@@ -11,8 +11,6 @@ import { validateProfile } from '@/lib/validation';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { ProfileTabs } from '@/components/profile/ProfileTabs';
 
-// import { Review } from '@/components/reviews/Review';
-
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -91,7 +89,7 @@ export default async function Profile({
                     WHERE id = ${user.id}
                   `;
 
-                  revalidatePath('/[locale]/(dashboard)/profile');
+                  revalidatePath(`/${locale}/profile`);
                 }}
                 profile={{
                   bio: user.bio,

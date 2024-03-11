@@ -96,6 +96,12 @@ For accesing the logs of the database you can run the following command:
 bun run db:logs
 ```
 
+For toggling the role of your user between admin and user you can run the following command:
+
+```bash
+bun run db:admin
+```
+
 ### Local storage
 
 When you have Docker installed you can run the following command to start the S3 storage:
