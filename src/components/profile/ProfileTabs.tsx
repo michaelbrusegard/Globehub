@@ -13,8 +13,7 @@ type ProfileTabsProps = {
 };
 
 function ProfileTabs({ reviews, favorites }: ProfileTabsProps) {
-  // const t = useTranslations('profile');
-  // console.log(favorites);
+  const noFavorites = favorites.length === 0;
   return (
     <div className='flex w-full flex-col'>
       <Tabs aria-label='Options'>
@@ -37,7 +36,7 @@ function ProfileTabs({ reviews, favorites }: ProfileTabsProps) {
           </Card>
         </Tab>
         <Tab key='favorites' title='Favoritter'>
-          {true ? (
+          {noFavorites ? (
             <NoContent message='favoritt destinasjoner.' />
           ) : (
             favorites.map((destination, index) => (
