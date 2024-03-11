@@ -4,11 +4,12 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 
 import { auth } from '@/lib/auth';
-import { sql } from '@/lib/db';
+import { type Destination, sql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
 import { validateProfile } from '@/lib/validation';
 
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
+import { ProfileTabs } from '@/components/profile/ProfileTabs';
 
 // import { Review } from '@/components/reviews/Review';
 
@@ -33,7 +34,12 @@ export default async function Profile({
   const t = await getTranslations('profile');
   const session = await auth();
   const user = session?.user;
-
+  const favorites: Destination[] = await sql`
+    SELECT destinations.*
+    FROM destinations
+    INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
+    WHERE user_favorites.user_id = ${user?.id ?? 0};
+  `;
   if (!user) {
     redirect('/signin');
   } else {
@@ -109,18 +115,9 @@ export default async function Profile({
             )}
           </div>
         </div>
-        {/* <h2 className='my-4 border-b border-divider pb-2 font-arimo text-3xl font-semibold tracking-tight'>
-          Mine vurderinger
-        </h2>
-        <ul role='list' className='divide-y divide-gray-100'>
-          {reviews.map((review) => (
-            <Review
-              profilepic={user.image}
-              review={review}
-              key={review.text}
-            />
-          ))}
-        </ul> */}
+        <div className='flex w-full flex-col'>
+          <ProfileTabs favorites={favorites} />
+        </div>
       </>
     );
   }
