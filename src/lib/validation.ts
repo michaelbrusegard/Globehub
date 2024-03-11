@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-function validateProfile({ bio }: { bio: string }) {
+function validateProfile({ bio }: { bio?: string }) {
   const profileSchema = z.object({
     bio: z.string().max(200),
   });
@@ -28,8 +28,8 @@ function validateDestination(
 ) {
   const worldRegionEnum = z.enum(worldRegions as [string, ...string[]]);
 
-  const latitudeRegex = /^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{4,}$/, // Latitude
-    longitudeRegex = /^-?((([1-9]?[0-9]|1[0-7][0-9])\.{1}\d{4,})|180\.0000)$/; // Longitude
+  const latitudeRegex = /^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{3,}$/,
+    longitudeRegex = /^-?((([1-9]?[0-9]|1[0-7][0-9])\.{1}\d{3,})|180\.0000)$/;
 
   const destinationSchema = z.object({
     title: z.string().min(2).max(100),
