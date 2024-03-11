@@ -1,6 +1,5 @@
 import { Chip } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { revalidatePath } from 'next/cache';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 
@@ -89,29 +88,6 @@ export default async function Destination({
     parseFloat(parts[1]!),
   ];
 
-  type SqlResult = {
-    exists: boolean;
-  };
-
-  async function getFavorite() {
-    if (user) {
-      return (
-        (
-          (await sql`
-      SELECT EXISTS (
-        SELECT 1 
-        FROM user_favorites 
-        WHERE user_id = ${user?.id} AND destination_id = ${destination?.id}
-      ) as "exists"
-  `) as SqlResult[]
-        )[0]?.exists ?? false
-      );
-    } else {
-      return false;
-    }
-  }
-
-  const favorite: boolean = await getFavorite();
   return (
     <article className='mt-12'>
       <section>
@@ -123,27 +99,6 @@ export default async function Destination({
           user={user}
           author={author}
           destination={destination}
-          favorite={favorite}
-          updateFavorite={async (favorite: boolean) => {
-            'use server';
-            if (!user) {
-              throw new Error('You must be signed in to perform this action');
-            }
-
-            if (!favorite) {
-              await sql`
-                INSERT INTO user_favorites (user_id, destination_id)
-                VALUES (${user?.id}, ${destination.id})
-              `;
-            } else {
-              await sql`
-                DELETE FROM user_favorites
-                WHERE user_id = ${user?.id} AND destination_id = ${destination.id}
-              `;
-            }
-
-            revalidatePath(`/[locale]/(dashboard)/${params.destination}`);
-          }}
         />
         <ImageCarousel className='mb-4' destination={destination} />
         <div className='mx-auto max-w-2xl'>

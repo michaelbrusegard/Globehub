@@ -8,11 +8,12 @@ import {
   User as UserAvatar,
 } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
+import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 import readingTime from 'reading-time';
 
 import { type User } from '@/lib/db';
-import type { Destination } from '@/lib/db';
+import { type Destination, sql } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
 import { FavoriteButton } from '@/components/destination/FavoriteButton';
@@ -23,20 +24,41 @@ type AuthorPopoverProps = {
   user: User | undefined;
   author: User;
   destination: Destination;
-  favorite: boolean;
-  updateFavorite: (favorite: boolean) => void;
 };
 
-function AuthorPopover({
+async function AuthorPopover({
   className,
   user,
   author,
   destination,
-  favorite,
-  updateFavorite,
 }: AuthorPopoverProps) {
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
+
+  type SqlResult = {
+    exists: boolean;
+  };
+
+  async function getFavorite() {
+    if (user) {
+      return (
+        (
+          (await sql`
+      SELECT EXISTS (
+        SELECT 1 
+        FROM user_favorites 
+        WHERE user_id = ${user?.id} AND destination_id = ${destination?.id}
+      ) as "exists"
+  `) as SqlResult[]
+        )[0]?.exists ?? false
+      );
+    } else {
+      return false;
+    }
+  }
+
+  const favorite: boolean = await getFavorite();
+
   return (
     <div className={cn('w-full items-center justify-between', className)}>
       <Popover showArrow shouldBlockScroll placement='bottom'>
@@ -80,10 +102,26 @@ function AuthorPopover({
       <div>
         {user && (
           <FavoriteButton
-            user={user}
             destination={destination}
             favorite={favorite}
-            updateFavorite={updateFavorite}
+            updateFavorite={async (favorite: boolean) => {
+              'use server';
+              if (!user) {
+                throw new Error('You must be signed in to perform this action');
+              }
+              if (!favorite) {
+                await sql`
+                  INSERT INTO user_favorites (user_id, destination_id)
+                  VALUES (${user?.id}, ${destination.id})
+                `;
+              } else {
+                await sql`
+                  DELETE FROM user_favorites
+                  WHERE user_id = ${user?.id} AND destination_id = ${destination.id}
+                `;
+              }
+              revalidatePath(`/[locale]/(dashboard)/${destination.id}`);
+            }}
           ></FavoriteButton>
         )}
         {user && (user.role === 'admin' || user.id === author.id) && (
