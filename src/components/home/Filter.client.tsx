@@ -6,10 +6,6 @@ import {
   AutocompleteSection,
   Button,
   Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Select,
   SelectItem,
 } from '@nextui-org/react';
@@ -90,12 +86,6 @@ const WorldRegion: React.FC = () => {
     { key: 'southAmerica', value: 'Sør-Amerika' },
     { key: 'oceania', value: 'Oseania' },
   ];
-  // <DropdownItem key='africa'>Afrika</DropdownItem>
-  // <DropdownItem key='asia'>Asia</DropdownItem>
-  //<DropdownItem key='europe'>Europa</DropdownItem>
-  // <DropdownItem key='northAmerica'>Nord-Amerika</DropdownItem>
-  //<DropdownItem key='southAmerica'>Sør-Amerika</DropdownItem>
-  // <DropdownItem key='oceania'>Oseania</DropdownItem>
 
   const [worldRegion, setWorldRegion] = useQueryState(
     'world_region',
@@ -127,32 +117,32 @@ const WorldRegion: React.FC = () => {
   );
 };
 
-const SortBy: React.FC = () => {
-  return (
-    <div>
-      <Dropdown>
-        <DropdownTrigger>
-          <Button
-            radius='sm'
-            size='lg'
-            style={{ fontSize: '15px' }}
-            variant='flat'
-          >
-            {'Sort by'}
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          aria-label='Sort by'
-          disallowEmptySelection
-          selectionMode='single'
-        >
-          <DropdownItem key='Rating'>Rating</DropdownItem>
-          <DropdownItem key='Name'>Name</DropdownItem>
-          <DropdownItem key='Something'>Something</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </div>
-  );
-};
+// const SortBy: React.FC = () => {
+//   return (
+//     <div>
+//       <Dropdown>
+//         <DropdownTrigger>
+//           <Button
+//             radius='sm'
+//             size='lg'
+//             style={{ fontSize: '15px' }}
+//             variant='flat'
+//           >
+//             {'Sort by'}
+//           </Button>
+//         </DropdownTrigger>
+//         <DropdownMenu
+//           aria-label='Sort by'
+//           disallowEmptySelection
+//           selectionMode='single'
+//         >
+//           <DropdownItem key='Rating'>Rating</DropdownItem>
+//           <DropdownItem key='Name'>Name</DropdownItem>
+//           <DropdownItem key='Something'>Something</DropdownItem>
+//         </DropdownMenu>
+//       </Dropdown>
+//     </div>
+//   );
+// };
 
-export { AddFilter, SortBy };
+export { AddFilter };
