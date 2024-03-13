@@ -36,7 +36,7 @@
     "cancel": "Avbryt",
     "update": "Oppdater",
     "writeBio": "Skriv din biografi her...",
-    "bioErrorMessage": "Biografien kan maks være 200 tegn lang.",
+    "bioTooLong": "Biografien kan maks være 200 tegn lang.",
     "reviews": "Vurderinger"
   },
   "home": {

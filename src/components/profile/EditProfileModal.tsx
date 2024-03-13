@@ -10,7 +10,8 @@ import {
   Textarea,
   useDisclosure,
 } from '@nextui-org/react';
-import { useState } from 'react';
+import { useForm } from '@tanstack/react-form';
+import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useFormStatus } from 'react-dom';
 
 import { validateProfile } from '@/lib/validation';
@@ -25,7 +26,7 @@ type EditProfileModalProps = {
     cancel: string;
     update: string;
     writeBio: string;
-    bioErrorMessage: string;
+    bioTooLong: string;
   };
 };
 
@@ -37,52 +38,86 @@ type FormProps = {
     cancel: string;
     update: string;
     writeBio: string;
-    bioErrorMessage: string;
+    bioTooLong: string;
   };
 };
 
-function SubmitButton({ t }: { t: { update: string } }) {
+function SubmitButton({
+  canSubmit,
+  t,
+}: {
+  canSubmit: boolean;
+  t: { update: string };
+}) {
   const { pending } = useFormStatus();
   return (
-    <Button className='w-24' color='primary' type='submit' isLoading={pending}>
+    <Button
+      className='w-24'
+      color='primary'
+      type='submit'
+      isLoading={pending}
+      isDisabled={!canSubmit}
+    >
       {!pending && t.update}
     </Button>
   );
 }
 
 function Form({ updateProfile, onClose, profile, t }: FormProps) {
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [currentProfile, setCurrentProfile] = useState(profile);
-  function validate(e: React.ChangeEvent<HTMLInputElement>) {
-    const newProfile = { ...currentProfile, [e.target.name]: e.target.value };
-    setCurrentProfile(newProfile);
-    const parsed = validateProfile(newProfile);
-    setIsInvalid(!parsed.success);
-  }
+  const { Field, handleSubmit, useStore } = useForm({
+    defaultValues: {
+      bio: '',
+    },
+  });
+
+  const submissionAttempts = useStore((state) => state.submissionAttempts);
+  const canSubmit = useStore((state) => state.canSubmit);
+
   return (
     <form
       action={(formData: FormData) => {
-        if (isInvalid) return;
+        if (!canSubmit) return;
         updateProfile(formData);
         onClose();
       }}
+      onSubmit={handleSubmit}
     >
       <ModalBody>
-        <Textarea
-          minRows={5}
-          placeholder={t.writeBio}
+        <Field
           name='bio'
-          defaultValue={profile.bio}
-          errorMessage={isInvalid && t.bioErrorMessage}
-          isInvalid={isInvalid}
-          onChange={validate}
-        />
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateProfile({
+              bioTooLong: t.bioTooLong,
+            }).pick({ bio: true }).shape.bio,
+          }}
+        >
+          {({ state, handleChange, handleBlur }) => (
+            <Textarea
+              minRows={5}
+              placeholder={t.writeBio}
+              name='bio'
+              onChange={(e) => {
+                handleChange(e.target.value);
+              }}
+              onBlur={handleBlur}
+              value={state.value}
+              defaultValue={profile.bio}
+              errorMessage={
+                state.meta.errors &&
+                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0].split(', ')[0]
+              }
+              isInvalid={state.meta.errors.length > 0}
+            />
+          )}
+        </Field>
       </ModalBody>
       <ModalFooter>
         <Button color='danger' variant='light' type='button' onPress={onClose}>
           {t.cancel}
         </Button>
-        <SubmitButton t={{ update: t.update }} />
+        <SubmitButton canSubmit={canSubmit} t={{ update: t.update }} />
       </ModalFooter>
     </form>
   );
@@ -115,7 +150,7 @@ function EditProfileModal({
                   cancel: t.cancel,
                   update: t.update,
                   writeBio: t.writeBio,
-                  bioErrorMessage: t.bioErrorMessage,
+                  bioTooLong: t.bioTooLong,
                 }}
               />
             </>

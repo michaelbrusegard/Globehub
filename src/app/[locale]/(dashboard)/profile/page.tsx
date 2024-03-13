@@ -75,7 +75,7 @@ export default async function Profile({
                     );
                   }
 
-                  const parsed = validateProfile(
+                  const parsed = validateProfile().safeParse(
                     Object.fromEntries(formData) as { bio: string },
                   );
 
@@ -100,7 +100,7 @@ export default async function Profile({
                   cancel: t('cancel'),
                   update: t('update'),
                   writeBio: t('writeBio'),
-                  bioErrorMessage: t('bioErrorMessage'),
+                  bioTooLong: t('bioTooLong'),
                 }}
               />
             </div>

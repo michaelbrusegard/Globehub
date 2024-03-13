@@ -93,6 +93,8 @@ export default async function DestinationEdit({
           }
 
           const parsed = validateDestination(
+            Object.keys(worldRegionTranslations),
+          ).safeParse(
             Object.fromEntries(formData) as {
               title: string;
               content: string;
@@ -101,7 +103,6 @@ export default async function DestinationEdit({
               longitude: string;
               worldRegion: string;
             },
-            Object.keys(worldRegionTranslations),
           );
 
           if (!parsed.success) {
