@@ -38,7 +38,7 @@ function Thumb({ selected, imageSrc, index, onClick }: ThumbProps) {
         onPress={onClick}
       >
         <Image
-          className='h-14 w-full object-cover'
+          className='aspect-video h-14 object-cover'
           radius='md'
           as={NextImage}
           alt={index + ''}
