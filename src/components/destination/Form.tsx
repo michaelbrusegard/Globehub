@@ -20,6 +20,7 @@ type FormProps = {
   destination?: Destination;
   worldRegions: Record<string, string>;
   t: {
+    details: string;
     title: string;
     writeTitle: string;
     content: string;
@@ -131,84 +132,51 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
           />
         )}
       </Field>
-      <Field
-        name='content'
-        validatorAdapter={zodValidator}
-        validators={{
-          onChange: validateDestination({
-            t: {
-              contentTooLong: t.contentTooLong,
-              contentTooShort: t.contentTooShort,
-            },
-          }).pick({ content: true }).shape.content,
-        }}
-      >
-        {({ state, handleChange, handleBlur }) => (
-          <Textarea
-            classNames={{
-              input: 'h-48',
-            }}
-            minRows={12}
-            placeholder={t.writeContent}
-            labelPlacement='outside'
-            name='content'
-            size='lg'
-            label={t.content}
-            onChange={(e) => {
-              handleChange(e.target.value);
-            }}
-            onBlur={handleBlur}
-            value={state.value}
-            errorMessage={
-              submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
-              state.meta.errors[0].split(', ')[0]
-            }
-            isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
-            isRequired
-          />
-        )}
-      </Field>
-      <Field
-        name='exclusiveContent'
-        validatorAdapter={zodValidator}
-        validators={{
-          onChange: validateDestination({
-            t: {
-              exclusiveContentTooLong: t.exclusiveContentTooLong,
-              exclusiveContentTooShort: t.exclusiveContentTooShort,
-            },
-          }).pick({ exclusiveContent: true }).shape.exclusiveContent,
-        }}
-      >
-        {({ state, handleChange, handleBlur }) => (
-          <Textarea
-            classNames={{
-              input: 'h-48',
-            }}
-            minRows={12}
-            placeholder={t.writeExclusiveContent}
-            labelPlacement='outside'
-            name='exclusiveContent'
-            size='lg'
-            label={t.exclusiveContent}
-            onChange={(e) => {
-              handleChange(e.target.value);
-            }}
-            onBlur={handleBlur}
-            value={state.value}
-            errorMessage={
-              submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
-              state.meta.errors[0].split(', ')[0]
-            }
-            isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
-            isRequired
-          />
-        )}
-      </Field>
+      <div>
+        <h2 className='mb-1 max-w-full overflow-hidden text-ellipsis text-medium text-foreground subpixel-antialiased'>
+          {t.details}
+        </h2>
+        <Field
+          name='worldRegion'
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateDestination({
+              worldRegions: Object.keys(worldRegions),
+              t: {
+                worldRegionInvalid: t.worldRegionInvalid,
+              },
+            }).pick({ worldRegion: true }).shape.worldRegion,
+          }}
+        >
+          {({ state, handleChange, handleBlur }) => (
+            <Select
+              className='max-w-[336px]'
+              name='worldRegion'
+              label={t.worldRegion}
+              selectionMode='single'
+              placeholder={t.worldRegionPlaceholder}
+              defaultSelectedKeys={[state.value]}
+              onChange={(e) => {
+                handleChange(e.target.value);
+              }}
+              onBlur={handleBlur}
+              errorMessage={
+                submissionAttempts > 0 &&
+                state.meta.errors &&
+                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0].split(', ')[0]
+              }
+              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+            >
+              {Object.entries(worldRegions).map(([key, value]) => (
+                <SelectItem key={key} value={key}>
+                  {value}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
+        </Field>
+      </div>
       <div className='flex gap-4'>
         <Field
           name='latitude'
@@ -286,29 +254,33 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
         </Field>
       </div>
       <Field
-        name='worldRegion'
+        name='content'
         validatorAdapter={zodValidator}
         validators={{
           onChange: validateDestination({
-            worldRegions: Object.keys(worldRegions),
             t: {
-              worldRegionInvalid: t.worldRegionInvalid,
+              contentTooLong: t.contentTooLong,
+              contentTooShort: t.contentTooShort,
             },
-          }).pick({ worldRegion: true }).shape.worldRegion,
+          }).pick({ content: true }).shape.content,
         }}
       >
         {({ state, handleChange, handleBlur }) => (
-          <Select
-            className='max-w-xs'
-            name='worldRegion'
-            label={t.worldRegion}
-            selectionMode='single'
-            placeholder={t.worldRegionPlaceholder}
-            defaultSelectedKeys={[state.value]}
+          <Textarea
+            classNames={{
+              input: 'h-48',
+            }}
+            minRows={12}
+            placeholder={t.writeContent}
+            labelPlacement='outside'
+            name='content'
+            size='lg'
+            label={t.content}
             onChange={(e) => {
               handleChange(e.target.value);
             }}
             onBlur={handleBlur}
+            value={state.value}
             errorMessage={
               submissionAttempts > 0 &&
               state.meta.errors &&
@@ -316,13 +288,47 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
               state.meta.errors[0].split(', ')[0]
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
-          >
-            {Object.entries(worldRegions).map(([key, value]) => (
-              <SelectItem key={key} value={key}>
-                {value}
-              </SelectItem>
-            ))}
-          </Select>
+            isRequired
+          />
+        )}
+      </Field>
+      <Field
+        name='exclusiveContent'
+        validatorAdapter={zodValidator}
+        validators={{
+          onChange: validateDestination({
+            t: {
+              exclusiveContentTooLong: t.exclusiveContentTooLong,
+              exclusiveContentTooShort: t.exclusiveContentTooShort,
+            },
+          }).pick({ exclusiveContent: true }).shape.exclusiveContent,
+        }}
+      >
+        {({ state, handleChange, handleBlur }) => (
+          <Textarea
+            classNames={{
+              input: 'h-48',
+            }}
+            minRows={12}
+            placeholder={t.writeExclusiveContent}
+            labelPlacement='outside'
+            name='exclusiveContent'
+            size='lg'
+            label={t.exclusiveContent}
+            onChange={(e) => {
+              handleChange(e.target.value);
+            }}
+            onBlur={handleBlur}
+            value={state.value}
+            errorMessage={
+              submissionAttempts > 0 &&
+              state.meta.errors &&
+              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0].split(', ')[0]
+            }
+            isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+            isRequired
+          />
         )}
       </Field>
       <div className='flex w-full justify-end gap-4'>

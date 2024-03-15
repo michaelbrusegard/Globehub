@@ -137,6 +137,7 @@ export default async function DestinationEdit({
         destination={destination}
         worldRegions={worldRegionTranslations}
         t={{
+          details: t('details'),
           title: t('title'),
           writeTitle: t('writeTitle'),
           content: t('content'),

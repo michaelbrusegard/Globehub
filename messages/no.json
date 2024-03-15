@@ -71,6 +71,7 @@
       "humidity": "fuktighet"
     },
     "write": {
+      "details": "Detaljer",
       "title": "Tittel",
       "writeTitle": "Skriv tittel...",
       "titleTooLong": "Tittelen kan være på maksimalt 100 tegn",
