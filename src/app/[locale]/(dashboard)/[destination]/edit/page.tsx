@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
 import { validateDestination } from '@/lib/validation';
 
-import { FormFields } from '@/components/destination/FormFields';
+import { Form } from '@/components/destination/Form';
 
 export async function generateMetadata({
   params: { locale },
@@ -84,17 +84,17 @@ export default async function DestinationEdit({
       <h1 className='mb-10 mt-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
         {t('editDestination')}
       </h1>
-      <form
-        action={async (formData: FormData) => {
+      <Form
+        updateDestination={async (formData: FormData) => {
           'use server';
 
           if (!(user && (user.role === 'admin' || user.id === author.id))) {
             throw new Error('Unauthorized');
           }
 
-          const parsed = validateDestination(
-            Object.keys(worldRegionTranslations),
-          ).safeParse(
+          const parsed = validateDestination({
+            worldRegions: Object.keys(worldRegionTranslations),
+          }).safeParse(
             Object.fromEntries(formData) as {
               title: string;
               content: string;
@@ -110,46 +110,60 @@ export default async function DestinationEdit({
           }
 
           const [updatedDestination] = await sql`
-            UPDATE destinations
-            SET
-              name = ${parsed.data.title},
-              content = ${parsed.data.content},
-              exclusive_content = ${parsed.data.exclusiveContent},
-              location = POINT(${parsed.data.longitude}, ${parsed.data.latitude}),
-              world_region = ${parsed.data.worldRegion},
-              modified_at = NOW()
-            WHERE id = ${destination.id}
-            RETURNING *
-          `;
+                UPDATE destinations
+                SET
+                  name = ${parsed.data.title},
+                  content = ${parsed.data.content},
+                  exclusive_content = ${parsed.data.exclusiveContent},
+                  location = POINT(${parsed.data.longitude}, ${parsed.data.latitude}),
+                  world_region = ${parsed.data.worldRegion},
+                  modified_at = NOW()
+                WHERE id = ${destination.id}
+                RETURNING *
+              `;
 
           if (
             updatedDestination &&
             destination.location !== updatedDestination.location
           ) {
             await sql`
-            DELETE FROM weather_caches
-            WHERE destination_id = ${destination.id}
-          `;
+                DELETE FROM weather_caches
+                WHERE destination_id = ${destination.id}
+              `;
           }
 
           redirect(`/${destination.id}`);
         }}
-      >
-        <FormFields
-          destination={destination}
-          worldRegions={worldRegionTranslations}
-          t={{
-            title: t('title'),
-            content: t('content'),
-            exclusiveContent: t('exclusiveContent'),
-            cancel: t('cancel'),
-            submit: t('update'),
-            latitude: t('latitude'),
-            longitude: t('longitude'),
-            worldRegion: t('worldRegion'),
-          }}
-        />
-      </form>
+        destination={destination}
+        worldRegions={worldRegionTranslations}
+        t={{
+          title: t('title'),
+          writeTitle: t('writeTitle'),
+          content: t('content'),
+          writeContent: t('writeContent'),
+          exclusiveContent: t('exclusiveContent'),
+          writeExclusiveContent: t('writeExclusiveContent'),
+          cancel: t('cancel'),
+          submit: t('update'),
+          latitude: t('latitude'),
+          latitudePlaceholder: t('latitudePlaceholder'),
+          longitude: t('longitude'),
+          longitudePlaceholder: t('longitudePlaceholder'),
+          worldRegion: t('worldRegion'),
+          titleTooLong: t('titleTooLong'),
+          titleTooShort: t('titleTooShort'),
+          contentTooShort: t('contentTooShort'),
+          contentTooLong: t('contentTooLong'),
+          exclusiveContentTooShort: t('exclusiveContentTooShort'),
+          exclusiveContentTooLong: t('exclusiveContentTooLong'),
+          latitudeInvalid: t('latitudeInvalid'),
+          latitudeDecimalsInvalid: t('latitudeDecimalsInvalid'),
+          longitudeInvalid: t('longitudeInvalid'),
+          longitudeDecimalsInvalid: t('longitudeDecimalsInvalid'),
+          worldRegionInvalid: t('worldRegionInvalid'),
+          worldRegionPlaceholder: t('worldRegionPlaceholder'),
+        }}
+      />
     </>
   );
 }

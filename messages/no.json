@@ -72,15 +72,32 @@
     },
     "write": {
       "title": "Tittel",
+      "writeTitle": "Skriv tittel...",
+      "titleTooLong": "Tittelen kan være på maksimalt 100 tegn",
+      "titleTooShort": "Tittelen må være på minst 2 tegn",
       "content": "Innhold",
+      "writeContent": "Skriv innhold...",
+      "contentTooShort": "Innholdet må være på minst 1000 tegn",
+      "contentTooLong": "Innholdet kan være på maksimalt 10000 tegn",
       "exclusiveContent": "Eksklusivt innhold",
+      "writeExclusiveContent": "Skriv eksklusivt innhold kun tilgjengelig for innloggede brukere...",
+      "exclusiveContentTooShort": "Eksklusivt innhold må være på minst 1000 tegn",
+      "exclusiveContentTooLong": "Eksklusivt innhold kan være på maksimalt 10000 tegn",
       "update": "Oppdater",
       "editDestination": "Rediger destinasjon",
       "cancel": "Avbryt",
       "latitude": "Breddegrad",
+      "latitudePlaceholder": "12,3456",
+      "latitudeInvalid": "Verdien må være mellom -90 og 90",
+      "latitudeDecimalsInvalid": "Må ha minst 3 og maks 6 desimaler",
       "longitude": "Lengdegrad",
+      "longitudePlaceholder": "98,7654",
+      "longitudeInvalid": "Verdien må være mellom -180 og 180",
+      "longitudeDecimalsInvalid": "Må ha minst 3 og maks 6 desimaler",
       "worldRegionEnum": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
-      "worldRegion": "Verdensdel"
+      "worldRegion": "Verdensdel",
+      "worldRegionPlaceholder": "Velg verdensdel",
+      "worldRegionInvalid": "Verdensdel må være en av følgende: Afrika Nord-Amerika Asia Europa Oseania Sør-Amerika"
     },
     "reviews": {
       "title": "Anmeldelser"
