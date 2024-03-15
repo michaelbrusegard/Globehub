@@ -1,6 +1,8 @@
 'use client';
 
-import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
+import { Tab, Tabs } from '@nextui-org/react';
+
+import { ReviewListElement } from '../reviews/ReviewListElement';
 
 import { type Destination, type Review } from '@/lib/db';
 
@@ -8,32 +10,24 @@ import { FavoriteListElement } from '@/components/profile/FavoriteListElement';
 import { NoContent } from '@/components/profile/NoContent';
 
 type ProfileTabsProps = {
-  reviews: [Review];
+  reviews: (Review & { name: string; images: string[]; id: number })[];
   favorites: Destination[];
 };
 
 function ProfileTabs({ reviews, favorites }: ProfileTabsProps) {
   const noFavorites = favorites.length === 0;
+  const noReviews = reviews.length === 0;
   return (
     <div className='flex w-full flex-col'>
       <Tabs aria-label='Options'>
         <Tab key='review' title='Vurderinger'>
-          {true ? (
-            <NoContent message='vurderinger.' />
+          {noReviews ? (
+            <NoContent message='vurderinger' />
           ) : (
-            favorites.map((destination, index) => (
-              <FavoriteListElement key={index} destination={destination} />
+            reviews.map((reviews, index) => (
+              <ReviewListElement key={index} review={reviews} />
             ))
           )}
-
-          <Card>
-            <CardBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </CardBody>
-          </Card>
         </Tab>
         <Tab key='favorites' title='Favoritter'>
           {noFavorites ? (
@@ -43,12 +37,6 @@ function ProfileTabs({ reviews, favorites }: ProfileTabsProps) {
               <FavoriteListElement key={index} destination={destination} />
             ))
           )}
-
-          {/* {renderNoContent(favorites, (favorites) => ( 
-            favorites.map((destination, index) => (
-            <FavoriteListElement key={index} destination={destination} />
-          ))
-          ), 'favoritt destinasjoner.')} */}
         </Tab>
       </Tabs>
     </div>
