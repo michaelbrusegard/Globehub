@@ -10,6 +10,7 @@ import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
+import { ReviewsField } from '@/components/destination/ReviewsField';
 import { Time } from '@/components/destination/Time';
 import { Weather } from '@/components/destination/Weather';
 
@@ -177,6 +178,7 @@ export default async function Destination({
         </section>
         <section className='prose dark:prose-invert'>
           <h1>{t('reviews.title')}</h1>
+          <ReviewsField user={user} destination={destination} />
         </section>
       </div>
     </article>
