@@ -29,9 +29,17 @@ export default async function DestinationEdit({
   const session = await auth();
   const user = session?.user;
 
-  const [destination]: Destination[] = await sql`
-    SELECT *
+  const [destination]: (Destination & {
+    keywords: string[];
+  })[] = await sql`
+    SELECT destinations.*, keywords.keywords
     FROM destinations
+    LEFT JOIN (
+      SELECT destination_id, ARRAY_AGG(name ORDER BY name) as keywords
+      FROM destination_keywords
+      JOIN keywords ON destination_keywords.keyword_id = keywords.id
+      GROUP BY destination_id
+    ) keywords ON destinations.id = keywords.destination_id
     WHERE destinations.id = ${params.destination}
   `;
 
@@ -78,6 +86,17 @@ export default async function DestinationEdit({
     },
     {},
   );
+
+  const result: { name: string }[] = await sql`
+    SELECT name 
+    FROM keywords
+  `;
+
+  const allKeywords = result.map((row) => row.name);
+
+  if (!allKeywords) {
+    throw new Error('Keywords not found');
+  }
 
   return (
     <>
@@ -135,6 +154,7 @@ export default async function DestinationEdit({
           redirect(`/${destination.id}`);
         }}
         destination={destination}
+        allKeywords={allKeywords}
         worldRegions={worldRegionTranslations}
         t={{
           details: t('details'),
@@ -163,6 +183,15 @@ export default async function DestinationEdit({
           longitudeDecimalsInvalid: t('longitudeDecimalsInvalid'),
           worldRegionInvalid: t('worldRegionInvalid'),
           worldRegionPlaceholder: t('worldRegionPlaceholder'),
+          keywordsLabel: t('keywordsLabel'),
+          keywordsPlaceholder: t('keywordsPlaceholder'),
+          add: t('add'),
+          keywordTooShort: t('keywordTooShort'),
+          keywordTooLong: t('keywordTooLong'),
+          keywordNoSpaces: t('keywordNoSpaces'),
+          keywordDuplicate: t('keywordDuplicate'),
+          keywordsRequired: t('keywordsRequired'),
+          keywordsMax: t('keywordsMax'),
         }}
       />
     </>

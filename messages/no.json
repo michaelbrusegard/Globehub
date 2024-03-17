@@ -98,7 +98,16 @@
       "worldRegionEnum": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
       "worldRegion": "Verdensdel",
       "worldRegionPlaceholder": "Velg verdensdel",
-      "worldRegionInvalid": "Verdensdel må være en av følgende: Afrika Nord-Amerika Asia Europa Oseania Sør-Amerika"
+      "worldRegionInvalid": "Verdensdel må være en av følgende: Afrika Nord-Amerika Asia Europa Oseania Sør-Amerika",
+      "keywordsLabel": "Nøkkelord",
+      "keywordsPlaceholder": "Skriv nøkkelord...",
+      "add": "Legg til",
+      "keywordTooShort": "Nøkkelordet må være på minst 2 tegn",
+      "keywordTooLong": "Nøkkelordet kan være på maksimalt 50 tegn",
+      "keywordNoSpaces": "Nøkkelordet kan ikke inneholde mellomrom",
+      "keywordDuplicate": "Det er duplikate nøkkelord",
+      "keywordsRequired": "Minst ett nøkkelord må legges til",
+      "keywordsMax": "Maksimalt 20 nøkkelord kan legges til"
     },
     "reviews": {
       "title": "Anmeldelser"

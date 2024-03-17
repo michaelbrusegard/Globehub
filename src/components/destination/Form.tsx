@@ -15,9 +15,14 @@ import { useFormStatus } from 'react-dom';
 import { type Destination } from '@/lib/db';
 import { validateDestination } from '@/lib/validation';
 
+import { KeywordFormField } from '@/components/destination/KeywordFormField';
+
 type FormProps = {
   updateDestination: (formData: FormData) => void;
-  destination?: Destination;
+  destination?: Destination & {
+    keywords: string[];
+  };
+  allKeywords: string[];
   worldRegions: Record<string, string>;
   t: {
     details: string;
@@ -46,6 +51,15 @@ type FormProps = {
     longitudeDecimalsInvalid: string;
     worldRegionInvalid: string;
     worldRegionPlaceholder: string;
+    keywordsLabel: string;
+    keywordsPlaceholder: string;
+    add: string;
+    keywordTooShort: string;
+    keywordTooLong: string;
+    keywordNoSpaces: string;
+    keywordDuplicate: string;
+    keywordsRequired: string;
+    keywordsMax: string;
   };
 };
 
@@ -70,7 +84,13 @@ function SubmitButton({
   );
 }
 
-function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
+function Form({
+  updateDestination,
+  destination,
+  allKeywords,
+  worldRegions,
+  t,
+}: FormProps) {
   const coordinates = destination?.location.slice(1, -1).split(',');
   const [longitude, latitude] = coordinates ?? ['', ''];
 
@@ -82,6 +102,7 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
       latitude: destination ? latitude : '',
       longitude: destination ? longitude : '',
       worldRegion: destination?.worldRegion ?? '',
+      keywords: destination?.keywords ?? [],
     },
   });
 
@@ -133,7 +154,7 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
         )}
       </Field>
       <div>
-        <h2 className='mb-1 max-w-full overflow-hidden text-ellipsis text-medium text-foreground subpixel-antialiased'>
+        <h2 className='mb-1 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
           {t.details}
         </h2>
         <Field
@@ -328,6 +349,46 @@ function Form({ updateDestination, destination, worldRegions, t }: FormProps) {
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
             isRequired
+          />
+        )}
+      </Field>
+      <Field
+        name='keywords'
+        validatorAdapter={zodValidator}
+        validators={{
+          onChange: validateDestination({
+            t: {
+              keywordTooShort: t.keywordTooShort,
+              keywordTooLong: t.keywordTooLong,
+              keywordNoSpaces: t.keywordNoSpaces,
+              keywordDuplicate: t.keywordDuplicate,
+              keywordsRequired: t.keywordsRequired,
+              keywordsMax: t.keywordsMax,
+            },
+          }).pick({ keywords: true }).shape.keywords,
+        }}
+      >
+        {({ state, handleChange, handleBlur }) => (
+          <KeywordFormField
+            currentKeywords={state.value}
+            allKeywords={allKeywords}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+            t={{
+              keywordsLabel: t.keywordsLabel,
+              keywordsPlaceholder: t.keywordsPlaceholder,
+              add: t.add,
+              keywordTooShort: t.keywordTooShort,
+              keywordTooLong: t.keywordTooLong,
+              keywordNoSpaces: t.keywordNoSpaces,
+            }}
+            errorMessage={
+              submissionAttempts > 0 &&
+              state.meta.errors &&
+              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0].split(', ')[0]
+            }
+            isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
           />
         )}
       </Field>

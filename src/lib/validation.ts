@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
-  return z.object({
-    bio: z.string().max(200, t?.bioTooLong),
-  });
-}
-
 type validateDestinationProps = {
   worldRegions?: string[];
   t?: {
@@ -20,8 +14,36 @@ type validateDestinationProps = {
     longitudeInvalid?: string;
     longitudeDecimalsInvalid?: string;
     worldRegionInvalid?: string;
+    keywordTooShort?: string;
+    keywordTooLong?: string;
+    keywordNoSpaces?: string;
+    keywordDuplicate?: string;
+    keywordsRequired?: string;
+    keywordsMax?: string;
   };
 };
+
+type validateKeywordProps = {
+  t?: {
+    keywordTooShort?: string;
+    keywordTooLong?: string;
+    keywordNoSpaces?: string;
+  };
+};
+
+function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
+  return z.object({
+    bio: z.string().max(200, t?.bioTooLong),
+  });
+}
+
+function validateKeyword({ t }: validateKeywordProps) {
+  return z
+    .string()
+    .min(2, t?.keywordTooShort)
+    .max(50, t?.keywordTooLong)
+    .refine((keyword) => !keyword.includes(' '), t?.keywordNoSpaces);
+}
 
 function validateDestination({
   worldRegions,
@@ -57,7 +79,15 @@ function validateDestination({
     worldRegion: z
       .string()
       .refine((value) => worldRegions?.includes(value), t?.worldRegionInvalid),
+    keywords: z
+      .array(validateKeyword({ t }))
+      .min(1, t?.keywordsRequired)
+      .max(20, t?.keywordsMax)
+      .refine((keywords) => {
+        const uniqueKeywords = new Set(keywords);
+        return uniqueKeywords.size === keywords.length;
+      }, t?.keywordDuplicate),
   });
 }
 
-export { validateProfile, validateDestination };
+export { validateProfile, validateDestination, validateKeyword };
