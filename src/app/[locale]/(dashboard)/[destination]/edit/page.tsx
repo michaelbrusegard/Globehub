@@ -111,24 +111,42 @@ export default async function DestinationEdit({
             throw new Error('Unauthorized');
           }
 
+          const formDataEntries = Object.fromEntries(formData) as {
+            title: string;
+            content: string;
+            exclusiveContent: string;
+            latitude: string;
+            longitude: string;
+            worldRegion: string;
+            keywords: string | string[];
+          };
+
+          if (typeof formDataEntries.keywords === 'string') {
+            formDataEntries.keywords = JSON.parse(
+              formDataEntries.keywords,
+            ) as string[];
+          }
+
           const parsed = validateDestination({
             worldRegions: Object.keys(worldRegionTranslations),
-          }).safeParse(
-            Object.fromEntries(formData) as {
-              title: string;
-              content: string;
-              exclusiveContent: string;
-              latitude: string;
-              longitude: string;
-              worldRegion: string;
-            },
-          );
+          }).safeParse(formDataEntries);
 
           if (!parsed.success) {
             return;
           }
 
-          const [updatedDestination] = await sql`
+          const destinationKeywords = destination.keywords;
+
+          const oldKeywords = destinationKeywords.filter((keyword) => {
+            return !parsed.data.keywords.includes(keyword);
+          });
+
+          const newKeywords = parsed.data.keywords.filter((keyword) => {
+            return !destinationKeywords.includes(keyword);
+          });
+
+          await sql.begin(async (sql): Promise<void> => {
+            const [updatedDestination] = await sql`
                 UPDATE destinations
                 SET
                   name = ${parsed.data.title},
@@ -141,16 +159,62 @@ export default async function DestinationEdit({
                 RETURNING *
               `;
 
-          if (
-            updatedDestination &&
-            destination.location !== updatedDestination.location
-          ) {
-            await sql`
+            if (
+              updatedDestination &&
+              destination.location !== updatedDestination.location
+            ) {
+              await sql`
                 DELETE FROM weather_caches
                 WHERE destination_id = ${destination.id}
               `;
-          }
+            }
 
+            await sql`
+              DELETE FROM destination_keywords
+              WHERE destination_id = ${destination.id}
+                AND keyword_id IN (
+                  SELECT id
+                  FROM keywords
+                  WHERE name = ANY(${sql.array(oldKeywords)})
+                )
+            `;
+
+            await sql`
+              DELETE FROM keywords
+              WHERE id NOT IN (
+                SELECT keyword_id
+                FROM destination_keywords
+              )
+                AND name = ANY(${sql.array(oldKeywords)})
+            `;
+
+            await sql`
+              INSERT INTO keywords (name)
+              SELECT keyword
+              FROM UNNEST(${sql.array(newKeywords)}::text[]) AS keyword
+              WHERE NOT EXISTS (
+                SELECT 1
+                FROM keywords
+                WHERE name = keyword
+              )
+            `;
+
+            const result: {
+              id: number;
+            }[] = await sql`
+              SELECT id
+              FROM keywords
+              WHERE name = ANY(${sql.array(newKeywords)})
+            `;
+
+            const newKeywordIds = result.map((row) => row.id);
+
+            await sql`
+              INSERT INTO destination_keywords (destination_id, keyword_id)
+              SELECT ${destination.id}, keyword_id
+              FROM UNNEST(${sql.array(newKeywordIds)}::integer[]) AS keyword_id
+            `;
+          });
           redirect(`/${destination.id}`);
         }}
         destination={destination}
@@ -192,6 +256,7 @@ export default async function DestinationEdit({
           keywordDuplicate: t('keywordDuplicate'),
           keywordsRequired: t('keywordsRequired'),
           keywordsMax: t('keywordsMax'),
+          keywordFirstLetterCapital: t('keywordFirstLetterCapital'),
         }}
       />
     </>

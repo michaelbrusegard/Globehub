@@ -107,7 +107,8 @@
       "keywordNoSpaces": "Nøkkelordet kan ikke inneholde mellomrom",
       "keywordDuplicate": "Det er duplikate nøkkelord",
       "keywordsRequired": "Minst ett nøkkelord må legges til",
-      "keywordsMax": "Maksimalt 20 nøkkelord kan legges til"
+      "keywordsMax": "Maksimalt 20 nøkkelord kan legges til",
+      "keywordFirstLetterCapital": "Første bokstav i nøkkelordet må være stor"
     },
     "reviews": {
       "title": "Anmeldelser"

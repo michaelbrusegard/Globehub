@@ -27,6 +27,8 @@ type KeywordFormFieldProps = {
     keywordTooShort: string;
     keywordTooLong: string;
     keywordNoSpaces: string;
+    keywordDuplicate: string;
+    keywordFirstLetterCapital: string;
   };
 };
 
@@ -44,9 +46,44 @@ function KeywordFormField({
   const [newKeyword, setNewKeyword] = useState('');
   const [autoCompleteInvalid, setAutoCompleteInvalid] = useState(false);
   const [autoCompleteErrorMessage, setAutoCompleteErrorMessage] = useState('');
+
+  function handleNewKeywordChange() {
+    if (selectedKeywords.includes(newKeyword)) {
+      setAutoCompleteInvalid(true);
+      setAutoCompleteErrorMessage(t.keywordDuplicate);
+      return;
+    }
+
+    const result = validateKeyword({
+      t: {
+        keywordTooShort: t.keywordTooShort,
+        keywordTooLong: t.keywordTooLong,
+        keywordNoSpaces: t.keywordNoSpaces,
+        keywordFirstLetterCapital: t.keywordFirstLetterCapital,
+      },
+    }).safeParse(newKeyword);
+
+    if (!result.success) {
+      setAutoCompleteInvalid(true);
+      setAutoCompleteErrorMessage(
+        result.error.errors.map((e) => e.message).join(', '),
+      );
+    } else {
+      setSelectedKeywords([...selectedKeywords, newKeyword]);
+      setNewKeyword('');
+      handleChange(selectedKeywords);
+      setAutoCompleteInvalid(false);
+      setAutoCompleteErrorMessage('');
+    }
+  }
   return (
     <div className='space-y-4'>
       <div className='flex items-end justify-between gap-4'>
+        <input
+          type='hidden'
+          name='keywords'
+          value={JSON.stringify(selectedKeywords)}
+        />
         <Autocomplete
           label={t.keywordsLabel}
           placeholder={t.keywordsPlaceholder}
@@ -62,6 +99,7 @@ function KeywordFormField({
                 keywordTooShort: t.keywordTooShort,
                 keywordTooLong: t.keywordTooLong,
                 keywordNoSpaces: t.keywordNoSpaces,
+                keywordFirstLetterCapital: t.keywordFirstLetterCapital,
               },
             }).safeParse(newKeyword);
             if (result.success) {
@@ -71,6 +109,12 @@ function KeywordFormField({
           }}
           isInvalid={autoCompleteInvalid}
           errorMessage={autoCompleteErrorMessage.split(', ')[0]}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleNewKeywordChange();
+            }
+          }}
         >
           {allKeywords.map((keyword) => (
             <AutocompleteItem key={keyword} value={keyword}>
@@ -82,28 +126,7 @@ function KeywordFormField({
           className={cn(autoCompleteInvalid && 'mb-6')}
           size='md'
           variant='faded'
-          onPress={() => {
-            const result = validateKeyword({
-              t: {
-                keywordTooShort: t.keywordTooShort,
-                keywordTooLong: t.keywordTooLong,
-                keywordNoSpaces: t.keywordNoSpaces,
-              },
-            }).safeParse(newKeyword);
-
-            if (!result.success) {
-              setAutoCompleteInvalid(true);
-              setAutoCompleteErrorMessage(
-                result.error.errors.map((e) => e.message).join(', '),
-              );
-            } else {
-              setSelectedKeywords([...selectedKeywords, newKeyword]);
-              setNewKeyword('');
-              handleChange(selectedKeywords);
-              setAutoCompleteInvalid(false);
-              setAutoCompleteErrorMessage('');
-            }
-          }}
+          onPress={handleNewKeywordChange}
         >
           {t.add}
         </Button>

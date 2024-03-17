@@ -20,6 +20,7 @@ type validateDestinationProps = {
     keywordDuplicate?: string;
     keywordsRequired?: string;
     keywordsMax?: string;
+    keywordFirstLetterCapital?: string;
   };
 };
 
@@ -28,6 +29,7 @@ type validateKeywordProps = {
     keywordTooShort?: string;
     keywordTooLong?: string;
     keywordNoSpaces?: string;
+    keywordFirstLetterCapital?: string;
   };
 };
 
@@ -42,9 +44,12 @@ function validateKeyword({ t }: validateKeywordProps) {
     .string()
     .min(2, t?.keywordTooShort)
     .max(50, t?.keywordTooLong)
-    .refine((keyword) => !keyword.includes(' '), t?.keywordNoSpaces);
+    .refine((keyword) => !keyword.includes(' '), t?.keywordNoSpaces)
+    .refine(
+      (keyword) => keyword && keyword.startsWith(keyword[0]!.toUpperCase()),
+      t?.keywordFirstLetterCapital,
+    );
 }
-
 function validateDestination({
   worldRegions,
   t,

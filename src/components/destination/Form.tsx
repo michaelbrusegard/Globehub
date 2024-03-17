@@ -60,6 +60,7 @@ type FormProps = {
     keywordDuplicate: string;
     keywordsRequired: string;
     keywordsMax: string;
+    keywordFirstLetterCapital: string;
   };
 };
 
@@ -364,6 +365,7 @@ function Form({
               keywordDuplicate: t.keywordDuplicate,
               keywordsRequired: t.keywordsRequired,
               keywordsMax: t.keywordsMax,
+              keywordFirstLetterCapital: t.keywordFirstLetterCapital,
             },
           }).pick({ keywords: true }).shape.keywords,
         }}
@@ -380,7 +382,9 @@ function Form({
               add: t.add,
               keywordTooShort: t.keywordTooShort,
               keywordTooLong: t.keywordTooLong,
+              keywordDuplicate: t.keywordDuplicate,
               keywordNoSpaces: t.keywordNoSpaces,
+              keywordFirstLetterCapital: t.keywordFirstLetterCapital,
             }}
             errorMessage={
               submissionAttempts > 0 &&
