@@ -47,6 +47,11 @@ function KeywordFormField({
   const [autoCompleteInvalid, setAutoCompleteInvalid] = useState(false);
   const [autoCompleteErrorMessage, setAutoCompleteErrorMessage] = useState('');
 
+  function updateValidationState(newSelectedKeywords: string[]) {
+    handleChange(newSelectedKeywords);
+    currentKeywords = newSelectedKeywords;
+  }
+
   function handleNewKeywordChange() {
     if (selectedKeywords.includes(newKeyword)) {
       setAutoCompleteInvalid(true);
@@ -69,13 +74,15 @@ function KeywordFormField({
         result.error.errors.map((e) => e.message).join(', '),
       );
     } else {
-      setSelectedKeywords([...selectedKeywords, newKeyword]);
+      const newSelectedKeywords = [...selectedKeywords, newKeyword];
+      setSelectedKeywords(newSelectedKeywords);
+      updateValidationState(newSelectedKeywords);
       setNewKeyword('');
-      handleChange(selectedKeywords);
       setAutoCompleteInvalid(false);
       setAutoCompleteErrorMessage('');
     }
   }
+
   return (
     <div className='space-y-4'>
       <div className='flex items-end justify-between gap-4'>
@@ -147,11 +154,13 @@ function KeywordFormField({
               <Chip
                 key={keyword}
                 size='md'
-                onClose={() =>
-                  setSelectedKeywords(
-                    selectedKeywords.filter((k) => k !== keyword),
-                  )
-                }
+                onClose={() => {
+                  const newSelectedKeywords = selectedKeywords.filter(
+                    (k) => k !== keyword,
+                  );
+                  setSelectedKeywords(newSelectedKeywords);
+                  updateValidationState(newSelectedKeywords);
+                }}
               >
                 {keyword}
               </Chip>
