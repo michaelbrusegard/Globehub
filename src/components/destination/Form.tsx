@@ -423,10 +423,10 @@ function Form({
         <Field
           name='imageUrls'
           validatorAdapter={zodValidator}
-          validators={{
-            onChange: validateDestination().pick({ imageUrls: true }).shape
-              .imageUrls,
-          }}
+          // validators={{
+          //   onChange: validateDestination().pick({ imageUrls: true }).shape
+          //     .imageUrls,
+          // }}
         >
           {({ state: imageUrlsState, handleChange: handleImageUrlsChange }) => (
             <Field name='imageFiles' validatorAdapter={zodValidator}>

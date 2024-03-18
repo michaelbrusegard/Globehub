@@ -3,6 +3,14 @@ import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
+import {
+  DeleteObjectCommand,
+  type ObjectCannedACL,
+  PutObjectCommand,
+  destinationsBucket,
+  endpoint,
+  s3,
+} from '@/lib/s3';
 import { validateDestination } from '@/lib/validation';
 
 import { Form } from '@/components/destination/Form';
@@ -153,10 +161,12 @@ export default async function EditDestination({
           }).safeParse(formDataEntries);
 
           if (!parsed.success) {
+            console.log(parsed.error);
             return;
           }
 
           const destinationKeywords = destination.keywords;
+          const destinationImageUrls = destination.images;
 
           const oldKeywords = destinationKeywords.filter((keyword) => {
             return !parsed.data.keywords.includes(keyword);
@@ -166,9 +176,46 @@ export default async function EditDestination({
             return !destinationKeywords.includes(keyword);
           });
 
-          const oldImageUrls = destination.images.filter((imageUrl) => {
+          const oldImageUrls = destinationImageUrls.filter((imageUrl) => {
             return !parsed.data.imageUrls.includes(imageUrl);
           });
+
+          const newImageUrls = [];
+
+          for (const oldImageUrl of oldImageUrls) {
+            if (!oldImageUrl.startsWith(endpoint)) {
+              continue;
+            }
+
+            const params = {
+              Bucket: destinationsBucket,
+              Key: oldImageUrl.replace(endpoint, ''),
+            };
+
+            const deleteCommand = new DeleteObjectCommand(params);
+
+            await s3.send(deleteCommand);
+          }
+
+          for (const [index, imageFile] of parsed.data.imageFiles.entries()) {
+            const uniqueFileName = `${Date.now()}-${index}`;
+
+            const params = {
+              Bucket: destinationsBucket,
+              Key: `${destination.id}/${uniqueFileName}`,
+              Body: imageFile.buffer as File,
+            };
+
+            const command = new PutObjectCommand(params);
+
+            await s3.send(command);
+
+            newImageUrls.push(
+              endpoint + '/' + destinationsBucket + '/' + params.Key,
+            );
+          }
+
+          parsed.data.imageUrls = [...parsed.data.imageUrls, ...newImageUrls];
 
           await sql.begin(async (sql): Promise<void> => {
             const [updatedDestination] = await sql`
@@ -179,6 +226,7 @@ export default async function EditDestination({
                   exclusive_content = ${parsed.data.exclusiveContent},
                   location = POINT(${parsed.data.longitude}, ${parsed.data.latitude}),
                   world_region = ${parsed.data.worldRegion},
+                  images = ${sql.array(parsed.data.imageUrls)},
                   modified_at = NOW()
                 WHERE id = ${destination.id}
                 RETURNING *
