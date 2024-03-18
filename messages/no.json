@@ -115,9 +115,11 @@
       "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
       "uploadAFile": "Last opp en fil",
       "orDragAndDrop": "eller dra og slipp",
-      "imageNameTooLong": "Bildets navn kan være på maksimalt 255 tegn",
+      "imageNameTooLong": "Bildets navn kan være på maksimalt 100 tegn",
       "imageTypeInvalid": "Bildet må være av typen PNG eller JPG",
-      "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB"
+      "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB",
+      "tooFewImages": "Minst 3 bilder må legges til",
+      "tooManyImages": "Maksimalt 10 bilder kan legges til"
     },
     "reviews": {
       "title": "Anmeldelser"

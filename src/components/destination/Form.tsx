@@ -10,6 +10,7 @@ import {
 } from '@nextui-org/react';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
+import { d } from 'node_modules/nuqs/dist/serializer-RqlbYgUW';
 import { useFormStatus } from 'react-dom';
 
 import { type Destination } from '@/lib/db';
@@ -71,6 +72,8 @@ type FormProps = {
     imageNameTooLong: string;
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
+    tooFewImages: string;
+    tooManyImages: string;
   };
 };
 
@@ -423,10 +426,16 @@ function Form({
         <Field
           name='imageUrls'
           validatorAdapter={zodValidator}
-          // validators={{
-          //   onChange: validateDestination().pick({ imageUrls: true }).shape
-          //     .imageUrls,
-          // }}
+          validators={{
+            onChange: validateDestination({
+              imageUrls: destination?.images ?? [],
+              imageFilesLength: imageFiles.length,
+              t: {
+                tooFewImages: t.tooFewImages,
+                tooManyImages: t.tooManyImages,
+              },
+            }).pick({ imageUrls: true }).shape.imageUrls,
+          }}
         >
           {({ state: imageUrlsState, handleChange: handleImageUrlsChange }) => (
             <Field name='imageFiles' validatorAdapter={zodValidator}>
@@ -441,6 +450,16 @@ function Form({
                   imageFiles={imageFilesState.value}
                   setImageFiles={handleImageFilesChange}
                   handleBlur={handleBlur}
+                  errorMessage={
+                    submissionAttempts > 0 &&
+                    imageUrlsState.meta.errors &&
+                    typeof imageUrlsState.meta.errors[0] === 'string' &&
+                    imageUrlsState.meta.errors[0].split(', ')[0]
+                  }
+                  isInvalid={
+                    submissionAttempts > 0 &&
+                    imageUrlsState.meta.errors.length > 0
+                  }
                   t={{
                     removeImage: t.removeImage,
                     PngJpg1MbMax: t.PngJpg1MbMax,
@@ -449,6 +468,7 @@ function Form({
                     imageNameTooLong: t.imageNameTooLong,
                     imageTypeInvalid: t.imageTypeInvalid,
                     imageSizeTooLarge: t.imageSizeTooLarge,
+                    tooManyImages: t.tooManyImages,
                   }}
                 />
               )}

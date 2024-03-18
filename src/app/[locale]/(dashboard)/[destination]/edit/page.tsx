@@ -156,6 +156,7 @@ export default async function EditDestination({
           formDataEntries.imageFiles = imageFiles;
 
           const parsed = validateDestination({
+            imageFilesLength: imageFiles.length,
             imageUrls: destination.images,
             worldRegions: Object.keys(worldRegionTranslations),
           }).safeParse(formDataEntries);
@@ -339,6 +340,8 @@ export default async function EditDestination({
           imageNameTooLong: t('imageNameTooLong'),
           imageTypeInvalid: t('imageTypeInvalid'),
           imageSizeTooLarge: t('imageSizeTooLarge'),
+          tooFewImages: t('tooFewImages'),
+          tooManyImages: t('tooManyImages'),
         }}
       />
     </>

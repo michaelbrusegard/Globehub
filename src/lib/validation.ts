@@ -3,6 +3,7 @@ import { z } from 'zod';
 type validateDestinationProps = {
   imageUrls?: string[];
   worldRegions?: string[];
+  imageFilesLength?: number;
   t?: {
     titleTooShort?: string;
     titleTooLong?: string;
@@ -25,6 +26,8 @@ type validateDestinationProps = {
     imageNameTooLong?: string;
     imageTypeInvalid?: string;
     imageSizeTooLarge?: string;
+    tooFewImages?: string;
+    tooManyImages?: string;
   };
 };
 
@@ -75,6 +78,7 @@ function validateImageFile({ t }: validateImageFileProps = {}) {
 }
 
 function validateDestination({
+  imageFilesLength = 0,
   imageUrls,
   worldRegions,
   t,
@@ -126,9 +130,16 @@ function validateDestination({
         const uniqueKeywords = new Set(keywords);
         return uniqueKeywords.size === keywords.length;
       }, t?.keywordDuplicate),
-    imageUrls: z.array(
-      z.string().refine((value) => imageUrls?.includes(value)),
-    ),
+    imageUrls: z
+      .array(z.string().refine((value) => imageUrls?.includes(value)))
+      .refine(
+        (imageUrls) => imageUrls.length >= 3 - imageFilesLength,
+        t?.tooFewImages,
+      )
+      .refine(
+        (imageUrls) => imageUrls.length <= 10 - imageFilesLength,
+        t?.tooManyImages,
+      ),
     imageFiles: z.array(
       validateImageFile({
         t: {

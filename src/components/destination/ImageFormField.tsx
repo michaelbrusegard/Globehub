@@ -15,6 +15,8 @@ type ImageFormFieldProps = {
   imageFiles: File[];
   setImageFiles: (imageFiles: File[]) => void;
   handleBlur: () => void;
+  errorMessage: string | false | undefined;
+  isInvalid: boolean;
   t: {
     removeImage: string;
     PngJpg1MbMax: string;
@@ -23,6 +25,7 @@ type ImageFormFieldProps = {
     imageNameTooLong: string;
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
+    tooManyImages: string;
   };
 };
 
@@ -40,15 +43,22 @@ function ImageFormField({
   imageFiles,
   setImageFiles,
   handleBlur,
+  errorMessage,
+  isInvalid,
   t,
 }: ImageFormFieldProps) {
   const [dragging, setDragging] = useState(false);
   const [imageIsInvalid, setImageIsInvalid] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState('');
 
-  function updateState(newImageFiles: File[]) {
+  function updateImageFileState(newImageFiles: File[]) {
     setImageFiles(newImageFiles);
     imageFiles = newImageFiles;
+  }
+
+  function updateImageUrlState(newImageUrls: string[]) {
+    setImageUrls(newImageUrls);
+    imageUrls = newImageUrls;
   }
 
   function handleFileChange(files: FileList | null) {
@@ -78,7 +88,8 @@ function ImageFormField({
     }
 
     const newImageFiles = Array.from(files);
-    updateState([...imageFiles, ...newImageFiles]);
+    updateImageFileState([...imageFiles, ...newImageFiles]);
+    updateImageUrlState(imageUrls);
   }
 
   function handleDragOver(event: React.DragEvent) {
@@ -118,7 +129,7 @@ function ImageFormField({
           />
           <CardBody
             className='flex justify-center text-center'
-            aria-describedby={imageIsInvalid ? 'keywords-error' : undefined}
+            aria-describedby={imageIsInvalid ? 'image-files-error' : undefined}
             aria-invalid={imageIsInvalid}
           >
             <Photo
@@ -139,7 +150,7 @@ function ImageFormField({
                   accept='.jpg,.png,.jpeg'
                   onChange={handleFileUpload}
                   aria-describedby={
-                    imageIsInvalid ? 'keywords-error' : undefined
+                    imageIsInvalid ? 'image-files-error' : undefined
                   }
                   aria-invalid={imageIsInvalid}
                 />
@@ -152,43 +163,55 @@ function ImageFormField({
           </CardFooter>
         </Card>
         {imageIsInvalid && (
-          <div id='image-error' className='mt-1 text-tiny text-danger'>
+          <div id='image-files-error' className='mt-1 text-tiny text-danger'>
             {imageErrorMessage}
           </div>
         )}
       </div>
-      <Card className='min-h-[136px]'>
-        <CardBody className='flex flex-row flex-wrap gap-2'>
-          {imageUrls.map((image) => (
-            <ImageInterface
-              key={image}
-              imageUrl={image}
-              onPress={() => {
-                const newImageUrls = imageUrls.filter((url) => url !== image);
-                setImageUrls(newImageUrls);
-                imageUrls = newImageUrls;
-              }}
-              t={{
-                removeImage: t.removeImage,
-              }}
-            />
-          ))}
-          {imageFiles.map((image, index) => (
-            <ImageInterface
-              key={URL.createObjectURL(image)}
-              imageUrl={URL.createObjectURL(image)}
-              onPress={() => {
-                updateState(
-                  imageFiles.filter((_, imgIndex) => imgIndex !== index),
-                );
-              }}
-              t={{
-                removeImage: t.removeImage,
-              }}
-            />
-          ))}
-        </CardBody>
-      </Card>
+      <div>
+        <Card className='min-h-[136px]'>
+          <CardBody
+            className={cn(
+              'flex flex-row flex-wrap gap-2',
+              isInvalid && 'bg-danger-50',
+            )}
+            aria-describedby={isInvalid ? 'image-files-error' : undefined}
+            aria-invalid={isInvalid}
+          >
+            {imageUrls.map((image) => (
+              <ImageInterface
+                key={image}
+                imageUrl={image}
+                onPress={() => {
+                  updateImageUrlState(imageUrls.filter((url) => url !== image));
+                }}
+                t={{
+                  removeImage: t.removeImage,
+                }}
+              />
+            ))}
+            {imageFiles.map((image, index) => (
+              <ImageInterface
+                key={URL.createObjectURL(image)}
+                imageUrl={URL.createObjectURL(image)}
+                onPress={() => {
+                  updateImageFileState(
+                    imageFiles.filter((_, imgIndex) => imgIndex !== index),
+                  );
+                }}
+                t={{
+                  removeImage: t.removeImage,
+                }}
+              />
+            ))}
+          </CardBody>
+        </Card>
+        {isInvalid && (
+          <div id='image-urls-error' className='mt-1 text-tiny text-danger'>
+            {errorMessage}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
