@@ -139,11 +139,6 @@ function Form({
       }}
       onSubmit={handleSubmit}
     >
-      {
-        new Promise((resolve) => {
-          setTimeout(resolve, 500);
-        })
-      }
       <Field
         name='title'
         validatorAdapter={zodValidator}
