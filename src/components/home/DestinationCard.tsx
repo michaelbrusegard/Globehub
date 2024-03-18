@@ -49,7 +49,6 @@ function DestinationCard({
             src={destination.images[0]}
             sizes='(max-width: 768px) 100vw, 33vw'
             fill
-            priority
             removeWrapper
           />
         </div>

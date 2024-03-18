@@ -75,8 +75,8 @@ function KeywordFormField({
       );
     } else {
       const newSelectedKeywords = [...selectedKeywords, newKeyword];
-      setSelectedKeywords(newSelectedKeywords);
       updateValidationState(newSelectedKeywords);
+      setSelectedKeywords(newSelectedKeywords);
       setNewKeyword('');
       setAutoCompleteInvalid(false);
       setAutoCompleteErrorMessage('');
@@ -139,16 +139,14 @@ function KeywordFormField({
         </Button>
       </div>
       <div>
-        <Card
-          className='min-h-[52px]'
-          aria-describedby={isInvalid ? 'keywords-error' : undefined}
-          aria-invalid={isInvalid}
-        >
+        <Card className='min-h-[52px]'>
           <CardBody
             className={cn(
               'flex flex-row flex-wrap gap-2',
               isInvalid && 'bg-danger-50',
             )}
+            aria-describedby={isInvalid ? 'keywords-error' : undefined}
+            aria-invalid={isInvalid}
           >
             {selectedKeywords.map((keyword) => (
               <Chip
@@ -158,8 +156,8 @@ function KeywordFormField({
                   const newSelectedKeywords = selectedKeywords.filter(
                     (k) => k !== keyword,
                   );
-                  setSelectedKeywords(newSelectedKeywords);
                   updateValidationState(newSelectedKeywords);
+                  setSelectedKeywords(newSelectedKeywords);
                 }}
               >
                 {keyword}

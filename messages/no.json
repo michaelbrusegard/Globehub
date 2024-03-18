@@ -84,6 +84,7 @@
       "writeExclusiveContent": "Skriv eksklusivt innhold kun tilgjengelig for innloggede brukere...",
       "exclusiveContentTooShort": "Eksklusivt innhold må være på minst 1000 tegn",
       "exclusiveContentTooLong": "Eksklusivt innhold kan være på maksimalt 10000 tegn",
+      "youCanUseMarkdown": "Du kan bruke Markdown for å formatere teksten. For eksempel, '## Overskrift', '*kursiv*', '**fet**', '[lenke](https://www.lenke.no)', og '- liste element'",
       "update": "Oppdater",
       "editDestination": "Rediger destinasjon",
       "cancel": "Avbryt",
@@ -108,7 +109,12 @@
       "keywordDuplicate": "Det er duplikate nøkkelord",
       "keywordsRequired": "Minst ett nøkkelord må legges til",
       "keywordsMax": "Maksimalt 20 nøkkelord kan legges til",
-      "keywordFirstLetterCapital": "Første bokstav i nøkkelordet må være stor"
+      "keywordFirstLetterCapital": "Første bokstav i nøkkelordet må være stor",
+      "images": "Bilder",
+      "removeImage": "Fjern bilde",
+      "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
+      "uploadAFile": "Last opp en fil",
+      "orDragAndDrop": "eller dra og slipp"
     },
     "reviews": {
       "title": "Anmeldelser"

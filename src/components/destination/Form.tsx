@@ -15,6 +15,7 @@ import { useFormStatus } from 'react-dom';
 import { type Destination } from '@/lib/db';
 import { validateDestination } from '@/lib/validation';
 
+import { ImageFormField } from '@/components/destination/ImageFormField';
 import { KeywordFormField } from '@/components/destination/KeywordFormField';
 
 type FormProps = {
@@ -43,6 +44,7 @@ type FormProps = {
     contentTooLong: string;
     exclusiveContentTooShort: string;
     exclusiveContentTooLong: string;
+    youCanUseMarkdown: string;
     latitudePlaceholder: string;
     latitudeInvalid: string;
     latitudeDecimalsInvalid: string;
@@ -61,6 +63,11 @@ type FormProps = {
     keywordsRequired: string;
     keywordsMax: string;
     keywordFirstLetterCapital: string;
+    images: string;
+    removeImage: string;
+    PngJpg1MbMax: string;
+    uploadAFile: string;
+    orDragAndDrop: string;
   };
 };
 
@@ -104,6 +111,8 @@ function Form({
       longitude: destination ? longitude : '',
       worldRegion: destination?.worldRegion ?? '',
       keywords: destination?.keywords ?? [],
+      imageUrls: destination?.images ?? [],
+      imageFiles: [] as File[],
     },
   });
 
@@ -112,7 +121,7 @@ function Form({
 
   return (
     <form
-      className='space-y-4'
+      className='mb-12 space-y-4'
       action={(formData: FormData) => {
         if (!canSubmit) return;
         updateDestination(formData);
@@ -303,6 +312,7 @@ function Form({
             }}
             onBlur={handleBlur}
             value={state.value}
+            description={t.youCanUseMarkdown}
             errorMessage={
               submissionAttempts > 0 &&
               state.meta.errors &&
@@ -342,6 +352,7 @@ function Form({
             }}
             onBlur={handleBlur}
             value={state.value}
+            description={t.youCanUseMarkdown}
             errorMessage={
               submissionAttempts > 0 &&
               state.meta.errors &&
@@ -396,6 +407,48 @@ function Form({
           />
         )}
       </Field>
+      <div>
+        <h2 className='mb-1.5 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
+          {t.images}
+        </h2>
+        <Field
+          name='imageUrls'
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateDestination().pick({ imageUrls: true }).shape
+              .imageUrls,
+          }}
+        >
+          {({ state: imageUrlsState, handleChange: handleImageUrlsChange }) => (
+            <Field
+              name='imageFiles'
+              validatorAdapter={zodValidator}
+              validators={{
+                onChange: validateDestination().pick({ imageFiles: true }).shape
+                  .imageFiles,
+              }}
+            >
+              {({
+                state: imageFilesState,
+                handleChange: handleImageFilesChange,
+              }) => (
+                <ImageFormField
+                  currentImageUrls={imageUrlsState.value}
+                  handleImageUrlsChange={handleImageUrlsChange}
+                  currentImageFiles={imageFilesState.value}
+                  handleImageFilesChange={handleImageFilesChange}
+                  t={{
+                    removeImage: t.removeImage,
+                    PngJpg1MbMax: t.PngJpg1MbMax,
+                    uploadAFile: t.uploadAFile,
+                    orDragAndDrop: t.orDragAndDrop,
+                  }}
+                />
+              )}
+            </Field>
+          )}
+        </Field>
+      </div>
       <div className='flex w-full justify-end gap-4'>
         <Button
           as={Link}

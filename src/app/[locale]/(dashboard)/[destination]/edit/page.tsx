@@ -19,7 +19,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function DestinationEdit({
+export default async function EditDestination({
   params,
 }: {
   params: { destination: string; locale: string };
@@ -241,6 +241,7 @@ export default async function DestinationEdit({
           contentTooLong: t('contentTooLong'),
           exclusiveContentTooShort: t('exclusiveContentTooShort'),
           exclusiveContentTooLong: t('exclusiveContentTooLong'),
+          youCanUseMarkdown: t('youCanUseMarkdown'),
           latitudeInvalid: t('latitudeInvalid'),
           latitudeDecimalsInvalid: t('latitudeDecimalsInvalid'),
           longitudeInvalid: t('longitudeInvalid'),
@@ -257,6 +258,11 @@ export default async function DestinationEdit({
           keywordsRequired: t('keywordsRequired'),
           keywordsMax: t('keywordsMax'),
           keywordFirstLetterCapital: t('keywordFirstLetterCapital'),
+          images: t('images'),
+          removeImage: t('removeImage'),
+          PngJpg1MbMax: t('PngJpg1MbMax'),
+          uploadAFile: t('uploadAFile'),
+          orDragAndDrop: t('orDragAndDrop'),
         }}
       />
     </>
