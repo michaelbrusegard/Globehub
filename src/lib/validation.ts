@@ -22,6 +22,9 @@ type validateDestinationProps = {
     keywordsRequired?: string;
     keywordsMax?: string;
     keywordFirstLetterCapital?: string;
+    imageNameTooLong?: string;
+    imageTypeInvalid?: string;
+    imageSizeTooLarge?: string;
   };
 };
 
@@ -34,13 +37,21 @@ type validateKeywordProps = {
   };
 };
 
+type validateImageFileProps = {
+  t?: {
+    imageNameTooLong?: string;
+    imageTypeInvalid?: string;
+    imageSizeTooLarge?: string;
+  };
+};
+
 function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
   return z.object({
     bio: z.string().max(200, t?.bioTooLong),
   });
 }
 
-function validateKeyword({ t }: validateKeywordProps) {
+function validateKeyword({ t }: validateKeywordProps = {}) {
   return z
     .string()
     .min(2, t?.keywordTooShort)
@@ -51,6 +62,18 @@ function validateKeyword({ t }: validateKeywordProps) {
       t?.keywordFirstLetterCapital,
     );
 }
+
+function validateImageFile({ t }: validateImageFileProps = {}) {
+  return z.object({
+    name: z.string().max(100, t?.imageNameTooLong),
+    type: z
+      .string()
+      .regex(/(image\/jpeg|image\/png|image\/jpg)$/, t?.imageTypeInvalid),
+    size: z.number().max(1048576, t?.imageSizeTooLarge),
+    lastModified: z.number(),
+  });
+}
+
 function validateDestination({
   imageUrls,
   worldRegions,
@@ -87,24 +110,40 @@ function validateDestination({
       .string()
       .refine((value) => worldRegions?.includes(value), t?.worldRegionInvalid),
     keywords: z
-      .array(validateKeyword({ t }))
+      .array(
+        validateKeyword({
+          t: {
+            keywordTooShort: t?.keywordTooShort,
+            keywordTooLong: t?.keywordTooLong,
+            keywordNoSpaces: t?.keywordNoSpaces,
+            keywordFirstLetterCapital: t?.keywordFirstLetterCapital,
+          },
+        }),
+      )
       .min(1, t?.keywordsRequired)
       .max(20, t?.keywordsMax)
       .refine((keywords) => {
         const uniqueKeywords = new Set(keywords);
         return uniqueKeywords.size === keywords.length;
       }, t?.keywordDuplicate),
-    // imageUrls: z.array(
-    //   z.string().refine((value) => imageUrls?.includes(value)),
-    // ),
-    // imageFiles: z.array(
-    //   z.object({
-    //     name: z.string(),
-    //     type: z.string().regex(/(image\/jpeg|image\/png|image\/jpg)$/),
-    //     size: z.number().max(1048576),
-    //   }),
-    // ),
+    imageUrls: z.array(
+      z.string().refine((value) => imageUrls?.includes(value)),
+    ),
+    imageFiles: z.array(
+      validateImageFile({
+        t: {
+          imageNameTooLong: t?.imageNameTooLong,
+          imageTypeInvalid: t?.imageTypeInvalid,
+          imageSizeTooLarge: t?.imageSizeTooLarge,
+        },
+      }),
+    ),
   });
 }
 
-export { validateProfile, validateDestination, validateKeyword };
+export {
+  validateProfile,
+  validateDestination,
+  validateKeyword,
+  validateImageFile,
+};

@@ -114,7 +114,10 @@
       "removeImage": "Fjern bilde",
       "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
       "uploadAFile": "Last opp en fil",
-      "orDragAndDrop": "eller dra og slipp"
+      "orDragAndDrop": "eller dra og slipp",
+      "imageNameTooLong": "Bildets navn kan være på maksimalt 255 tegn",
+      "imageTypeInvalid": "Bildet må være av typen PNG eller JPG",
+      "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB"
     },
     "reviews": {
       "title": "Anmeldelser"

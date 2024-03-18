@@ -68,6 +68,9 @@ type FormProps = {
     PngJpg1MbMax: string;
     uploadAFile: string;
     orDragAndDrop: string;
+    imageNameTooLong: string;
+    imageTypeInvalid: string;
+    imageSizeTooLarge: string;
   };
 };
 
@@ -111,19 +114,25 @@ function Form({
       longitude: destination ? longitude : '',
       worldRegion: destination?.worldRegion ?? '',
       keywords: destination?.keywords ?? [],
-      // imageUrls: destination?.images ?? [],
-      // imageFiles: [] as File[],
+      imageUrls: destination?.images ?? [],
+      imageFiles: [] as File[],
     },
   });
 
   const canSubmit = useStore((state) => state.canSubmit);
   const submissionAttempts = useStore((state) => state.submissionAttempts);
+  const imageFiles = useStore((state) => state.values.imageFiles);
 
   return (
     <form
       className='mb-12 space-y-4'
       action={(formData: FormData) => {
         if (!canSubmit) return;
+
+        imageFiles.forEach((file, index) => {
+          formData.append(`imageFiles[${index}]`, file);
+        });
+
         updateDestination(formData);
       }}
       onSubmit={handleSubmit}
@@ -407,7 +416,7 @@ function Form({
           />
         )}
       </Field>
-      {/* <div>
+      <div>
         <h2 className='mb-1.5 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
           {t.images}
         </h2>
@@ -420,35 +429,33 @@ function Form({
           }}
         >
           {({ state: imageUrlsState, handleChange: handleImageUrlsChange }) => (
-            <Field
-              name='imageFiles'
-              validatorAdapter={zodValidator}
-              validators={{
-                onChange: validateDestination().pick({ imageFiles: true }).shape
-                  .imageFiles,
-              }}
-            >
+            <Field name='imageFiles' validatorAdapter={zodValidator}>
               {({
                 state: imageFilesState,
                 handleChange: handleImageFilesChange,
+                handleBlur,
               }) => (
                 <ImageFormField
                   imageUrls={imageUrlsState.value}
                   setImageUrls={handleImageUrlsChange}
                   imageFiles={imageFilesState.value}
                   setImageFiles={handleImageFilesChange}
+                  handleBlur={handleBlur}
                   t={{
                     removeImage: t.removeImage,
                     PngJpg1MbMax: t.PngJpg1MbMax,
                     uploadAFile: t.uploadAFile,
                     orDragAndDrop: t.orDragAndDrop,
+                    imageNameTooLong: t.imageNameTooLong,
+                    imageTypeInvalid: t.imageTypeInvalid,
+                    imageSizeTooLarge: t.imageSizeTooLarge,
                   }}
                 />
               )}
             </Field>
           )}
         </Field>
-      </div> */}
+      </div>
       <div className='flex w-full justify-end gap-4'>
         <Button
           as={Link}

@@ -111,9 +111,7 @@ export default async function EditDestination({
             throw new Error('Unauthorized');
           }
 
-          console.log('formData', formData);
-
-          const formDataEntries = Object.fromEntries(formData) as {
+          type FormDataEntries = {
             title: string;
             content: string;
             exclusiveContent: string;
@@ -121,7 +119,12 @@ export default async function EditDestination({
             longitude: string;
             worldRegion: string;
             keywords: string | string[];
+            imageUrls: string | string[];
+            imageFiles?: File[];
           };
+
+          const formDataEntries: Partial<FormDataEntries> =
+            Object.fromEntries(formData);
 
           if (typeof formDataEntries.keywords === 'string') {
             formDataEntries.keywords = JSON.parse(
@@ -129,12 +132,27 @@ export default async function EditDestination({
             ) as string[];
           }
 
+          if (typeof formDataEntries.imageUrls === 'string') {
+            formDataEntries.imageUrls = JSON.parse(
+              formDataEntries.imageUrls,
+            ) as string[];
+          }
+
+          const imageFiles: File[] = [];
+          for (const [key, value] of formData.entries()) {
+            if (key.startsWith('imageFiles')) {
+              imageFiles.push(value as File);
+            }
+          }
+
+          formDataEntries.imageFiles = imageFiles;
+
           const parsed = validateDestination({
+            imageUrls: destination.images,
             worldRegions: Object.keys(worldRegionTranslations),
           }).safeParse(formDataEntries);
 
           if (!parsed.success) {
-            console.log('parsed.error', parsed.error);
             return;
           }
 
@@ -146,6 +164,10 @@ export default async function EditDestination({
 
           const newKeywords = parsed.data.keywords.filter((keyword) => {
             return !destinationKeywords.includes(keyword);
+          });
+
+          const oldImageUrls = destination.images.filter((imageUrl) => {
+            return !parsed.data.imageUrls.includes(imageUrl);
           });
 
           await sql.begin(async (sql): Promise<void> => {
@@ -266,6 +288,9 @@ export default async function EditDestination({
           PngJpg1MbMax: t('PngJpg1MbMax'),
           uploadAFile: t('uploadAFile'),
           orDragAndDrop: t('orDragAndDrop'),
+          imageNameTooLong: t('imageNameTooLong'),
+          imageTypeInvalid: t('imageTypeInvalid'),
+          imageSizeTooLarge: t('imageSizeTooLarge'),
         }}
       />
     </>
