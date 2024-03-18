@@ -9,10 +9,10 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 type ImageFormFieldProps = {
-  currentImageUrls: string[];
-  handleImageUrlsChange: (imageUrls: string[]) => void;
-  currentImageFiles: File[];
-  handleImageFilesChange: (imageFiles: File[]) => void;
+  imageUrls: string[];
+  setImageUrls: (imageUrls: string[]) => void;
+  imageFiles: File[];
+  setImageFiles: (imageFiles: File[]) => void;
   t: {
     removeImage: string;
     PngJpg1MbMax: string;
@@ -30,21 +30,18 @@ type ImageInterfaceProps = {
 };
 
 function ImageFormField({
-  currentImageUrls,
-  handleImageUrlsChange,
-  currentImageFiles,
-  handleImageFilesChange,
+  imageUrls,
+  setImageUrls,
+  imageFiles,
+  setImageFiles,
   t,
 }: ImageFormFieldProps) {
-  const [imageUrls, setImagesUrls] = useState<string[]>(currentImageUrls);
-  const [imageFiles, setImageFiles] = useState<File[]>(currentImageFiles);
   const [dragging, setDragging] = useState(false);
 
   function handleFileChange(files: FileList | null) {
     if (files) {
       const newImageFiles = Array.from(files);
-      const updatedImageFiles = [...currentImageFiles, ...newImageFiles];
-      handleImageFilesChange(updatedImageFiles);
+      const updatedImageFiles = [...imageFiles, ...newImageFiles];
       setImageFiles(updatedImageFiles);
     }
   }
@@ -117,9 +114,8 @@ function ImageFormField({
               imageUrl={image}
               onPress={() => {
                 const newImageUrls = imageUrls.filter((url) => url !== image);
-                handleImageUrlsChange(newImageUrls);
-                currentImageUrls = newImageUrls;
-                setImagesUrls(newImageUrls);
+                setImageUrls(newImageUrls);
+                imageUrls = newImageUrls;
               }}
               t={{
                 removeImage: t.removeImage,
@@ -134,9 +130,8 @@ function ImageFormField({
                 const newImageFiles = imageFiles.filter(
                   (_, imgIndex) => imgIndex !== index,
                 );
-                handleImageFilesChange(newImageFiles);
-                currentImageFiles = newImageFiles;
                 setImageFiles(newImageFiles);
+                imageFiles = newImageFiles;
               }}
               t={{
                 removeImage: t.removeImage,

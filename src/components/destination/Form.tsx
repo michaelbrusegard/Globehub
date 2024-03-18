@@ -111,8 +111,8 @@ function Form({
       longitude: destination ? longitude : '',
       worldRegion: destination?.worldRegion ?? '',
       keywords: destination?.keywords ?? [],
-      imageUrls: destination?.images ?? [],
-      imageFiles: [] as File[],
+      // imageUrls: destination?.images ?? [],
+      // imageFiles: [] as File[],
     },
   });
 
@@ -383,9 +383,9 @@ function Form({
       >
         {({ state, handleChange, handleBlur }) => (
           <KeywordFormField
-            currentKeywords={state.value}
+            keywords={state.value}
+            setKeywords={handleChange}
             allKeywords={allKeywords}
-            handleChange={handleChange}
             handleBlur={handleBlur}
             t={{
               keywordsLabel: t.keywordsLabel,
@@ -407,7 +407,7 @@ function Form({
           />
         )}
       </Field>
-      <div>
+      {/* <div>
         <h2 className='mb-1.5 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
           {t.images}
         </h2>
@@ -433,10 +433,10 @@ function Form({
                 handleChange: handleImageFilesChange,
               }) => (
                 <ImageFormField
-                  currentImageUrls={imageUrlsState.value}
-                  handleImageUrlsChange={handleImageUrlsChange}
-                  currentImageFiles={imageFilesState.value}
-                  handleImageFilesChange={handleImageFilesChange}
+                  imageUrls={imageUrlsState.value}
+                  setImageUrls={handleImageUrlsChange}
+                  imageFiles={imageFilesState.value}
+                  setImageFiles={handleImageFilesChange}
                   t={{
                     removeImage: t.removeImage,
                     PngJpg1MbMax: t.PngJpg1MbMax,
@@ -448,7 +448,7 @@ function Form({
             </Field>
           )}
         </Field>
-      </div>
+      </div> */}
       <div className='flex w-full justify-end gap-4'>
         <Button
           as={Link}

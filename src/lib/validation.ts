@@ -94,16 +94,16 @@ function validateDestination({
         const uniqueKeywords = new Set(keywords);
         return uniqueKeywords.size === keywords.length;
       }, t?.keywordDuplicate),
-    imageUrls: z.array(
-      z.string().refine((value) => imageUrls?.includes(value)),
-    ),
-    imageFiles: z.array(
-      z.object({
-        name: z.string(),
-        type: z.string().regex(/(image\/jpeg|image\/png|image\/jpg)$/),
-        size: z.number().max(1048576),
-      }),
-    ),
+    // imageUrls: z.array(
+    //   z.string().refine((value) => imageUrls?.includes(value)),
+    // ),
+    // imageFiles: z.array(
+    //   z.object({
+    //     name: z.string(),
+    //     type: z.string().regex(/(image\/jpeg|image\/png|image\/jpg)$/),
+    //     size: z.number().max(1048576),
+    //   }),
+    // ),
   });
 }
 

@@ -111,6 +111,8 @@ export default async function EditDestination({
             throw new Error('Unauthorized');
           }
 
+          console.log('formData', formData);
+
           const formDataEntries = Object.fromEntries(formData) as {
             title: string;
             content: string;
@@ -132,6 +134,7 @@ export default async function EditDestination({
           }).safeParse(formDataEntries);
 
           if (!parsed.success) {
+            console.log('parsed.error', parsed.error);
             return;
           }
 

@@ -14,9 +14,9 @@ import { cn } from '@/lib/utils';
 import { validateKeyword } from '@/lib/validation';
 
 type KeywordFormFieldProps = {
-  currentKeywords: string[];
+  keywords: string[];
   allKeywords: string[];
-  handleChange: (keywords: string[]) => void;
+  setKeywords: (keywords: string[]) => void;
   handleBlur: () => void;
   errorMessage: string | false | undefined;
   isInvalid: boolean;
@@ -33,28 +33,26 @@ type KeywordFormFieldProps = {
 };
 
 function KeywordFormField({
-  currentKeywords,
+  keywords,
   allKeywords,
-  handleChange,
+  setKeywords,
   handleBlur,
   errorMessage,
   isInvalid,
   t,
 }: KeywordFormFieldProps) {
-  const [selectedKeywords, setSelectedKeywords] =
-    useState<string[]>(currentKeywords);
   const [newKeyword, setNewKeyword] = useState('');
-  const [autoCompleteInvalid, setAutoCompleteInvalid] = useState(false);
+  const [inputIsInvalid, setInputIsInvalid] = useState(false);
   const [autoCompleteErrorMessage, setAutoCompleteErrorMessage] = useState('');
 
-  function updateValidationState(newSelectedKeywords: string[]) {
-    handleChange(newSelectedKeywords);
-    currentKeywords = newSelectedKeywords;
+  function updateState(newKeywords: string[]) {
+    setKeywords(newKeywords);
+    keywords = newKeywords;
   }
 
   function handleNewKeywordChange() {
-    if (selectedKeywords.includes(newKeyword)) {
-      setAutoCompleteInvalid(true);
+    if (keywords.includes(newKeyword)) {
+      setInputIsInvalid(true);
       setAutoCompleteErrorMessage(t.keywordDuplicate);
       return;
     }
@@ -69,16 +67,14 @@ function KeywordFormField({
     }).safeParse(newKeyword);
 
     if (!result.success) {
-      setAutoCompleteInvalid(true);
+      setInputIsInvalid(true);
       setAutoCompleteErrorMessage(
         result.error.errors.map((e) => e.message).join(', '),
       );
     } else {
-      const newSelectedKeywords = [...selectedKeywords, newKeyword];
-      updateValidationState(newSelectedKeywords);
-      setSelectedKeywords(newSelectedKeywords);
+      updateState([...keywords, newKeyword]);
       setNewKeyword('');
-      setAutoCompleteInvalid(false);
+      setInputIsInvalid(false);
       setAutoCompleteErrorMessage('');
     }
   }
@@ -86,11 +82,7 @@ function KeywordFormField({
   return (
     <div className='space-y-4'>
       <div className='flex items-end justify-between gap-4'>
-        <input
-          type='hidden'
-          name='keywords'
-          value={JSON.stringify(selectedKeywords)}
-        />
+        <input type='hidden' name='keywords' value={JSON.stringify(keywords)} />
         <Autocomplete
           label={t.keywordsLabel}
           placeholder={t.keywordsPlaceholder}
@@ -110,11 +102,11 @@ function KeywordFormField({
               },
             }).safeParse(newKeyword);
             if (result.success) {
-              setAutoCompleteInvalid(false);
+              setInputIsInvalid(false);
               setAutoCompleteErrorMessage('');
             }
           }}
-          isInvalid={autoCompleteInvalid}
+          isInvalid={inputIsInvalid}
           errorMessage={autoCompleteErrorMessage.split(', ')[0]}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -130,7 +122,7 @@ function KeywordFormField({
           ))}
         </Autocomplete>
         <Button
-          className={cn(autoCompleteInvalid && 'mb-6')}
+          className={cn(inputIsInvalid && 'mb-6')}
           size='md'
           variant='faded'
           onPress={handleNewKeywordChange}
@@ -148,16 +140,12 @@ function KeywordFormField({
             aria-describedby={isInvalid ? 'keywords-error' : undefined}
             aria-invalid={isInvalid}
           >
-            {selectedKeywords.map((keyword) => (
+            {keywords.map((keyword) => (
               <Chip
                 key={keyword}
                 size='md'
                 onClose={() => {
-                  const newSelectedKeywords = selectedKeywords.filter(
-                    (k) => k !== keyword,
-                  );
-                  updateValidationState(newSelectedKeywords);
-                  setSelectedKeywords(newSelectedKeywords);
+                  updateState(keywords.filter((k) => k !== keyword));
                 }}
               >
                 {keyword}
