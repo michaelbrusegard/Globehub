@@ -4,6 +4,8 @@ import HeartIcon from '@material-symbols/svg-400/outlined/favorite.svg';
 import { Button } from '@nextui-org/react';
 import { startTransition, useOptimistic } from 'react';
 
+import { cn } from '@/lib/utils';
+
 type FavoriteButtonProps = {
   favorite: boolean;
   updateFavorite: () => Promise<void>;
@@ -39,7 +41,15 @@ function FavoriteButton({ favorite, updateFavorite, t }: FavoriteButtonProps) {
       aria-label={t.favorite}
       onPress={handlePress}
     >
-      <HeartIcon className='size-5 fill-danger-foreground' />
+      <HeartIcon
+        className={cn(
+          'size-5',
+          optimisticFavorite
+            ? 'fill-danger-foreground'
+            : 'fill-default-foreground',
+        )}
+        aria-hidden='true'
+      />
     </Button>
   );
 }

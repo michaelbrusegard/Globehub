@@ -17,9 +17,11 @@ import { validateDestination } from '@/lib/validation';
 
 import { ImageFormField } from '@/components/destination/ImageFormField';
 import { KeywordFormField } from '@/components/destination/KeywordFormField';
+import { DeleteModal } from '@/components/settings/DeleteModal';
 
 type FormProps = {
   updateDestination: (formData: FormData) => void;
+  deleteDestination: () => void;
   destination?: Destination & {
     keywords: string[];
   };
@@ -73,6 +75,9 @@ type FormProps = {
     imageSizeTooLarge: string;
     tooFewImages: string;
     tooManyImages: string;
+    delete: string;
+    deleteConfirmation: string;
+    deleteDestination: string;
   };
 };
 
@@ -99,6 +104,7 @@ function SubmitButton({
 
 function Form({
   updateDestination,
+  deleteDestination,
   destination,
   allKeywords,
   worldRegions,
@@ -475,19 +481,32 @@ function Form({
           )}
         </Field>
       </div>
-      <div className='flex w-full justify-end gap-4'>
-        <Button
-          as={Link}
-          href={destination ? `/${destination.id}` : '/'}
-          color='danger'
-          variant='light'
-        >
-          {t.cancel}
-        </Button>
-        <SubmitButton
-          t={{ submit: t.submit }}
-          canSubmit={canSubmit || submissionAttempts === 0}
-        />
+      <div className='flex w-full justify-between gap-4'>
+        {destination && (
+          <DeleteModal
+            action={deleteDestination}
+            t={{
+              delete: t.delete,
+              cancel: t.cancel,
+              description: t.deleteConfirmation,
+              deleteDestination: t.deleteDestination,
+            }}
+          />
+        )}
+        <div className='flex w-full justify-end gap-4'>
+          <Button
+            as={Link}
+            href={destination ? `/${destination.id}` : '/'}
+            color='danger'
+            variant='light'
+          >
+            {t.cancel}
+          </Button>
+          <SubmitButton
+            t={{ submit: t.submit }}
+            canSubmit={canSubmit || submissionAttempts === 0}
+          />
+        </div>
       </div>
     </form>
   );

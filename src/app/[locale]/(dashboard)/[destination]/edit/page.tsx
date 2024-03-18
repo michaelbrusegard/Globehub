@@ -2,7 +2,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type User, sql } from '@/lib/db';
+import { type Destination, type Keyword, type User, sql } from '@/lib/db';
 import {
   DeleteObjectCommand,
   PutObjectCommand,
@@ -183,7 +183,10 @@ export default async function EditDestination({
 
           const params = {
             Bucket: destinationsBucket,
-            Key: oldImageUrl.replace(endpoint, ''),
+            Key: oldImageUrl.replace(
+              endpoint + '/' + destinationsBucket + '/',
+              '',
+            ),
           };
 
           const deleteCommand = new DeleteObjectCommand(params);
@@ -286,6 +289,81 @@ export default async function EditDestination({
         });
         redirect(`/${destination.id}`);
       }}
+      deleteDestination={async () => {
+        'use server';
+        if (!(user && (user.role === 'admin' || user.id === author.id))) {
+          throw new Error('Unauthorized');
+        }
+
+        for (const imageUrl of destination.images) {
+          if (!imageUrl.startsWith(endpoint)) {
+            continue;
+          }
+
+          const params = {
+            Bucket: destinationsBucket,
+            Key: imageUrl.replace(
+              endpoint + '/' + destinationsBucket + '/',
+              '',
+            ),
+          };
+
+          const deleteCommand = new DeleteObjectCommand(params);
+
+          await s3.send(deleteCommand);
+        }
+
+        await sql.begin(async (sql): Promise<void> => {
+          await sql`
+            DELETE FROM user_favorites
+            WHERE destination_id = ${destination.id}
+          `;
+
+          await sql`
+            DELETE FROM destination_keywords
+            WHERE destination_id = ${destination.id}
+          `;
+
+          await sql`
+            DELETE FROM reviews
+            WHERE destination_id = ${destination.id}
+          `;
+
+          await sql`
+            DELETE FROM weather_caches
+            WHERE destination_id = ${destination.id}
+          `;
+
+          for (const keywordName of destination.keywords) {
+            const [keyword]: Keyword[] = await sql`
+              SELECT id
+              FROM keywords
+              WHERE name = ${keywordName}
+            `;
+
+            if (keyword) {
+              const [result]: { count: number }[] = await sql`
+                SELECT COUNT(*)
+                FROM destination_keywords
+                WHERE keyword_id = ${keyword.id}
+              `;
+
+              if (result && result.count === 0) {
+                await sql`
+                  DELETE FROM keywords
+                  WHERE id = ${keyword.id}
+                `;
+              }
+            }
+          }
+
+          await sql`
+            DELETE FROM destinations
+            WHERE id = ${destination.id}
+          `;
+        });
+        redirect('/');
+      }}
       destination={destination}
       allKeywords={allKeywords}
       worldRegions={worldRegionTranslations}
@@ -337,6 +415,9 @@ export default async function EditDestination({
         imageSizeTooLarge: t('imageSizeTooLarge'),
         tooFewImages: t('tooFewImages'),
         tooManyImages: t('tooManyImages'),
+        delete: t('delete'),
+        deleteConfirmation: t('deleteConfirmation'),
+        deleteDestination: t('deleteDestination'),
       }}
     />
   );

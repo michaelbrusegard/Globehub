@@ -120,7 +120,10 @@
       "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB",
       "tooFewImages": "Minst 3 bilder må legges til",
       "tooManyImages": "Maksimalt 10 bilder kan legges til",
-      "newDestination": "Ny destinasjon"
+      "newDestination": "Ny destinasjon",
+      "delete": "Slett",
+      "deleteConfirmation": "Er du sikker på at du vil slette denne destinasjonen? Dette kan ikke angres. Alle anmeldelser og bilder vil også bli slettet.",
+      "deleteDestination": "Slett destinasjon"
     },
     "reviews": {
       "title": "Anmeldelser"
