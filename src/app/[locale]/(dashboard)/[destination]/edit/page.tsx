@@ -5,7 +5,6 @@ import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
 import {
   DeleteObjectCommand,
-  type ObjectCannedACL,
   PutObjectCommand,
   destinationsBucket,
   endpoint,
@@ -114,7 +113,6 @@ export default async function EditDestination({
       <Form
         updateDestination={async (formData: FormData) => {
           'use server';
-
           if (!(user && (user.role === 'admin' || user.id === author.id))) {
             throw new Error('Unauthorized');
           }
@@ -148,8 +146,8 @@ export default async function EditDestination({
 
           const imageFiles: File[] = [];
           for (const [key, value] of formData.entries()) {
-            if (key.startsWith('imageFiles')) {
-              imageFiles.push(value as File);
+            if (key.startsWith('imageFiles') && value instanceof File) {
+              imageFiles.push(value);
             }
           }
 
@@ -162,7 +160,6 @@ export default async function EditDestination({
           }).safeParse(formDataEntries);
 
           if (!parsed.success) {
-            console.log(parsed.error);
             return;
           }
 
@@ -198,13 +195,15 @@ export default async function EditDestination({
             await s3.send(deleteCommand);
           }
 
-          for (const [index, imageFile] of parsed.data.imageFiles.entries()) {
+          for (const [index, imageFile] of imageFiles.entries()) {
             const uniqueFileName = `${Date.now()}-${index}`;
+            const arrayBuffer = await imageFile.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
 
             const params = {
               Bucket: destinationsBucket,
               Key: `${destination.id}/${uniqueFileName}`,
-              Body: imageFile.buffer as File,
+              Body: buffer,
             };
 
             const command = new PutObjectCommand(params);

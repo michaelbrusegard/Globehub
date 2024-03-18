@@ -10,7 +10,6 @@ import {
 } from '@nextui-org/react';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { d } from 'node_modules/nuqs/dist/serializer-RqlbYgUW';
 import { useFormStatus } from 'react-dom';
 
 import { type Destination } from '@/lib/db';
@@ -438,7 +437,7 @@ function Form({
           }}
         >
           {({ state: imageUrlsState, handleChange: handleImageUrlsChange }) => (
-            <Field name='imageFiles' validatorAdapter={zodValidator}>
+            <Field name='imageFiles'>
               {({
                 state: imageFilesState,
                 handleChange: handleImageFilesChange,
