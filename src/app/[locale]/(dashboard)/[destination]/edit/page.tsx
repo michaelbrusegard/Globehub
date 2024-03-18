@@ -106,119 +106,115 @@ export default async function EditDestination({
   }
 
   return (
-    <>
-      <h1 className='mb-10 mt-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
-        {t('editDestination')}
-      </h1>
-      <Form
-        updateDestination={async (formData: FormData) => {
-          'use server';
-          if (!(user && (user.role === 'admin' || user.id === author.id))) {
-            throw new Error('Unauthorized');
+    <Form
+      updateDestination={async (formData: FormData) => {
+        'use server';
+        if (!(user && (user.role === 'admin' || user.id === author.id))) {
+          throw new Error('Unauthorized');
+        }
+
+        type FormDataEntries = {
+          title: string;
+          content: string;
+          exclusiveContent: string;
+          latitude: string;
+          longitude: string;
+          worldRegion: string;
+          keywords: string | string[];
+          imageUrls: string | string[];
+          imageFiles?: File[];
+        };
+
+        const formDataEntries: Partial<FormDataEntries> =
+          Object.fromEntries(formData);
+
+        if (typeof formDataEntries.keywords === 'string') {
+          formDataEntries.keywords = JSON.parse(
+            formDataEntries.keywords,
+          ) as string[];
+        }
+
+        if (typeof formDataEntries.imageUrls === 'string') {
+          formDataEntries.imageUrls = JSON.parse(
+            formDataEntries.imageUrls,
+          ) as string[];
+        }
+
+        const imageFiles: File[] = [];
+        for (const [key, value] of formData.entries()) {
+          if (key.startsWith('imageFiles') && value instanceof File) {
+            imageFiles.push(value);
+          }
+        }
+
+        formDataEntries.imageFiles = imageFiles;
+
+        const parsed = validateDestination({
+          imageFilesLength: imageFiles.length,
+          imageUrls: destination.images,
+          worldRegions: Object.keys(worldRegionTranslations),
+        }).safeParse(formDataEntries);
+
+        if (!parsed.success) {
+          return;
+        }
+
+        const destinationKeywords = destination.keywords;
+        const destinationImageUrls = destination.images;
+
+        const oldKeywords = destinationKeywords.filter((keyword) => {
+          return !parsed.data.keywords.includes(keyword);
+        });
+
+        const newKeywords = parsed.data.keywords.filter((keyword) => {
+          return !destinationKeywords.includes(keyword);
+        });
+
+        const oldImageUrls = destinationImageUrls.filter((imageUrl) => {
+          return !parsed.data.imageUrls.includes(imageUrl);
+        });
+
+        const newImageUrls = [];
+
+        for (const oldImageUrl of oldImageUrls) {
+          if (!oldImageUrl.startsWith(endpoint)) {
+            continue;
           }
 
-          type FormDataEntries = {
-            title: string;
-            content: string;
-            exclusiveContent: string;
-            latitude: string;
-            longitude: string;
-            worldRegion: string;
-            keywords: string | string[];
-            imageUrls: string | string[];
-            imageFiles?: File[];
+          const params = {
+            Bucket: destinationsBucket,
+            Key: oldImageUrl.replace(endpoint, ''),
           };
 
-          const formDataEntries: Partial<FormDataEntries> =
-            Object.fromEntries(formData);
+          const deleteCommand = new DeleteObjectCommand(params);
 
-          if (typeof formDataEntries.keywords === 'string') {
-            formDataEntries.keywords = JSON.parse(
-              formDataEntries.keywords,
-            ) as string[];
-          }
+          await s3.send(deleteCommand);
+        }
 
-          if (typeof formDataEntries.imageUrls === 'string') {
-            formDataEntries.imageUrls = JSON.parse(
-              formDataEntries.imageUrls,
-            ) as string[];
-          }
+        for (const [index, imageFile] of imageFiles.entries()) {
+          const uniqueFileName = `${Date.now()}-${index}`;
+          const arrayBuffer = await imageFile.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
 
-          const imageFiles: File[] = [];
-          for (const [key, value] of formData.entries()) {
-            if (key.startsWith('imageFiles') && value instanceof File) {
-              imageFiles.push(value);
-            }
-          }
+          const params = {
+            Bucket: destinationsBucket,
+            Key: `${destination.id}/${uniqueFileName}`,
+            Body: buffer,
+          };
 
-          formDataEntries.imageFiles = imageFiles;
+          const command = new PutObjectCommand(params);
 
-          const parsed = validateDestination({
-            imageFilesLength: imageFiles.length,
-            imageUrls: destination.images,
-            worldRegions: Object.keys(worldRegionTranslations),
-          }).safeParse(formDataEntries);
+          await s3.send(command);
 
-          if (!parsed.success) {
-            return;
-          }
+          newImageUrls.push(
+            endpoint + '/' + destinationsBucket + '/' + params.Key,
+          );
+        }
 
-          const destinationKeywords = destination.keywords;
-          const destinationImageUrls = destination.images;
+        parsed.data.imageUrls = [...parsed.data.imageUrls, ...newImageUrls];
 
-          const oldKeywords = destinationKeywords.filter((keyword) => {
-            return !parsed.data.keywords.includes(keyword);
-          });
-
-          const newKeywords = parsed.data.keywords.filter((keyword) => {
-            return !destinationKeywords.includes(keyword);
-          });
-
-          const oldImageUrls = destinationImageUrls.filter((imageUrl) => {
-            return !parsed.data.imageUrls.includes(imageUrl);
-          });
-
-          const newImageUrls = [];
-
-          for (const oldImageUrl of oldImageUrls) {
-            if (!oldImageUrl.startsWith(endpoint)) {
-              continue;
-            }
-
-            const params = {
-              Bucket: destinationsBucket,
-              Key: oldImageUrl.replace(endpoint, ''),
-            };
-
-            const deleteCommand = new DeleteObjectCommand(params);
-
-            await s3.send(deleteCommand);
-          }
-
-          for (const [index, imageFile] of imageFiles.entries()) {
-            const uniqueFileName = `${Date.now()}-${index}`;
-            const arrayBuffer = await imageFile.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-
-            const params = {
-              Bucket: destinationsBucket,
-              Key: `${destination.id}/${uniqueFileName}`,
-              Body: buffer,
-            };
-
-            const command = new PutObjectCommand(params);
-
-            await s3.send(command);
-
-            newImageUrls.push(
-              endpoint + '/' + destinationsBucket + '/' + params.Key,
-            );
-          }
-
-          parsed.data.imageUrls = [...parsed.data.imageUrls, ...newImageUrls];
-
-          await sql.begin(async (sql): Promise<void> => {
-            const [updatedDestination] = await sql`
+        await sql.begin(async (sql): Promise<void> => {
+          const [updatedDestination] = await sql`
                 UPDATE destinations
                 SET
                   name = ${parsed.data.title},
@@ -232,17 +228,17 @@ export default async function EditDestination({
                 RETURNING *
               `;
 
-            if (
-              updatedDestination &&
-              destination.location !== updatedDestination.location
-            ) {
-              await sql`
+          if (
+            updatedDestination &&
+            destination.location !== updatedDestination.location
+          ) {
+            await sql`
                 DELETE FROM weather_caches
                 WHERE destination_id = ${destination.id}
               `;
-            }
+          }
 
-            await sql`
+          await sql`
               DELETE FROM destination_keywords
               WHERE destination_id = ${destination.id}
                 AND keyword_id IN (
@@ -252,7 +248,7 @@ export default async function EditDestination({
                 )
             `;
 
-            await sql`
+          await sql`
               DELETE FROM keywords
               WHERE id NOT IN (
                 SELECT keyword_id
@@ -261,7 +257,7 @@ export default async function EditDestination({
                 AND name = ANY(${sql.array(oldKeywords)})
             `;
 
-            await sql`
+          await sql`
               INSERT INTO keywords (name)
               SELECT keyword
               FROM UNNEST(${sql.array(newKeywords)}::text[]) AS keyword
@@ -272,77 +268,76 @@ export default async function EditDestination({
               )
             `;
 
-            const result: {
-              id: number;
-            }[] = await sql`
+          const result: {
+            id: number;
+          }[] = await sql`
               SELECT id
               FROM keywords
               WHERE name = ANY(${sql.array(newKeywords)})
             `;
 
-            const newKeywordIds = result.map((row) => row.id);
+          const newKeywordIds = result.map((row) => row.id);
 
-            await sql`
+          await sql`
               INSERT INTO destination_keywords (destination_id, keyword_id)
               SELECT ${destination.id}, keyword_id
               FROM UNNEST(${sql.array(newKeywordIds)}::integer[]) AS keyword_id
             `;
-          });
-          redirect(`/${destination.id}`);
-        }}
-        destination={destination}
-        allKeywords={allKeywords}
-        worldRegions={worldRegionTranslations}
-        t={{
-          details: t('details'),
-          title: t('title'),
-          writeTitle: t('writeTitle'),
-          content: t('content'),
-          writeContent: t('writeContent'),
-          exclusiveContent: t('exclusiveContent'),
-          writeExclusiveContent: t('writeExclusiveContent'),
-          cancel: t('cancel'),
-          submit: t('update'),
-          latitude: t('latitude'),
-          latitudePlaceholder: t('latitudePlaceholder'),
-          longitude: t('longitude'),
-          longitudePlaceholder: t('longitudePlaceholder'),
-          worldRegion: t('worldRegion'),
-          titleTooLong: t('titleTooLong'),
-          titleTooShort: t('titleTooShort'),
-          contentTooShort: t('contentTooShort'),
-          contentTooLong: t('contentTooLong'),
-          exclusiveContentTooShort: t('exclusiveContentTooShort'),
-          exclusiveContentTooLong: t('exclusiveContentTooLong'),
-          youCanUseMarkdown: t('youCanUseMarkdown'),
-          latitudeInvalid: t('latitudeInvalid'),
-          latitudeDecimalsInvalid: t('latitudeDecimalsInvalid'),
-          longitudeInvalid: t('longitudeInvalid'),
-          longitudeDecimalsInvalid: t('longitudeDecimalsInvalid'),
-          worldRegionInvalid: t('worldRegionInvalid'),
-          worldRegionPlaceholder: t('worldRegionPlaceholder'),
-          keywordsLabel: t('keywordsLabel'),
-          keywordsPlaceholder: t('keywordsPlaceholder'),
-          add: t('add'),
-          keywordTooShort: t('keywordTooShort'),
-          keywordTooLong: t('keywordTooLong'),
-          keywordNoSpaces: t('keywordNoSpaces'),
-          keywordDuplicate: t('keywordDuplicate'),
-          keywordsRequired: t('keywordsRequired'),
-          keywordsMax: t('keywordsMax'),
-          keywordFirstLetterCapital: t('keywordFirstLetterCapital'),
-          images: t('images'),
-          removeImage: t('removeImage'),
-          PngJpg1MbMax: t('PngJpg1MbMax'),
-          uploadAFile: t('uploadAFile'),
-          orDragAndDrop: t('orDragAndDrop'),
-          imageNameTooLong: t('imageNameTooLong'),
-          imageTypeInvalid: t('imageTypeInvalid'),
-          imageSizeTooLarge: t('imageSizeTooLarge'),
-          tooFewImages: t('tooFewImages'),
-          tooManyImages: t('tooManyImages'),
-        }}
-      />
-    </>
+        });
+        redirect(`/${destination.id}`);
+      }}
+      destination={destination}
+      allKeywords={allKeywords}
+      worldRegions={worldRegionTranslations}
+      t={{
+        details: t('details'),
+        title: t('title'),
+        writeTitle: t('writeTitle'),
+        content: t('content'),
+        writeContent: t('writeContent'),
+        exclusiveContent: t('exclusiveContent'),
+        writeExclusiveContent: t('writeExclusiveContent'),
+        cancel: t('cancel'),
+        submit: t('update'),
+        latitude: t('latitude'),
+        latitudePlaceholder: t('latitudePlaceholder'),
+        longitude: t('longitude'),
+        longitudePlaceholder: t('longitudePlaceholder'),
+        worldRegion: t('worldRegion'),
+        titleTooLong: t('titleTooLong'),
+        titleTooShort: t('titleTooShort'),
+        contentTooShort: t('contentTooShort'),
+        contentTooLong: t('contentTooLong'),
+        exclusiveContentTooShort: t('exclusiveContentTooShort'),
+        exclusiveContentTooLong: t('exclusiveContentTooLong'),
+        youCanUseMarkdown: t('youCanUseMarkdown'),
+        latitudeInvalid: t('latitudeInvalid'),
+        latitudeDecimalsInvalid: t('latitudeDecimalsInvalid'),
+        longitudeInvalid: t('longitudeInvalid'),
+        longitudeDecimalsInvalid: t('longitudeDecimalsInvalid'),
+        worldRegionInvalid: t('worldRegionInvalid'),
+        worldRegionPlaceholder: t('worldRegionPlaceholder'),
+        keywordsLabel: t('keywordsLabel'),
+        keywordsPlaceholder: t('keywordsPlaceholder'),
+        add: t('add'),
+        keywordTooShort: t('keywordTooShort'),
+        keywordTooLong: t('keywordTooLong'),
+        keywordNoSpaces: t('keywordNoSpaces'),
+        keywordDuplicate: t('keywordDuplicate'),
+        keywordsRequired: t('keywordsRequired'),
+        keywordsMax: t('keywordsMax'),
+        keywordFirstLetterCapital: t('keywordFirstLetterCapital'),
+        images: t('images'),
+        removeImage: t('removeImage'),
+        PngJpg1MbMax: t('PngJpg1MbMax'),
+        uploadAFile: t('uploadAFile'),
+        orDragAndDrop: t('orDragAndDrop'),
+        imageNameTooLong: t('imageNameTooLong'),
+        imageTypeInvalid: t('imageTypeInvalid'),
+        imageSizeTooLarge: t('imageSizeTooLarge'),
+        tooFewImages: t('tooFewImages'),
+        tooManyImages: t('tooManyImages'),
+      }}
+    />
   );
 }

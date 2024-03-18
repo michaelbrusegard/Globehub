@@ -119,7 +119,8 @@
       "imageTypeInvalid": "Bildet må være av typen PNG eller JPG",
       "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB",
       "tooFewImages": "Minst 3 bilder må legges til",
-      "tooManyImages": "Maksimalt 10 bilder kan legges til"
+      "tooManyImages": "Maksimalt 10 bilder kan legges til",
+      "newDestination": "Ny destinasjon"
     },
     "reviews": {
       "title": "Anmeldelser"

@@ -139,6 +139,11 @@ function Form({
       }}
       onSubmit={handleSubmit}
     >
+      {
+        new Promise((resolve) => {
+          setTimeout(resolve, 500);
+        })
+      }
       <Field
         name='title'
         validatorAdapter={zodValidator}
@@ -428,7 +433,7 @@ function Form({
           validators={{
             onChange: validateDestination({
               imageUrls: destination?.images ?? [],
-              imageFilesLength: imageFiles.length,
+              imageFilesLength: imageFiles?.length ?? 0,
               t: {
                 tooFewImages: t.tooFewImages,
                 tooManyImages: t.tooManyImages,
