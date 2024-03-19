@@ -10,9 +10,9 @@ import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
-import { ReviewsField } from '@/components/destination/ReviewsField';
 import { Time } from '@/components/destination/Time';
 import { Weather } from '@/components/destination/Weather';
+import { ReviewsField } from '@/components/reviews/ReviewsField';
 
 export async function generateMetadata({
   params,
