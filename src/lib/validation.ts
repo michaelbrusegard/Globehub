@@ -107,17 +107,14 @@ function validateDestination({
       .max(10000, t?.exclusiveContentTooLong),
     latitude: z
       .string()
-      .regex(/^-?([1-8]?[1-9]|[1-9]0)\.\d{3,6}$/, t?.latitudeDecimalsInvalid)
+      .regex(/^\-?\d+\.\d{3,6}$/, t?.latitudeDecimalsInvalid)
       .refine((value) => {
         const num = parseFloat(value);
         return num >= -90 && num <= 90;
       }, t?.latitudeInvalid),
     longitude: z
       .string()
-      .regex(
-        /^-?((([1-9]?[0-9]|1[0-7][0-9])\.\d{3,6})|180\.000)$/,
-        t?.longitudeDecimalsInvalid,
-      )
+      .regex(/^\-?\d+\.\d{3,6}$/, t?.longitudeDecimalsInvalid)
       .refine((value) => {
         const num = parseFloat(value);
         return num >= -180 && num <= 180;
