@@ -8,7 +8,8 @@
     "newDestination": "Ny destinasjon"
   },
   "ui": {
-    "page": "side"
+    "page": "side",
+    "filters": "filtre"
   },
   "layout": {
     "signIn": "Logg inn",
