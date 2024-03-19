@@ -6,13 +6,13 @@ import Markdown from 'react-markdown';
 import { auth } from '@/lib/auth';
 import { type Destination, type User, sql } from '@/lib/db';
 
-import { AuthorPopover } from '@/components/destination/AuthorPopover';
 import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
-import { Time } from '@/components/destination/Time';
+import { SubHeader } from '@/components/destination/SubHeader';
 import { Weather } from '@/components/destination/Weather';
-import { ReviewsField } from '@/components/reviews/ReviewsField';
+import { Time } from '@/components/reusables/Time';
+import { Reviews } from '@/components/reviews/Reviews';
 
 export async function generateMetadata({
   params,
@@ -89,7 +89,7 @@ export default async function Destination({
         <h1 className='mb-14 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
           {destination.name}
         </h1>
-        <AuthorPopover
+        <SubHeader
           className='hidden justify-between md:mb-12 md:flex'
           user={user}
           author={author}
@@ -97,7 +97,7 @@ export default async function Destination({
         />
         <ImageCarousel className='mb-4' destination={destination} />
         <div className='mx-auto max-w-2xl'>
-          <AuthorPopover
+          <SubHeader
             className={cn(
               'mb-6 flex justify-between gap-2 sm:flex-row sm:items-center md:hidden',
               (user?.role === 'admin' || user?.id === author.id) && 'flex-col',
@@ -115,7 +115,7 @@ export default async function Destination({
                 />
                 <span className='self-center'>
                   {destination.reviewCount + ' '}
-                  <small>{t('reviews.title')}</small>
+                  <small>{t('reviews')}</small>
                 </span>
               </>
             ) : (
@@ -176,9 +176,11 @@ export default async function Destination({
             destinationId={destination.id}
           />
         </section>
-        <section className='prose dark:prose-invert'>
-          <h1>{t('reviews.title')}</h1>
-          <ReviewsField user={user} destination={destination} />
+        <section>
+          <span className='prose dark:prose-invert'>
+            <h1 className='mb-2'>{t('reviews')}</h1>
+          </span>
+          <Reviews user={user} destination={destination} />
         </section>
       </div>
     </article>

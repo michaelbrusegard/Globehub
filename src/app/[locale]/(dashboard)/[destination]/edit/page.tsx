@@ -438,7 +438,9 @@ export default async function EditDestination({
         tooFewImages: t('tooFewImages'),
         tooManyImages: t('tooManyImages'),
         delete: t('delete'),
-        deleteConfirmation: t('deleteConfirmation'),
+        deleteConfirmation: t('deleteConfirmation', {
+          name: destination.name,
+        }),
         deleteDestination: t('deleteDestination'),
       }}
     />

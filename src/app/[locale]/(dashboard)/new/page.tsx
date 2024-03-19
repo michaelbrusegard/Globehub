@@ -265,9 +265,9 @@ export default async function NewDestination({
         imageSizeTooLarge: t('imageSizeTooLarge'),
         tooFewImages: t('tooFewImages'),
         tooManyImages: t('tooManyImages'),
-        delete: t('delete'),
-        deleteConfirmation: t('deleteConfirmation'),
-        deleteDestination: t('deleteDestination'),
+        delete: '',
+        deleteConfirmation: '',
+        deleteDestination: '',
       }}
     />
   );

@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     comment VARCHAR(200),
     image VARCHAR(255),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMPTZ DEFAULT NULL,
     PRIMARY KEY (user_id, destination_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (destination_id) REFERENCES destinations(id)

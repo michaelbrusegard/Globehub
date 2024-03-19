@@ -10,16 +10,15 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 import readingTime from 'reading-time';
 
-import { EditButton } from './EditButton';
-
 import { type User } from '@/lib/db';
 import { type Destination, sql } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
+import { EditButton } from '@/components/destination/EditButton';
 import { FavoriteButton } from '@/components/destination/FavoriteButton';
 import { UserCard } from '@/components/destination/UserCard';
 
-type AuthorPopoverProps = {
+type SubHeaderProps = {
   className?: string;
   user: User | undefined;
   author: User;
@@ -36,12 +35,7 @@ type ButtonProps = {
   };
 };
 
-function AuthorPopover({
-  className,
-  user,
-  author,
-  destination,
-}: AuthorPopoverProps) {
+function SubHeader({ className, user, author, destination }: SubHeaderProps) {
   const t = useTranslations('destination');
   const { minutes } = readingTime(destination.content);
 
@@ -70,15 +64,14 @@ function AuthorPopover({
               },
               ImgComponent: NextImage,
               imgProps: {
-                width: 48,
-                height: 48,
+                width: 56,
+                height: 56,
                 fetchPriority: 'high',
                 loading: 'eager',
               },
               size: 'lg',
-              name: getInitials(author.name!),
+              name: getInitials(author.name ?? ''),
               src: author.image,
-              'aria-hidden': true,
             }}
           />
         </PopoverTrigger>
@@ -150,4 +143,4 @@ async function Buttons({ user, author, destination, t }: ButtonProps) {
   );
 }
 
-export { AuthorPopover };
+export { SubHeader };

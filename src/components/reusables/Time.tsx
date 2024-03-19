@@ -24,7 +24,7 @@ function Time({
       </time>
       {modifiedAt && (
         <>
-          &nbsp;{' '}
+          {' '}
           <span className='whitespace-nowrap italic text-default-500'>
             {t('modified') + ': '}
             <time dateTime={modifiedAt.toISOString()}>

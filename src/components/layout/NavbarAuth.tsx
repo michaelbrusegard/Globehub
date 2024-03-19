@@ -12,7 +12,7 @@ async function NavbarAuth() {
   const user = session?.user;
   return user ? (
     <ProfileDropdown
-      initials={getInitials(user.name!)}
+      initials={getInitials(user.name ?? '')}
       imageSrc={user.image!}
       signOut={async () => {
         'use server';

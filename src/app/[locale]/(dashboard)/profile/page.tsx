@@ -281,7 +281,9 @@ export default async function Profile({
           t={{
             delete: t('delete'),
             cancel: t('cancel'),
-            description: t('deleteConfirmation'),
+            description: t('deleteConfirmation', {
+              name: user.name,
+            }),
             buttonText: t('deleteUser'),
           }}
         />
