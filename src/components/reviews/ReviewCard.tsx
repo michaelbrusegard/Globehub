@@ -1,13 +1,19 @@
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
-import { getTranslations } from 'next-intl/server';
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Image,
+} from '@nextui-org/react';
+import NextImage from 'next/image';
 
 import { type Review, type User, sql } from '@/lib/db';
 
 import { Time } from '@/components/reusables/Time';
 import { AuthorPopover } from '@/components/reviews/AuthorPopover';
+import { Rating } from '@/components/reviews/Rating';
 
 async function ReviewCard({ review }: { review: Review }) {
-  const t = await getTranslations('reviews');
   const [author]: (User & { contributions: number })[] = await sql`
     SELECT users.*, COALESCE(reviews.review_count, 0) + COALESCE(destinations.destination_count, 0) as contributions
     FROM users
@@ -38,8 +44,25 @@ async function ReviewCard({ review }: { review: Review }) {
           modifiedAt={review.modifiedAt}
         />
       </CardHeader>
-      <CardBody></CardBody>
-      <CardFooter></CardFooter>
+      <CardBody className='flex flex-col gap-4 sm:flex-row'>
+        {review.image && (
+          <div className='shrink-0'>
+            <Image
+              className='aspect-video h-28 object-cover object-center'
+              as={NextImage}
+              alt={review.image}
+              src={review.image}
+              width={112}
+              height={112}
+            />
+          </div>
+        )}
+        <div>
+          <Rating rating={review.rating} />
+          <p className='text-sm text-default-900'>{review.comment}</p>
+        </div>
+      </CardBody>
+      <CardFooter />
     </Card>
   );
 }

@@ -15,7 +15,7 @@ export default function DestinationLoading() {
           <div className='mt-3 flex justify-center overflow-hidden'>
             <div className='flex flex-row gap-3 p-1'>
               {Array.from({ length: 5 }).map((_, index) => (
-                <div className='flex-shrink-0' key={index}>
+                <div className='shrink-0' key={index}>
                   <Skeleton className='aspect-video h-14 rounded-medium' />
                 </div>
               ))}

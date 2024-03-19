@@ -56,7 +56,7 @@ export default async function Profile({
         </h1>
         <div className='mb-10 flex flex-col gap-0 sm:flex-row sm:gap-3'>
           <Avatar
-            className='mx-auto h-40 w-40 flex-shrink-0 sm:mx-0'
+            className='mx-auto h-40 w-40 shrink-0 sm:mx-0'
             classNames={{
               name: 'font-arimo font-semibold',
             }}

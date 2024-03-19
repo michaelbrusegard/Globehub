@@ -20,7 +20,7 @@ function AuthorPopover({
   const t = useTranslations('reviews');
   return (
     <Popover showArrow shouldBlockScroll placement='bottom'>
-      <PopoverTrigger className='flex-shrink-0'>
+      <PopoverTrigger className='shrink-0'>
         <UserAvatar
           as='button'
           name={author.name}
@@ -41,7 +41,7 @@ function AuthorPopover({
         />
       </PopoverTrigger>
       <PopoverContent className='p-1'>
-        {/* <UserCard user={author} /> */}
+        <UserCard user={author} />
       </PopoverContent>
     </Popover>
   );

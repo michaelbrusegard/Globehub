@@ -9,7 +9,7 @@ function Time({
   createdAt: Date;
   modifiedAt: Date | null;
 }) {
-  const t = useTranslations('destination');
+  const t = useTranslations('reusables');
   const format = useFormatter();
   return (
     <div className={className}>
