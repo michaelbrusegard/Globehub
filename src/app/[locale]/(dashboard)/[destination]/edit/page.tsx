@@ -8,6 +8,7 @@ import {
   PutObjectCommand,
   destinationsBucket,
   endpoint,
+  reviewsBucket,
   s3,
 } from '@/lib/s3';
 import { validateDestination } from '@/lib/validation';
@@ -306,6 +307,27 @@ export default async function EditDestination({
               endpoint + '/' + destinationsBucket + '/',
               '',
             ),
+          };
+
+          const deleteCommand = new DeleteObjectCommand(params);
+
+          await s3.send(deleteCommand);
+        }
+
+        const reviews: { image: string }[] = await sql`
+          SELECT image
+          FROM reviews
+          WHERE destination_id = ${destination.id}
+        `;
+
+        for (const review of reviews) {
+          if (!review.image.startsWith(endpoint)) {
+            continue;
+          }
+
+          const params = {
+            Bucket: reviewsBucket,
+            Key: review.image.replace(endpoint + '/' + reviewsBucket + '/', ''),
           };
 
           const deleteCommand = new DeleteObjectCommand(params);

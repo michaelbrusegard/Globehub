@@ -6,10 +6,18 @@ import NextImage from 'next/image';
 import { auth } from '@/lib/auth';
 import { type Destination, sql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
+import {
+  DeleteObjectCommand,
+  destinationsBucket,
+  endpoint,
+  reviewsBucket,
+  s3,
+} from '@/lib/s3';
 import { validateProfile } from '@/lib/validation';
 
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { ProfileTabs } from '@/components/profile/ProfileTabs';
+import { DeleteModal } from '@/components/settings/DeleteModal';
 
 export async function generateMetadata({
   params: { locale },
@@ -116,6 +124,167 @@ export default async function Profile({
         <div className='flex w-full flex-col'>
           <ProfileTabs favorites={favorites} />
         </div>
+        <DeleteModal
+          className='mt-10'
+          action={async () => {
+            'use server';
+
+            if (!user) {
+              throw new Error('You must be signed in to perform this action');
+            }
+
+            const reviewImageUrls: string[] = [];
+            const destinationImageUrls: string[] = [];
+
+            await sql.begin(async (sql): Promise<void> => {
+              const userReviews: { image: string }[] = await sql`
+                SELECT image FROM reviews
+                WHERE user_id = ${user.id}
+              `;
+              reviewImageUrls.push(
+                ...userReviews.map((review) => review.image),
+              );
+
+              const userDestinations: { id: number; images: string[] }[] =
+                await sql`
+                SELECT id, images FROM destinations
+                WHERE user_id = ${user.id}
+              `;
+              destinationImageUrls.push(
+                ...userDestinations.flatMap(
+                  (destination) => destination.images,
+                ),
+              );
+
+              const destinationIds = userDestinations.map(
+                (destination) => destination.id,
+              );
+
+              const destinationReviews: { image: string }[] = await sql`
+                SELECT image FROM reviews
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              reviewImageUrls.push(
+                ...destinationReviews.map((review) => review.image),
+              );
+
+              await sql`
+                DELETE FROM reviews
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              await sql`
+                DELETE FROM user_favorites
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              await sql`
+                DELETE FROM weather_caches
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              const destinationKeywordIds: { keywordId: number }[] = await sql`
+                SELECT keyword_id FROM destination_keywords
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              await sql`
+                DELETE FROM destination_keywords
+                WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
+              `;
+
+              const keywordIds = destinationKeywordIds.map(
+                (keyword) => keyword.keywordId,
+              );
+
+              for (const keywordId of keywordIds) {
+                const [result]: { count: number }[] = await sql`
+                  SELECT COUNT(*) FROM destination_keywords
+                  WHERE keyword_id = ${keywordId}
+                `;
+
+                if (result && result.count === 0) {
+                  await sql`
+                    DELETE FROM keywords
+                    WHERE id = ${keywordId}
+                  `;
+                }
+              }
+
+              await sql`
+                DELETE FROM user_favorites
+                WHERE user_id = ${user.id}
+              `;
+
+              await sql`
+                DELETE FROM reviews
+                WHERE user_id = ${user.id}
+              `;
+
+              await sql`
+                DELETE FROM destinations
+                WHERE user_id = ${user.id}
+              `;
+
+              await sql`
+                DELETE FROM sessions
+                WHERE "userId" = ${user.id}
+              `;
+
+              await sql`
+                DELETE FROM accounts
+                WHERE "userId" = ${user.id}
+              `;
+
+              await sql`
+                DELETE FROM users
+                WHERE id = ${user.id}
+              `;
+            });
+
+            for (const imageUrl of destinationImageUrls) {
+              if (!imageUrl.startsWith(endpoint)) {
+                continue;
+              }
+
+              const params = {
+                Bucket: destinationsBucket,
+                Key: imageUrl.replace(
+                  endpoint + '/' + destinationsBucket + '/',
+                  '',
+                ),
+              };
+
+              const deleteCommand = new DeleteObjectCommand(params);
+
+              await s3.send(deleteCommand);
+            }
+
+            for (const imageUrl of reviewImageUrls) {
+              if (!imageUrl.startsWith(endpoint)) {
+                continue;
+              }
+
+              const params = {
+                Bucket: reviewsBucket,
+                Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
+              };
+
+              const deleteCommand = new DeleteObjectCommand(params);
+
+              await s3.send(deleteCommand);
+            }
+
+            redirect('/signin');
+          }}
+          t={{
+            delete: t('delete'),
+            cancel: t('cancel'),
+            description: t('deleteConfirmation'),
+            buttonText: t('deleteUser'),
+          }}
+        />
       </>
     );
   }

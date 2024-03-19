@@ -484,12 +484,13 @@ function Form({
       <div className='flex w-full justify-between gap-4'>
         {destination && (
           <DeleteModal
+            className='w-40'
             action={deleteDestination}
             t={{
               delete: t.delete,
               cancel: t.cancel,
               description: t.deleteConfirmation,
-              deleteDestination: t.deleteDestination,
+              buttonText: t.deleteDestination,
             }}
           />
         )}

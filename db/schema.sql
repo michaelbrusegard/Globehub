@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS reviews (
         rating >= 1
         AND rating <= 10
     ),
-    comment TEXT,
-    image TEXT,
+    comment VARCHAR(200),
+    image VARCHAR(255),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (user_id, destination_id),

@@ -38,7 +38,10 @@
     "update": "Oppdater",
     "writeBio": "Skriv din biografi her...",
     "bioTooLong": "Biografien kan maks være 200 tegn lang.",
-    "reviews": "Vurderinger"
+    "reviews": "Vurderinger",
+    "delete": "Slett",
+    "deleteConfirmation": "Er du sikker på at du vil slette brukeren? Dette kan ikke angres. Alle dine destinasjoner, anmeldser og bilder vil også bli slettet. Dette inkluderer også anmeldelser og bilder som andre brukere har lagt til på dine destinasjoner. Prosessen kan ta noen minutter.",
+    "deleteUser": "Slett bruker"
   },
   "home": {
     "title": "Topp destinasjoner",
@@ -123,7 +126,7 @@
       "tooManyImages": "Maksimalt 10 bilder kan legges til",
       "newDestination": "Ny destinasjon",
       "delete": "Slett",
-      "deleteConfirmation": "Er du sikker på at du vil slette denne destinasjonen? Dette kan ikke angres. Alle anmeldelser og bilder vil også bli slettet.",
+      "deleteConfirmation": "Er du sikker på at du vil slette destinasjonen? Dette kan ikke angres. Alle anmeldelser og bilder vil også bli slettet.",
       "deleteDestination": "Slett destinasjon",
       "create": "Opprett"
     },
