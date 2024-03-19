@@ -54,6 +54,18 @@ function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
   });
 }
 
+function validateReview(t?: {
+  ratingInvalid?: string;
+  commentTooLong?: string;
+}) {
+  const schema = z.object({
+    rating: z.number().min(1).max(10, t?.ratingInvalid),
+    comment: z.string().max(1000, t?.commentTooLong),
+  });
+
+  return schema;
+}
+
 function validateKeyword({ t }: validateKeywordProps = {}) {
   return z
     .string()
@@ -155,6 +167,7 @@ function validateDestination({
 export {
   validateProfile,
   validateDestination,
+  validateReview,
   validateKeyword,
   validateImageFile,
 };
