@@ -2,7 +2,7 @@ import React from 'react';
 
 import { type Keyword, sql } from '@/lib/db';
 
-import { AddFilter } from '@/components/home/Filter.client';
+import { AddFilter } from '@/components/home/Filter';
 
 async function SearchBar() {
   const keywords: Keyword[] = await sql`

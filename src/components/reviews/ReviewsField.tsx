@@ -5,8 +5,8 @@ import { type Destination, type Review } from '@/lib/db';
 import { sql } from '@/lib/db';
 import { validateReview } from '@/lib/validation';
 
-import { ReviewAdd } from '@/components/destination/reviews/ReviewAdd';
-import { ReviewListElement } from '@/components/destination/reviews/ReviewListElement';
+import { ReviewAdd } from '@/components/reviews/ReviewAdd';
+import { ReviewListElement } from '@/components/reviews/ReviewListElement';
 
 type ReviewsFieldProps = {
   className?: string;
