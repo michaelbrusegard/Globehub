@@ -45,11 +45,6 @@ function KeywordFormField({
   const [inputIsInvalid, setInputIsInvalid] = useState(false);
   const [autoCompleteErrorMessage, setAutoCompleteErrorMessage] = useState('');
 
-  function updateState(newKeywords: string[]) {
-    setKeywords(newKeywords);
-    keywords = newKeywords;
-  }
-
   function handleNewKeywordChange() {
     if (keywords.includes(newKeyword)) {
       setInputIsInvalid(true);
@@ -72,7 +67,7 @@ function KeywordFormField({
         result.error.errors.map((e) => e.message).join(', '),
       );
     } else {
-      updateState([...keywords, newKeyword]);
+      setKeywords([...keywords, newKeyword]);
       setNewKeyword('');
       setInputIsInvalid(false);
       setAutoCompleteErrorMessage('');
@@ -145,7 +140,7 @@ function KeywordFormField({
                 key={keyword}
                 size='md'
                 onClose={() => {
-                  updateState(keywords.filter((k) => k !== keyword));
+                  setKeywords(keywords.filter((k) => k !== keyword));
                 }}
               >
                 {keyword}

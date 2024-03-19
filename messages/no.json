@@ -4,7 +4,8 @@
     "title": "GlobeHub",
     "description": "GlobeHub er en plattform for å finne og anmelde reisedestinasjoner.",
     "myProfile": "Min profil",
-    "editDestination": "Rediger destinasjon"
+    "editDestination": "Rediger destinasjon",
+    "newDestination": "Ny destinasjon"
   },
   "ui": {
     "page": "side"
@@ -123,7 +124,8 @@
       "newDestination": "Ny destinasjon",
       "delete": "Slett",
       "deleteConfirmation": "Er du sikker på at du vil slette denne destinasjonen? Dette kan ikke angres. Alle anmeldelser og bilder vil også bli slettet.",
-      "deleteDestination": "Slett destinasjon"
+      "deleteDestination": "Slett destinasjon",
+      "create": "Opprett"
     },
     "reviews": {
       "title": "Anmeldelser"

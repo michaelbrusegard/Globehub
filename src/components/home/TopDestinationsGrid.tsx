@@ -10,8 +10,7 @@ async function TopDestinationsGrid({
   page: number;
   pageSize: number;
 }) {
-  const destinations: (Destination & { averageRating: number | null })[] =
-    await sql`
+  const destinations: (Destination & { averageRating: number })[] = await sql`
       SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
       FROM destinations
       LEFT JOIN reviews ON destinations.id = reviews.destination_id

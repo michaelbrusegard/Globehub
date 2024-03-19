@@ -122,7 +122,7 @@ export default async function EditDestination({
           worldRegion: string;
           keywords: string | string[];
           imageUrls: string | string[];
-          imageFiles?: File[];
+          imageFiles: File[];
         };
 
         const formDataEntries: Partial<FormDataEntries> =

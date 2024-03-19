@@ -12,7 +12,7 @@ import {
 import { useFormStatus } from 'react-dom';
 
 type DeleteModalProps = {
-  action: () => void;
+  action?: () => void;
   t: {
     delete: string;
     cancel: string;
@@ -44,7 +44,12 @@ function DeleteModal({ action, t }: DeleteModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Button onPress={onOpen} variant='bordered' color='default'>
+      <Button
+        className='w-40'
+        onPress={onOpen}
+        variant='bordered'
+        color='default'
+      >
         {t.deleteDestination}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop='blur'>

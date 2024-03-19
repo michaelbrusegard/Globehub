@@ -4,7 +4,7 @@ import Close from '@material-symbols/svg-400/outlined/close.svg';
 import Photo from '@material-symbols/svg-400/outlined/photo.svg';
 import { Button, Card, CardBody, CardFooter, Image } from '@nextui-org/react';
 import NextImage from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { validateImageFile } from '@/lib/validation';
@@ -50,15 +50,15 @@ function ImageFormField({
   const [dragging, setDragging] = useState(false);
   const [imageIsInvalid, setImageIsInvalid] = useState(false);
   const [imageErrorMessage, setImageErrorMessage] = useState('');
+  const [pendingImageUrls, setPendingImageUrls] = useState<string[]>(imageUrls);
 
-  function updateImageFileState(newImageFiles: File[]) {
+  useEffect(() => {
+    setImageUrls(pendingImageUrls);
+  }, [imageFiles, pendingImageUrls, setImageUrls]);
+
+  function updateState(newImageFiles: File[], newImageUrls: string[]) {
     setImageFiles(newImageFiles);
-    imageFiles = newImageFiles;
-  }
-
-  function updateImageUrlState(newImageUrls: string[]) {
-    setImageUrls(newImageUrls);
-    imageUrls = newImageUrls;
+    setPendingImageUrls(newImageUrls);
   }
 
   function handleFileChange(files: FileList | null) {
@@ -88,8 +88,7 @@ function ImageFormField({
     }
 
     const newImageFiles = Array.from(files);
-    updateImageFileState([...imageFiles, ...newImageFiles]);
-    updateImageUrlState(imageUrls);
+    updateState([...imageFiles, ...newImageFiles], imageUrls);
   }
 
   function handleDragOver(event: React.DragEvent) {
@@ -183,7 +182,10 @@ function ImageFormField({
                 key={image}
                 imageUrl={image}
                 onPress={() => {
-                  updateImageUrlState(imageUrls.filter((url) => url !== image));
+                  updateState(
+                    imageFiles,
+                    imageUrls.filter((url) => url !== image),
+                  );
                 }}
                 t={{
                   removeImage: t.removeImage,
@@ -195,8 +197,9 @@ function ImageFormField({
                 key={URL.createObjectURL(image)}
                 imageUrl={URL.createObjectURL(image)}
                 onPress={() => {
-                  updateImageFileState(
+                  updateState(
                     imageFiles.filter((_, imgIndex) => imgIndex !== index),
+                    imageUrls,
                   );
                 }}
                 t={{

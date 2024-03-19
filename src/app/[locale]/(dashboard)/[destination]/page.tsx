@@ -106,7 +106,7 @@ export default async function Destination({
             destination={destination}
           />
           <div className='mb-2 flex gap-0.5 text-default-500'>
-            {destination.averageRating !== 0 ? (
+            {destination.averageRating ? (
               <>
                 <AverageRating
                   className='self-end'

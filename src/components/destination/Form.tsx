@@ -21,7 +21,7 @@ import { DeleteModal } from '@/components/settings/DeleteModal';
 
 type FormProps = {
   updateDestination: (formData: FormData) => void;
-  deleteDestination: () => void;
+  deleteDestination?: () => void;
   destination?: Destination & {
     keywords: string[];
   };
@@ -434,7 +434,7 @@ function Form({
           validators={{
             onChange: validateDestination({
               imageUrls: destination?.images ?? [],
-              imageFilesLength: imageFiles?.length ?? 0,
+              imageFilesLength: imageFiles.length,
               t: {
                 tooFewImages: t.tooFewImages,
                 tooManyImages: t.tooManyImages,
