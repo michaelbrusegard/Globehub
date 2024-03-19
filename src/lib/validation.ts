@@ -6,6 +6,18 @@ function validateProfile(t?: { bioTooLong?: string }) {
   });
 }
 
+function validateReview(t?: {
+  ratingInvalid?: string;
+  commentTooLong?: string;
+}) {
+  const schema = z.object({
+    rating: z.number().min(1).max(10, t?.ratingInvalid),
+    comment: z.string().max(1000, t?.commentTooLong),
+  });
+
+  return schema;
+}
+
 function validateDestination(worldRegions: string[]) {
   const worldRegionEnum = z.enum(worldRegions as [string, ...string[]]);
 
@@ -22,4 +34,4 @@ function validateDestination(worldRegions: string[]) {
   });
 }
 
-export { validateProfile, validateDestination };
+export { validateProfile, validateDestination, validateReview };
