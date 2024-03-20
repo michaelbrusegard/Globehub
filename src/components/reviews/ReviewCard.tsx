@@ -44,7 +44,11 @@ async function ReviewCard({ review }: { review: Review }) {
           modifiedAt={review.modifiedAt}
         />
       </CardHeader>
-      <CardBody className='flex flex-col gap-4 sm:flex-row'>
+      <CardBody className='flex flex-col-reverse justify-between gap-4 sm:flex-row'>
+        <div>
+          <Rating rating={review.rating} />
+          <p className='text-sm text-default-900'>{review.comment}</p>
+        </div>
         {review.image && (
           <div className='shrink-0'>
             <Image
@@ -57,10 +61,6 @@ async function ReviewCard({ review }: { review: Review }) {
             />
           </div>
         )}
-        <div>
-          <Rating rating={review.rating} />
-          <p className='text-sm text-default-900'>{review.comment}</p>
-        </div>
       </CardBody>
       <CardFooter />
     </Card>

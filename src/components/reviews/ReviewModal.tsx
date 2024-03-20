@@ -14,31 +14,38 @@ import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useFormStatus } from 'react-dom';
 
-import { validateProfile } from '@/lib/validation';
+import { type Review } from '@/lib/db';
+import { validateReview } from '@/lib/validation';
 
-type EditProfileModalProps = {
+import { AddRating } from '@/components/reviews/AddRating';
+
+type ReviewModalProps = {
   className?: string;
-  updateProfile: (formData: FormData) => void;
-  profile: { bio?: string };
+  updateReview: (formData: FormData) => void;
+  review?: Review;
   t: {
-    edit: string;
-    editBio: string;
+    editReview: string;
+    writeReview: string;
     cancel: string;
     update: string;
-    writeBio: string;
-    bioTooLong: string;
+    create: string;
+    commentTooLong: string;
+    writeComment: string;
+    ratingInvalid: string;
   };
 };
 
 type FormProps = {
-  updateProfile: (formData: FormData) => void;
+  updateReview: (formData: FormData) => void;
   onClose: () => void;
-  profile: { bio?: string };
+  review?: Review;
   t: {
     cancel: string;
     update: string;
-    writeBio: string;
-    bioTooLong: string;
+    create: string;
+    commentTooLong: string;
+    writeComment: string;
+    ratingInvalid: string;
   };
 };
 
@@ -63,10 +70,12 @@ function SubmitButton({
   );
 }
 
-function Form({ updateProfile, onClose, profile, t }: FormProps) {
+function Form({ updateReview, onClose, review, t }: FormProps) {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: {
-      bio: profile.bio ?? '',
+      rating: review ? review.rating : 0,
+      comment: review ? review.comment : '',
+      image: review ? review.image : '',
     },
   });
 
@@ -77,28 +86,56 @@ function Form({ updateProfile, onClose, profile, t }: FormProps) {
     <form
       action={(formData: FormData) => {
         if (!canSubmit) return;
-        updateProfile(formData);
+        updateReview(formData);
         onClose();
       }}
       onSubmit={handleSubmit}
     >
       <ModalBody>
         <Field
-          name='bio'
+          name='rating'
           validatorAdapter={zodValidator}
           validators={{
-            onChange: validateProfile({
+            onChange: validateReview({
               t: {
-                bioTooLong: t.bioTooLong,
+                ratingInvalid: t.ratingInvalid,
               },
-            }).pick({ bio: true }).shape.bio,
+            }).pick({ rating: true }).shape.rating,
+          }}
+        >
+          {({ state, handleChange, handleBlur }) => (
+            <AddRating
+              setRating={(rating) => {
+                handleChange(rating);
+              }}
+              rating={state.value}
+              handleBlur={handleBlur}
+              errorMessage={
+                submissionAttempts > 0 &&
+                state.meta.errors &&
+                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0].split(', ')[0]
+              }
+              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+            />
+          )}
+        </Field>
+        <Field
+          name='comment'
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateReview({
+              t: {
+                commentTooLong: t.commentTooLong,
+              },
+            }).pick({ comment: true }).shape.comment,
           }}
         >
           {({ state, handleChange, handleBlur }) => (
             <Textarea
               minRows={5}
-              placeholder={t.writeBio}
-              name='bio'
+              placeholder={t.writeComment}
+              name='comment'
               onChange={(e) => {
                 handleChange(e.target.value);
               }}
@@ -128,34 +165,31 @@ function Form({ updateProfile, onClose, profile, t }: FormProps) {
   );
 }
 
-function EditProfileModal({
-  className,
-  updateProfile,
-  profile,
-  t,
-}: EditProfileModalProps) {
+function ReviewModal({ className, updateReview, review, t }: ReviewModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
       <Button className={className} onPress={onOpen} variant='bordered'>
-        {t.edit}
+        {review ? t.editReview : t.writeReview}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='2xl'>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
-                {t.editBio}
+                {review ? t.editReview : t.writeReview}
               </ModalHeader>
               <Form
-                updateProfile={updateProfile}
+                updateReview={updateReview}
                 onClose={onClose}
-                profile={profile}
+                review={review}
                 t={{
                   cancel: t.cancel,
                   update: t.update,
-                  writeBio: t.writeBio,
-                  bioTooLong: t.bioTooLong,
+                  create: t.create,
+                  commentTooLong: t.commentTooLong,
+                  writeComment: t.writeComment,
+                  ratingInvalid: t.ratingInvalid,
                 }}
               />
             </>
@@ -166,4 +200,4 @@ function EditProfileModal({
   );
 }
 
-export { EditProfileModal };
+export { ReviewModal };

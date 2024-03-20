@@ -31,6 +31,16 @@ type validateDestinationProps = {
   };
 };
 
+type validateReviewProps = {
+  t?: {
+    ratingInvalid?: string;
+    commentTooLong?: string;
+    imageNameTooLong?: string;
+    imageTypeInvalid?: string;
+    imageSizeTooLarge?: string;
+  };
+};
+
 type validateKeywordProps = {
   t?: {
     keywordTooShort?: string;
@@ -54,16 +64,18 @@ function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
   });
 }
 
-function validateReview(t?: {
-  ratingInvalid?: string;
-  commentTooLong?: string;
-}) {
-  const schema = z.object({
+function validateReview({ t }: validateReviewProps = {}) {
+  return z.object({
     rating: z.number().min(1).max(10, t?.ratingInvalid),
-    comment: z.string().max(1000, t?.commentTooLong),
+    comment: z.string().max(200, t?.commentTooLong),
+    image: validateImageFile({
+      t: {
+        imageNameTooLong: t?.imageNameTooLong,
+        imageTypeInvalid: t?.imageTypeInvalid,
+        imageSizeTooLarge: t?.imageSizeTooLarge,
+      },
+    }).optional(),
   });
-
-  return schema;
 }
 
 function validateKeyword({ t }: validateKeywordProps = {}) {

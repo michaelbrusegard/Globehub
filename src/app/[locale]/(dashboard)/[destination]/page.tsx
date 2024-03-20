@@ -12,7 +12,7 @@ import { ImageCarousel } from '@/components/destination/ImageCarousel';
 import { SubHeader } from '@/components/destination/SubHeader';
 import { Weather } from '@/components/destination/Weather';
 import { Time } from '@/components/reusables/Time';
-import { Reviews } from '@/components/reviews/Reviews';
+import { ReviewSection } from '@/components/reviews/ReviewSection';
 
 export async function generateMetadata({
   params,
@@ -176,12 +176,7 @@ export default async function Destination({
             destinationId={destination.id}
           />
         </section>
-        <section>
-          <span className='prose dark:prose-invert'>
-            <h1 className='mb-2'>{t('reviews')}</h1>
-          </span>
-          <Reviews user={user} destination={destination} />
-        </section>
+        <ReviewSection user={user} destination={destination} />
       </div>
     </article>
   );

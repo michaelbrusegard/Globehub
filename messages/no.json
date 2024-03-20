@@ -138,7 +138,17 @@
     "title": "Anmeldelser",
     "contributions": "Bidrag",
     "memberSince": "Medlem siden",
-    "noReviews": "Ingen anmeldelser"
+    "noReviews": "Ingen anmeldelser",
+    "editReview": "Rediger anmeldelse",
+    "writeReview": "Skriv anmeldelse",
+    "cancel": "Avbryt",
+    "update": "Oppdater",
+    "create": "Opprett",
+    "delete": "Slett",
+    "deleteConfirmation": "Er du sikker på at du vil slette anmeldelsen? Dette kan ikke angres.",
+    "writeComment": "Skriv en kommentar...",
+    "commentTooLong": "Kommentaren kan være på maksimalt 200 tegn",
+    "ratingInvalid": "Vurderingen må være mellom 1 og 5 stjerner"
   },
   "reusables": {
     "modified": "Sist endret"
