@@ -55,6 +55,7 @@ function AddRating({
                 onMouseLeave={() => setHover(0)}
                 onClick={() => setRating(starIndex)}
                 onKeyDown={(event) => handleKeyDown(event, starIndex)}
+                onMouseDown={(event) => event.preventDefault()}
                 onFocus={() => setFocus(starIndex)}
                 onBlur={() => {
                   setFocus(0);

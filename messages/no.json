@@ -148,7 +148,11 @@
     "deleteConfirmation": "Er du sikker på at du vil slette anmeldelsen? Dette kan ikke angres.",
     "writeComment": "Skriv en kommentar...",
     "commentTooLong": "Kommentaren kan være på maksimalt 200 tegn",
-    "ratingInvalid": "Vurderingen må være mellom 1 og 5 stjerner"
+    "ratingInvalid": "Vurderingen må være mellom 1 og 5 stjerner",
+    "deleteReview": "Slett anmeldelse",
+    "imageNameTooLong": "Bildets navn kan være på maksimalt 100 tegn",
+    "imageTypeInvalid": "Bildet må være av typen PNG eller JPG",
+    "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB"
   },
   "reusables": {
     "modified": "Sist endret"

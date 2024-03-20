@@ -43,6 +43,10 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
             'use server';
             console.log(formData);
           }}
+          deleteReview={async () => {
+            'use server';
+            console.log('delete');
+          }}
           t={{
             editReview: t('editReview'),
             writeReview: t('writeReview'),
@@ -52,6 +56,12 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
             commentTooLong: t('commentTooLong'),
             writeComment: t('writeComment'),
             ratingInvalid: t('ratingInvalid'),
+            delete: t('delete'),
+            deleteConfirmation: t('deleteConfirmation'),
+            deleteReview: t('deleteReview'),
+            imageNameTooLong: t('imageNameTooLong'),
+            imageTypeInvalid: t('imageTypeInvalid'),
+            imageSizeTooLarge: t('imageSizeTooLarge'),
           }}
         />
       </div>

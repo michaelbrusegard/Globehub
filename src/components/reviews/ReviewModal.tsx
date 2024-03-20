@@ -15,13 +15,16 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useFormStatus } from 'react-dom';
 
 import { type Review } from '@/lib/db';
+import { cn } from '@/lib/utils';
 import { validateReview } from '@/lib/validation';
 
 import { AddRating } from '@/components/reviews/AddRating';
+import { DeleteModal } from '@/components/settings/DeleteModal';
 
 type ReviewModalProps = {
   className?: string;
   updateReview: (formData: FormData) => void;
+  deleteReview: () => void;
   review?: Review;
   t: {
     editReview: string;
@@ -32,11 +35,18 @@ type ReviewModalProps = {
     commentTooLong: string;
     writeComment: string;
     ratingInvalid: string;
+    delete: string;
+    deleteConfirmation: string;
+    deleteReview: string;
+    imageNameTooLong: string;
+    imageTypeInvalid: string;
+    imageSizeTooLarge: string;
   };
 };
 
 type FormProps = {
   updateReview: (formData: FormData) => void;
+  deleteReview: () => void;
   onClose: () => void;
   review?: Review;
   t: {
@@ -46,6 +56,12 @@ type FormProps = {
     commentTooLong: string;
     writeComment: string;
     ratingInvalid: string;
+    delete: string;
+    deleteConfirmation: string;
+    deleteReview: string;
+    imageNameTooLong: string;
+    imageTypeInvalid: string;
+    imageSizeTooLarge: string;
   };
 };
 
@@ -70,7 +86,7 @@ function SubmitButton({
   );
 }
 
-function Form({ updateReview, onClose, review, t }: FormProps) {
+function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: {
       rating: review ? review.rating : 0,
@@ -151,21 +167,78 @@ function Form({ updateReview, onClose, review, t }: FormProps) {
             />
           )}
         </Field>
+        <Field
+          name='image'
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateReview({
+              t: {
+                imageNameTooLong: t.imageNameTooLong,
+                imageTypeInvalid: t.imageTypeInvalid,
+                imageSizeTooLarge: t.imageSizeTooLarge,
+              },
+            }).pick({ image: true }).shape.image,
+          }}
+        >
+          {({ state, handleChange, handleBlur }) => (
+            <Textarea
+              minRows={5}
+              placeholder={t.writeComment}
+              name='comment'
+              onChange={(e) => {
+                handleChange(e.target.value);
+              }}
+              onBlur={handleBlur}
+              value={state.value}
+              errorMessage={
+                submissionAttempts > 0 &&
+                state.meta.errors &&
+                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0].split(', ')[0]
+              }
+              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+            />
+          )}
+        </Field>
       </ModalBody>
-      <ModalFooter>
-        <Button color='danger' variant='light' type='button' onPress={onClose}>
-          {t.cancel}
-        </Button>
-        <SubmitButton
-          canSubmit={canSubmit || submissionAttempts === 0}
-          t={{ update: t.update }}
-        />
+      <ModalFooter className={cn('flex', review && 'justify-between')}>
+        {review && (
+          <DeleteModal
+            action={deleteReview}
+            t={{
+              delete: t.delete,
+              cancel: t.cancel,
+              description: t.deleteConfirmation,
+              buttonText: t.deleteReview,
+            }}
+          />
+        )}
+        <div className='flex gap-2'>
+          <Button
+            color='danger'
+            variant='light'
+            type='button'
+            onPress={onClose}
+          >
+            {t.cancel}
+          </Button>
+          <SubmitButton
+            canSubmit={canSubmit || submissionAttempts === 0}
+            t={{ update: t.update }}
+          />
+        </div>
       </ModalFooter>
     </form>
   );
 }
 
-function ReviewModal({ className, updateReview, review, t }: ReviewModalProps) {
+function ReviewModal({
+  className,
+  updateReview,
+  deleteReview,
+  review,
+  t,
+}: ReviewModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
@@ -183,6 +256,7 @@ function ReviewModal({ className, updateReview, review, t }: ReviewModalProps) {
                 updateReview={updateReview}
                 onClose={onClose}
                 review={review}
+                deleteReview={deleteReview}
                 t={{
                   cancel: t.cancel,
                   update: t.update,
@@ -190,6 +264,12 @@ function ReviewModal({ className, updateReview, review, t }: ReviewModalProps) {
                   commentTooLong: t.commentTooLong,
                   writeComment: t.writeComment,
                   ratingInvalid: t.ratingInvalid,
+                  delete: t.delete,
+                  deleteConfirmation: t.deleteConfirmation,
+                  deleteReview: t.deleteReview,
+                  imageNameTooLong: t.imageNameTooLong,
+                  imageTypeInvalid: t.imageTypeInvalid,
+                  imageSizeTooLarge: t.imageSizeTooLarge,
                 }}
               />
             </>
