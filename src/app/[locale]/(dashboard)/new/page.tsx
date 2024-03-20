@@ -30,7 +30,7 @@ export default async function NewDestination({
   const session = await auth();
   const user = session?.user;
 
-  if (!(user && user.role === 'admin')) {
+  if (!user) {
     notFound();
   }
 
@@ -75,7 +75,7 @@ export default async function NewDestination({
     <Form
       updateDestination={async (formData: FormData) => {
         'use server';
-        if (!(user && user.role === 'admin')) {
+        if (!user) {
           throw new Error('Unauthorized');
         }
 

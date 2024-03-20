@@ -15,7 +15,7 @@ async function Reviews({ destination }: { destination: Destination }) {
   `;
 
   if (reviews.length === 0) {
-    <span className='italic text-default-500'>{t('noReviews')}</span>;
+    return <span className='italic text-default-500'>{t('noReviews')}</span>;
   }
 
   return (

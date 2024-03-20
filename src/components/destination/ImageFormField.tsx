@@ -104,7 +104,7 @@ function ImageFormField({
       <div>
         <Card
           className={cn(
-            'mt-2 border-2 border-dashed px-2 py-4 transition-background',
+            'mt-2 border-2 border-dashed transition-background',
             imageIsInvalid && 'border-danger',
             dragging && 'bg-primary-50 dark:bg-primary-100',
           )}
@@ -118,7 +118,7 @@ function ImageFormField({
             value={JSON.stringify(imageUrls)}
           />
           <CardBody
-            className='flex justify-center text-center'
+            className='flex justify-center px-2 py-4 text-center'
             aria-describedby={imageIsInvalid ? 'image-files-error' : undefined}
             aria-invalid={imageIsInvalid}
           >

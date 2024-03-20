@@ -65,7 +65,7 @@ function ImageFormField({
       <div>
         <Card
           className={cn(
-            'mt-2 border-2 border-dashed px-2 py-4 transition-background',
+            'mt-2 border-2 border-dashed transition-background',
             imageFile && 'border-transparent',
             isInvalid && 'border-danger',
             dragging && 'bg-primary-50 dark:bg-primary-100',
@@ -79,7 +79,7 @@ function ImageFormField({
             aria-describedby={isInvalid ? 'image-file-error' : undefined}
             aria-invalid={isInvalid}
           >
-            <div className={cn(imageFile && 'hidden')}>
+            <div className={cn('px-2 py-4', imageFile && 'hidden')}>
               <Photo
                 className='mx-auto size-12 fill-default-700'
                 aria-hidden='true'
@@ -107,7 +107,7 @@ function ImageFormField({
               </div>
             </div>
             {imageFile && (
-              <div className='relative'>
+              <div className='relative mt-1 flex size-40 w-full justify-center'>
                 <ImageInterface
                   imageUrl={URL.createObjectURL(imageFile)}
                   onPress={() => setImageFile(undefined)}
@@ -116,9 +116,11 @@ function ImageFormField({
               </div>
             )}
           </CardBody>
-          <CardFooter className='flex justify-center text-xs leading-5'>
-            {!imageFile && t.PngJpg1MbMax}
-          </CardFooter>
+          {!imageFile && (
+            <CardFooter className='flex justify-center text-xs leading-5'>
+              {t.PngJpg1MbMax}
+            </CardFooter>
+          )}
         </Card>
         {isInvalid && (
           <div id='image-file-error' className='mt-1 text-tiny text-danger'>

@@ -146,7 +146,7 @@
     "create": "Opprett",
     "delete": "Slett",
     "deleteConfirmation": "Er du sikker på at du vil slette anmeldelsen? Dette kan ikke angres.",
-    "writeComment": "Skriv en kommentar...",
+    "writeComment": "Skriv en valgfri kommentar...",
     "commentTooLong": "Kommentaren kan være på maksimalt 200 tegn",
     "ratingInvalid": "Vurderingen må være mellom 1 og 5 stjerner",
     "ratingRequired": "Du må legge til en vurdering",
@@ -156,7 +156,7 @@
     "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB",
     "removeImage": "Fjern bilde",
     "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
-    "uploadAFile": "Last opp en fil",
+    "uploadAFile": "Last opp valgfri fil",
     "orDragAndDrop": "eller dra og slipp"
   },
   "reusables": {
