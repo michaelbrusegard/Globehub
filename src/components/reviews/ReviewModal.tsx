@@ -100,12 +100,15 @@ function SubmitButton({
 function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: {
+      imageUrl: review?.image ? review.image : '',
+      imageFile: undefined as File | undefined,
       rating: review ? review.rating : 0,
       comment: review ? review.comment : '',
-      imageFile: undefined as File | undefined,
     },
   });
 
+  const imageFile = useStore((state) => state.values.imageFile);
+  const rating = useStore((state) => state.values.rating);
   const canSubmit = useStore((state) => state.canSubmit);
   const submissionAttempts = useStore((state) => state.submissionAttempts);
 
@@ -113,6 +116,9 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
     <form
       action={(formData: FormData) => {
         if (!canSubmit) return;
+        if (rating === 0) return;
+        if (imageFile) formData.append('imageFile', imageFile);
+
         updateReview(formData);
         onClose();
       }}
@@ -120,37 +126,58 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
     >
       <ModalBody>
         <Field
-          name='imageFile'
+          name='imageUrl'
           validatorAdapter={zodValidator}
           validators={{
-            onChange: validateReview({
-              t: {
-                imageNameTooLong: t.imageNameTooLong,
-                imageTypeInvalid: t.imageTypeInvalid,
-                imageSizeTooLarge: t.imageSizeTooLarge,
-              },
-            }).pick({ imageFile: true }).shape.imageFile,
+            onChange: validateReview({ imageUrl: review?.image }).pick({
+              imageUrl: true,
+            }).shape.imageUrl,
           }}
         >
-          {({ state, handleChange, handleBlur }) => (
-            <ImageFormField
-              imageFile={state.value}
-              setImageFile={handleChange}
-              handleBlur={handleBlur}
-              errorMessage={
-                submissionAttempts > 0 &&
-                state.meta.errors &&
-                typeof state.meta.errors[0] === 'string' &&
-                state.meta.errors[0].split(', ')[0]
-              }
-              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
-              t={{
-                removeImage: t.removeImage,
-                PngJpg1MbMax: t.PngJpg1MbMax,
-                uploadAFile: t.uploadAFile,
-                orDragAndDrop: t.orDragAndDrop,
+          {({ state: imageUrlState, handleChange: imageUrlHandleChange }) => (
+            <Field
+              name='imageFile'
+              validatorAdapter={zodValidator}
+              validators={{
+                onChange: validateReview({
+                  t: {
+                    imageNameTooLong: t.imageNameTooLong,
+                    imageTypeInvalid: t.imageTypeInvalid,
+                    imageSizeTooLarge: t.imageSizeTooLarge,
+                  },
+                }).pick({ imageFile: true }).shape.imageFile,
               }}
-            />
+            >
+              {({
+                state: imageFileState,
+                handleChange: imageFileHandleChange,
+                handleBlur,
+              }) => (
+                <ImageFormField
+                  imageUrl={imageUrlState.value}
+                  setImageUrl={imageUrlHandleChange}
+                  imageFile={imageFileState.value}
+                  setImageFile={imageFileHandleChange}
+                  handleBlur={handleBlur}
+                  errorMessage={
+                    submissionAttempts > 0 &&
+                    imageFileState.meta.errors &&
+                    typeof imageFileState.meta.errors[0] === 'string' &&
+                    imageFileState.meta.errors[0].split(', ')[0]
+                  }
+                  isInvalid={
+                    submissionAttempts > 0 &&
+                    imageFileState.meta.errors.length > 0
+                  }
+                  t={{
+                    removeImage: t.removeImage,
+                    PngJpg1MbMax: t.PngJpg1MbMax,
+                    uploadAFile: t.uploadAFile,
+                    orDragAndDrop: t.orDragAndDrop,
+                  }}
+                />
+              )}
+            </Field>
           )}
         </Field>
         <Field
@@ -167,9 +194,7 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
         >
           {({ state, handleChange, handleBlur }) => (
             <AddRating
-              setRating={(rating) => {
-                handleChange(rating);
-              }}
+              setRating={handleChange}
               rating={state.value}
               handleBlur={handleBlur}
               errorMessage={
@@ -217,7 +242,10 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
       <ModalFooter className={cn('flex', review && 'justify-between')}>
         {review && (
           <DeleteModal
-            action={deleteReview}
+            action={() => {
+              deleteReview();
+              onClose();
+            }}
             t={{
               delete: t.delete,
               cancel: t.cancel,

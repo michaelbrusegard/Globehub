@@ -31,6 +31,7 @@ function AddRating({
 
   return (
     <div className='flex gap-2'>
+      <input type='hidden' name='rating' value={rating} />
       <div
         className={cn(
           'relative inline-flex rounded-md',

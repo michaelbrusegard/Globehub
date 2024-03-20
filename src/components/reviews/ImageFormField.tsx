@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils';
 import { ImageInterface } from '@/components/reusables/ImageInterface';
 
 type ImageFormFieldProps = {
+  imageUrl: string;
+  setImageUrl: (imageUrl: string) => void;
   imageFile: File | undefined;
   setImageFile: (imageFile: File | undefined) => void;
   handleBlur: () => void;
@@ -23,6 +25,8 @@ type ImageFormFieldProps = {
 };
 
 function ImageFormField({
+  imageUrl,
+  setImageUrl,
   imageFile,
   setImageFile,
   handleBlur,
@@ -66,7 +70,7 @@ function ImageFormField({
         <Card
           className={cn(
             'mt-2 border-2 border-dashed transition-background',
-            imageFile && 'border-transparent',
+            (imageFile ?? imageUrl) && 'border-transparent',
             isInvalid && 'border-danger',
             dragging && 'bg-primary-50 dark:bg-primary-100',
           )}
@@ -74,12 +78,15 @@ function ImageFormField({
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
+          <input type='hidden' name='imageUrl' value={imageUrl} />
           <CardBody
             className='flex justify-center text-center'
             aria-describedby={isInvalid ? 'image-file-error' : undefined}
             aria-invalid={isInvalid}
           >
-            <div className={cn('px-2 py-4', imageFile && 'hidden')}>
+            <div
+              className={cn('px-2 py-4', (imageFile ?? imageUrl) && 'hidden')}
+            >
               <Photo
                 className='mx-auto size-12 fill-default-700'
                 aria-hidden='true'
@@ -106,17 +113,22 @@ function ImageFormField({
                 <p className='pl-1'>{t.orDragAndDrop}</p>
               </div>
             </div>
-            {imageFile && (
+            {(imageFile ?? imageUrl) && (
               <div className='relative mt-1 flex size-40 w-full justify-center'>
                 <ImageInterface
-                  imageUrl={URL.createObjectURL(imageFile)}
-                  onPress={() => setImageFile(undefined)}
+                  imageUrl={
+                    imageFile ? URL.createObjectURL(imageFile) : imageUrl
+                  }
+                  onPress={() => {
+                    setImageUrl('');
+                    setImageFile(undefined);
+                  }}
                   t={{ removeImage: t.removeImage }}
                 />
               </div>
             )}
           </CardBody>
-          {!imageFile && (
+          {!(imageFile ?? imageUrl) && (
             <CardFooter className='flex justify-center text-xs leading-5'>
               {t.PngJpg1MbMax}
             </CardFooter>

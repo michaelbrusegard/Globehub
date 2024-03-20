@@ -32,6 +32,7 @@ type validateDestinationProps = {
 };
 
 type validateReviewProps = {
+  imageUrl?: string;
   t?: {
     ratingInvalid?: string;
     ratingRequired?: string;
@@ -65,10 +66,11 @@ function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
   });
 }
 
-function validateReview({ t }: validateReviewProps = {}) {
+function validateReview({ imageUrl, t }: validateReviewProps = {}) {
   return z.object({
     rating: z.number().min(1, t?.ratingRequired).max(10, t?.ratingInvalid),
     comment: z.string().max(200, t?.commentTooLong),
+    imageUrl: z.string().refine((value) => value === imageUrl || value === ''),
     imageFile: validateImageFile({
       t: {
         imageNameTooLong: t?.imageNameTooLong,
