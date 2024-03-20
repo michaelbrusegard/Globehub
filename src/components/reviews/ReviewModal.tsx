@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { validateReview } from '@/lib/validation';
 
 import { AddRating } from '@/components/reviews/AddRating';
+import { ImageFormField } from '@/components/reviews/ImageFormField';
 import { DeleteModal } from '@/components/settings/DeleteModal';
 
 type ReviewModalProps = {
@@ -41,6 +42,10 @@ type ReviewModalProps = {
     imageNameTooLong: string;
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
+    removeImage: string;
+    PngJpg1MbMax: string;
+    uploadAFile: string;
+    orDragAndDrop: string;
   };
 };
 
@@ -62,6 +67,10 @@ type FormProps = {
     imageNameTooLong: string;
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
+    removeImage: string;
+    PngJpg1MbMax: string;
+    uploadAFile: string;
+    orDragAndDrop: string;
   };
 };
 
@@ -91,7 +100,7 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
     defaultValues: {
       rating: review ? review.rating : 0,
       comment: review ? review.comment : '',
-      image: review ? review.image : '',
+      imageFile: undefined as File | undefined,
     },
   });
 
@@ -108,6 +117,40 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
       onSubmit={handleSubmit}
     >
       <ModalBody>
+        <Field
+          name='imageFile'
+          validatorAdapter={zodValidator}
+          validators={{
+            onChange: validateReview({
+              t: {
+                imageNameTooLong: t.imageNameTooLong,
+                imageTypeInvalid: t.imageTypeInvalid,
+                imageSizeTooLarge: t.imageSizeTooLarge,
+              },
+            }).pick({ imageFile: true }).shape.imageFile,
+          }}
+        >
+          {({ state, handleChange, handleBlur }) => (
+            <ImageFormField
+              imageFile={state.value}
+              setImageFile={handleChange}
+              handleBlur={handleBlur}
+              errorMessage={
+                submissionAttempts > 0 &&
+                state.meta.errors &&
+                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0].split(', ')[0]
+              }
+              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+              t={{
+                removeImage: t.removeImage,
+                PngJpg1MbMax: t.PngJpg1MbMax,
+                uploadAFile: t.uploadAFile,
+                orDragAndDrop: t.orDragAndDrop,
+              }}
+            />
+          )}
+        </Field>
         <Field
           name='rating'
           validatorAdapter={zodValidator}
@@ -145,39 +188,6 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
                 commentTooLong: t.commentTooLong,
               },
             }).pick({ comment: true }).shape.comment,
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => (
-            <Textarea
-              minRows={5}
-              placeholder={t.writeComment}
-              name='comment'
-              onChange={(e) => {
-                handleChange(e.target.value);
-              }}
-              onBlur={handleBlur}
-              value={state.value}
-              errorMessage={
-                submissionAttempts > 0 &&
-                state.meta.errors &&
-                typeof state.meta.errors[0] === 'string' &&
-                state.meta.errors[0].split(', ')[0]
-              }
-              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
-            />
-          )}
-        </Field>
-        <Field
-          name='image'
-          validatorAdapter={zodValidator}
-          validators={{
-            onChange: validateReview({
-              t: {
-                imageNameTooLong: t.imageNameTooLong,
-                imageTypeInvalid: t.imageTypeInvalid,
-                imageSizeTooLarge: t.imageSizeTooLarge,
-              },
-            }).pick({ image: true }).shape.image,
           }}
         >
           {({ state, handleChange, handleBlur }) => (
@@ -270,6 +280,10 @@ function ReviewModal({
                   imageNameTooLong: t.imageNameTooLong,
                   imageTypeInvalid: t.imageTypeInvalid,
                   imageSizeTooLarge: t.imageSizeTooLarge,
+                  removeImage: t.removeImage,
+                  PngJpg1MbMax: t.PngJpg1MbMax,
+                  uploadAFile: t.uploadAFile,
+                  orDragAndDrop: t.orDragAndDrop,
                 }}
               />
             </>

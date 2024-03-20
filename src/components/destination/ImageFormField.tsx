@@ -1,13 +1,13 @@
 'use client';
 
-import Close from '@material-symbols/svg-400/outlined/close.svg';
 import Photo from '@material-symbols/svg-400/outlined/photo.svg';
-import { Button, Card, CardBody, CardFooter, Image } from '@nextui-org/react';
-import NextImage from 'next/image';
+import { Card, CardBody, CardFooter } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { validateImageFile } from '@/lib/validation';
+
+import { ImageInterface } from '@/components/reusables/ImageInterface';
 
 type ImageFormFieldProps = {
   imageUrls: string[];
@@ -26,14 +26,6 @@ type ImageFormFieldProps = {
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
     tooManyImages: string;
-  };
-};
-
-type ImageInterfaceProps = {
-  imageUrl: string;
-  onPress: () => void;
-  t: {
-    removeImage: string;
   };
 };
 
@@ -124,7 +116,6 @@ function ImageFormField({
             type='hidden'
             name='imageUrls'
             value={JSON.stringify(imageUrls)}
-            onBlur={handleBlur}
           />
           <CardBody
             className='flex justify-center text-center'
@@ -152,6 +143,7 @@ function ImageFormField({
                     imageIsInvalid ? 'image-files-error' : undefined
                   }
                   aria-invalid={imageIsInvalid}
+                  onBlur={handleBlur}
                 />
               </label>
               <p className='pl-1'>{t.orDragAndDrop}</p>
@@ -211,36 +203,10 @@ function ImageFormField({
         </Card>
         {isInvalid && (
           <div id='image-urls-error' className='mt-1 text-tiny text-danger'>
-            {errorMessage}
+            {errorMessage}{' '}
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function ImageInterface({ imageUrl, onPress, t }: ImageInterfaceProps) {
-  return (
-    <div className='relative' key={imageUrl}>
-      <Image
-        className='aspect-video h-36 object-cover object-center'
-        as={NextImage}
-        alt={imageUrl}
-        src={imageUrl}
-        width={228}
-        height={128}
-      />
-      <Button
-        className='absolute right-1 top-1 z-10'
-        isIconOnly
-        size='sm'
-        variant='solid'
-        radius='lg'
-        aria-label={t.removeImage}
-        onPress={onPress}
-      >
-        <Close className='size-5 fill-foreground' aria-hidden='true' />
-      </Button>
     </div>
   );
 }

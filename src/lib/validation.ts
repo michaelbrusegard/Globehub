@@ -68,7 +68,7 @@ function validateReview({ t }: validateReviewProps = {}) {
   return z.object({
     rating: z.number().min(1).max(10, t?.ratingInvalid),
     comment: z.string().max(200, t?.commentTooLong),
-    image: validateImageFile({
+    imageFile: validateImageFile({
       t: {
         imageNameTooLong: t?.imageNameTooLong,
         imageTypeInvalid: t?.imageTypeInvalid,

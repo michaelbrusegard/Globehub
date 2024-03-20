@@ -152,7 +152,11 @@
     "deleteReview": "Slett anmeldelse",
     "imageNameTooLong": "Bildets navn kan være på maksimalt 100 tegn",
     "imageTypeInvalid": "Bildet må være av typen PNG eller JPG",
-    "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB"
+    "imageSizeTooLarge": "Bildet kan være på maksimalt 1MB",
+    "removeImage": "Fjern bilde",
+    "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
+    "uploadAFile": "Last opp en fil",
+    "orDragAndDrop": "eller dra og slipp"
   },
   "reusables": {
     "modified": "Sist endret"
