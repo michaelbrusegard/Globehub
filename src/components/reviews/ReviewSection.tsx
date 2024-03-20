@@ -89,6 +89,7 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
             commentTooLong: t('commentTooLong'),
             writeComment: t('writeComment'),
             ratingInvalid: t('ratingInvalid'),
+            ratingRequired: t('ratingRequired'),
             delete: t('delete'),
             deleteConfirmation: t('deleteConfirmation'),
             deleteReview: t('deleteReview'),

@@ -37,7 +37,13 @@ type ButtonProps = {
 
 function SubHeader({ className, user, author, destination }: SubHeaderProps) {
   const t = useTranslations('destination');
-  const { minutes } = readingTime(destination.content);
+  const { minutes } = readingTime(
+    destination.name +
+      ' ' +
+      destination.content +
+      ' ' +
+      destination.exclusiveContent,
+  );
 
   return (
     <div className={cn('w-full', className)}>

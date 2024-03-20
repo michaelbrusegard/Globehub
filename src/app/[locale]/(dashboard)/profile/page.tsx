@@ -166,7 +166,9 @@ export default async function Profile({
               `;
 
               reviewImageUrls.push(
-                ...destinationReviews.map((review) => review.image),
+                ...destinationReviews
+                  .filter((review) => review.image)
+                  .map((review) => review.image),
               );
 
               await sql`

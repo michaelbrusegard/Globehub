@@ -34,6 +34,7 @@ type validateDestinationProps = {
 type validateReviewProps = {
   t?: {
     ratingInvalid?: string;
+    ratingRequired?: string;
     commentTooLong?: string;
     imageNameTooLong?: string;
     imageTypeInvalid?: string;
@@ -66,7 +67,7 @@ function validateProfile({ t }: { t?: { bioTooLong?: string } } = {}) {
 
 function validateReview({ t }: validateReviewProps = {}) {
   return z.object({
-    rating: z.number().min(1).max(10, t?.ratingInvalid),
+    rating: z.number().min(1, t?.ratingRequired).max(10, t?.ratingInvalid),
     comment: z.string().max(200, t?.commentTooLong),
     imageFile: validateImageFile({
       t: {

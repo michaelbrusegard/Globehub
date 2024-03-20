@@ -36,6 +36,7 @@ type ReviewModalProps = {
     commentTooLong: string;
     writeComment: string;
     ratingInvalid: string;
+    ratingRequired: string;
     delete: string;
     deleteConfirmation: string;
     deleteReview: string;
@@ -61,6 +62,7 @@ type FormProps = {
     commentTooLong: string;
     writeComment: string;
     ratingInvalid: string;
+    ratingRequired: string;
     delete: string;
     deleteConfirmation: string;
     deleteReview: string;
@@ -158,6 +160,7 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
             onChange: validateReview({
               t: {
                 ratingInvalid: t.ratingInvalid,
+                ratingRequired: t.ratingRequired,
               },
             }).pick({ rating: true }).shape.rating,
           }}
@@ -274,6 +277,7 @@ function ReviewModal({
                   commentTooLong: t.commentTooLong,
                   writeComment: t.writeComment,
                   ratingInvalid: t.ratingInvalid,
+                  ratingRequired: t.ratingRequired,
                   delete: t.delete,
                   deleteConfirmation: t.deleteConfirmation,
                   deleteReview: t.deleteReview,
