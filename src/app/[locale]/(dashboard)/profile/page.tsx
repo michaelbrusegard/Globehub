@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 
 import { auth } from '@/lib/auth';
-import { type Destination, sql } from '@/lib/db';
+import { type Destination, type Review, sql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
 import {
   DeleteObjectCommand,
@@ -46,6 +46,18 @@ export default async function Profile({
     INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
     WHERE user_favorites.user_id = ${user?.id ?? 0};
   `;
+
+  const reviews: (Review & {
+    name: string;
+    images: string[];
+    id: number;
+  })[] = await sql`
+    SELECT R.comment, R.rating, R.created_at, D.name, D.images, D.id
+    FROM reviews AS R
+    JOIN destinations AS D ON R.destination_id = D.id
+    WHERE R.user_id = ${user?.id ?? 0}
+`;
+
   if (!user) {
     redirect('/signin');
   } else {
@@ -122,7 +134,7 @@ export default async function Profile({
           </div>
         </div>
         <div className='flex w-full flex-col'>
-          <ProfileTabs favorites={favorites} />
+          <ProfileTabs reviews={reviews} favorites={favorites} />
         </div>
         <DeleteModal
           className='mt-10'
