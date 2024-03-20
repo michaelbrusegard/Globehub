@@ -64,6 +64,7 @@
     "favorite": "Favoritt",
     "reviews": "Anmeldelser",
     "memberSince": "Medlem siden",
+    "noBio": "Brukeren har ikke skrevet en biografi ennå.",
     "weather": {
       "title": "Vær",
       "weatherNotAvailable": "Værdata er ikke tilgjengelig for denne destinasjonen.",
@@ -157,7 +158,8 @@
     "removeImage": "Fjern bilde",
     "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
     "uploadAFile": "Last opp valgfri fil",
-    "orDragAndDrop": "eller dra og slipp"
+    "orDragAndDrop": "eller dra og slipp",
+    "noBio": "Brukeren har ikke skrevet en biografi ennå."
   },
   "reusables": {
     "modified": "Sist endret"

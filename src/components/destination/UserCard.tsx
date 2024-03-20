@@ -42,7 +42,13 @@ async function UserCard({ user }: { user: User }) {
         </div>
       </CardHeader>
       <CardBody className='px-3 py-0'>
-        <p className='pl-px text-small text-default-500'>{user.bio}</p>
+        {user.bio ? (
+          <p className='pl-px text-small text-default-500'>{user.bio}</p>
+        ) : (
+          <p className='pl-px text-small italic text-default-500'>
+            {t('noBio')}
+          </p>
+        )}
       </CardBody>
       <CardFooter />
     </Card>
