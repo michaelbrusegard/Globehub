@@ -20,13 +20,14 @@ type FilterProps = {
     selectKeywords: string;
     selectWorldRegion: string;
     worldRegion: string;
+    keywordSearchParam: string;
   };
 };
 
 function Filters({ keywords, worldRegions, t }: FilterProps) {
   const [keyword, setKeyword] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useQueryState(
-    t.keywords,
+    t.keywordSearchParam,
     parseAsArrayOf<string>(parseAsString, ';')
       .withDefault([])
       .withOptions({ shallow: false }),
@@ -67,8 +68,8 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
           selectionMode='single'
           defaultSelectedKeys={worldRegion ? [worldRegion] : undefined}
         >
-          {Object.entries(worldRegions).map(([_, value]) => (
-            <SelectItem key={value} value={value}>
+          {Object.entries(worldRegions).map(([key, value]) => (
+            <SelectItem key={key} value={key}>
               {value}
             </SelectItem>
           ))}
@@ -99,10 +100,9 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
           ))}
         </Autocomplete>
       </div>
-      <div className='w-95 flex-wrap'>
+      <div className='flex w-full flex-wrap gap-2'>
         {selectedKeywords.map((keyword) => (
           <Chip
-            className='mb-2 mr-2'
             key={keyword}
             size='md'
             onClose={() => {

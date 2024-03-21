@@ -9,6 +9,7 @@ import {
 import { type Keyword, sql } from '@/lib/db';
 
 import { DestinationsPagination } from '@/components/home/DestinationsPagination';
+import { FilterGrid } from '@/components/home/FilterGrid';
 import { Filters } from '@/components/home/Filters';
 import { TopDestinationsGrid } from '@/components/home/TopDestinationsGrid';
 
@@ -64,14 +65,17 @@ export default async function Home({
 
   const searchParamsCache = createSearchParamsCache({
     [t('page')]: parseAsInteger.withDefault(1),
-    [t('keywords')]: parseAsArrayOf<string>(parseAsString, ';').withDefault([]),
+    [t('keywordSearchParam')]: parseAsArrayOf<string>(
+      parseAsString,
+      ';',
+    ).withDefault([]),
     [t('worldRegion')]: parseAsString.withDefault(''),
   });
 
   searchParamsCache.parse(searchParams);
 
   const page = searchParamsCache.get(t('page')) as number;
-  const keywords = searchParamsCache.get(t('keywords')) as string[];
+  const keywords = searchParamsCache.get(t('keywordSearchParam')) as string[];
   const worldRegion = searchParamsCache.get(t('worldRegion')) as string;
 
   const pageSize = 5;
@@ -101,7 +105,14 @@ export default async function Home({
             selectKeywords: t('selectKeywords'),
             selectWorldRegion: t('selectWorldRegion'),
             worldRegion: t('worldRegion'),
+            keywordSearchParam: t('keywordSearchParam'),
           }}
+        />
+        <FilterGrid
+          filterKeywords={keywords}
+          filterWorldRegion={worldRegion}
+          worldRegions={worldRegionTranslations}
+          pageSize={pageSize}
         />
       </div>
     </>
