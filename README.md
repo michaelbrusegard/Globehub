@@ -96,10 +96,10 @@ For accesing the logs of the database you can run the following command:
 bun run db:logs
 ```
 
-For toggling the role of your user between admin and user you can run the following command:
+For toggling the role of your user with the specified email between admin and user you can run the following command:
 
 ```bash
-bun run db:admin
+bun run db:admin YOUR_USER_EMAIL
 ```
 
 ### Local storage
