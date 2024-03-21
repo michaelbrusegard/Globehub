@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type Review, type User, sql } from '@/lib/db';
+import { type Destination, type Review, sql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
 import {
   DeleteObjectCommand,
