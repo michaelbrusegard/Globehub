@@ -83,10 +83,10 @@ CREATE TABLE IF NOT EXISTS reviews (
         rating >= 1
         AND rating <= 10
     ),
-    comment TEXT,
-    image TEXT,
+    comment VARCHAR(200),
+    image VARCHAR(255),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMPTZ DEFAULT NULL,
     PRIMARY KEY (user_id, destination_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (destination_id) REFERENCES destinations(id)
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 
 CREATE TABLE IF NOT EXISTS keywords (
     id SERIAL,
-    name VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 

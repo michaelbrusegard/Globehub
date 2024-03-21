@@ -1,5 +1,5 @@
 import { FormSkeleton } from '@/components/destination/FormSkeleton';
 
-export default function EditDestinationLoading() {
+export default function NewDestinationLoading() {
   return <FormSkeleton />;
 }

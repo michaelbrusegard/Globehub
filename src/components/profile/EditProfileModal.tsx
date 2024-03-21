@@ -66,12 +66,12 @@ function SubmitButton({
 function Form({ updateProfile, onClose, profile, t }: FormProps) {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: {
-      bio: '',
+      bio: profile.bio ?? '',
     },
   });
 
-  const submissionAttempts = useStore((state) => state.submissionAttempts);
   const canSubmit = useStore((state) => state.canSubmit);
+  const submissionAttempts = useStore((state) => state.submissionAttempts);
 
   return (
     <form
@@ -88,7 +88,9 @@ function Form({ updateProfile, onClose, profile, t }: FormProps) {
           validatorAdapter={zodValidator}
           validators={{
             onChange: validateProfile({
-              bioTooLong: t.bioTooLong,
+              t: {
+                bioTooLong: t.bioTooLong,
+              },
             }).pick({ bio: true }).shape.bio,
           }}
         >
@@ -102,13 +104,13 @@ function Form({ updateProfile, onClose, profile, t }: FormProps) {
               }}
               onBlur={handleBlur}
               value={state.value}
-              defaultValue={profile.bio}
               errorMessage={
+                submissionAttempts > 0 &&
                 state.meta.errors &&
                 typeof state.meta.errors[0] === 'string' &&
                 state.meta.errors[0].split(', ')[0]
               }
-              isInvalid={state.meta.errors.length > 0}
+              isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
             />
           )}
         </Field>
@@ -117,7 +119,10 @@ function Form({ updateProfile, onClose, profile, t }: FormProps) {
         <Button color='danger' variant='light' type='button' onPress={onClose}>
           {t.cancel}
         </Button>
-        <SubmitButton canSubmit={canSubmit} t={{ update: t.update }} />
+        <SubmitButton
+          canSubmit={canSubmit || submissionAttempts === 0}
+          t={{ update: t.update }}
+        />
       </ModalFooter>
     </form>
   );

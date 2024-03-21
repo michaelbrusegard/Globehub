@@ -5,19 +5,13 @@ import {
   CardFooter,
   CardHeader,
 } from '@nextui-org/react';
-import { getFormatter, getTranslations } from 'next-intl/server';
+import { useFormatter, useTranslations } from 'next-intl';
 
-import { sql } from '@/lib/db';
 import type { User } from '@/lib/db';
 
-async function UserCard({ user }: { user: User }) {
-  const t = await getTranslations('destination');
-  const format = await getFormatter();
-  const [result]: { count: number }[] = await sql`
-    SELECT COUNT(*)
-    FROM destinations
-    WHERE user_id = ${user.id}
-  `;
+function UserCard({ user }: { user: User }) {
+  const t = useTranslations('reviews');
+  const format = useFormatter();
 
   return (
     <Card shadow='none' className='max-w-[300px] border-none bg-transparent'>
@@ -35,8 +29,6 @@ async function UserCard({ user }: { user: User }) {
                 month: 'short',
                 day: 'numeric',
               })}
-              <br />
-              {result ? t('articlesWritten', { count: result.count }) : null}
             </h5>
           </div>
         </div>

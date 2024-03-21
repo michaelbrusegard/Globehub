@@ -1,6 +1,6 @@
 import { Skeleton } from '@nextui-org/react';
 
-function AuthorPopoverSkeleton({ className }: { className?: string }) {
+function SubHeaderSkeleton({ className }: { className?: string }) {
   return (
     <div className={className}>
       <div className='inline-flex items-center justify-center gap-2 rounded-small'>
@@ -14,4 +14,4 @@ function AuthorPopoverSkeleton({ className }: { className?: string }) {
   );
 }
 
-export { AuthorPopoverSkeleton };
+export { SubHeaderSkeleton };

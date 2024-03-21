@@ -1,16 +1,42 @@
 import { env } from '@/env';
 import {
+  DeleteObjectCommand,
+  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
   type S3ClientConfig,
 } from '@aws-sdk/client-s3';
+
+let isBucketPolicySet = false;
+
+async function setPublicBucketPolicy(bucketName: string) {
+  const params = {
+    Bucket: bucketName,
+    Policy: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Sid: 'PublicReadGetObject',
+          Effect: 'Allow',
+          Principal: '*',
+          Action: ['s3:GetObject'],
+          Resource: [`arn:aws:s3:::${bucketName}/*`],
+        },
+      ],
+    }),
+  };
+
+  await s3.send(new PutBucketPolicyCommand(params));
+}
+
+const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
 
 const config: S3ClientConfig = {
   credentials: {
     accessKeyId: env.STORAGE_USER,
     secretAccessKey: env.STORAGE_PASSWORD,
   },
-  endpoint: 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT,
+  endpoint: endpoint,
   forcePathStyle: true,
   region: 'eu-north-1',
 };
@@ -22,4 +48,19 @@ const buckets = env.STORAGE_NAME.split(',');
 const destinationsBucket = buckets[0]!;
 const reviewsBucket = buckets[1]!;
 
-export { s3, destinationsBucket, reviewsBucket, PutObjectCommand };
+void (async () => {
+  if (!isBucketPolicySet) {
+    await setPublicBucketPolicy(destinationsBucket);
+    await setPublicBucketPolicy(reviewsBucket);
+    isBucketPolicySet = true;
+  }
+})();
+
+export {
+  s3,
+  endpoint,
+  destinationsBucket,
+  reviewsBucket,
+  PutObjectCommand,
+  DeleteObjectCommand,
+};

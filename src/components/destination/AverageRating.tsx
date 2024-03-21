@@ -14,7 +14,7 @@ function AverageRating({
 }) {
   const t = useTranslations('destination');
 
-  const rating = averageRating !== 0 ? formatRating(averageRating) : null;
+  const rating = formatRating(averageRating);
 
   return (
     <span

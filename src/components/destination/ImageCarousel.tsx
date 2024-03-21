@@ -26,7 +26,7 @@ type ThumbProps = {
 
 function Thumb({ selected, imageSrc, index, onClick }: ThumbProps) {
   return (
-    <div className='flex-shrink-0'>
+    <div className='shrink-0'>
       <Button
         className={cn(
           'm-0 block h-full w-fit gap-0 bg-transparent p-0 opacity-50 blur-[2px] transition-opacity data-[focus-visible=true]:opacity-hover',
