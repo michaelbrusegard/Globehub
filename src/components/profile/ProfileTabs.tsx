@@ -44,7 +44,7 @@ function ProfileTabs({
   }
 
   return (
-    <div className='mx-auto max-w-2xl'>
+    <div className='mx-auto min-h-unit-7xl max-w-2xl'>
       <Tabs
         className='flex w-full flex-col'
         variant='bordered'

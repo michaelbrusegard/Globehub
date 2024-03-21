@@ -177,167 +177,173 @@ export default async function Profile({
           modified: t('modified'),
         }}
       />
-      <DeleteModal
-        className='mt-10'
-        action={async () => {
-          'use server';
+      <div className='flex w-full justify-center'>
+        <DeleteModal
+          className='my-16'
+          action={async () => {
+            'use server';
 
-          if (!user) {
-            throw new Error('You must be signed in to perform this action');
-          }
+            if (!user) {
+              throw new Error('You must be signed in to perform this action');
+            }
 
-          const reviewImageUrls: string[] = [];
-          const destinationImageUrls: string[] = [];
+            const reviewImageUrls: string[] = [];
+            const destinationImageUrls: string[] = [];
 
-          await sql.begin(async (sql): Promise<void> => {
-            const userReviews: { image: string }[] = await sql`
+            await sql.begin(async (sql): Promise<void> => {
+              const userReviews: { image: string }[] = await sql`
                 SELECT image FROM reviews
                 WHERE user_id = ${user.id}
               `;
-            reviewImageUrls.push(...userReviews.map((review) => review.image));
+              reviewImageUrls.push(
+                ...userReviews.map((review) => review.image),
+              );
 
-            const userDestinations: { id: number; images: string[] }[] =
-              await sql`
+              const userDestinations: { id: number; images: string[] }[] =
+                await sql`
                 SELECT id, images FROM destinations
                 WHERE user_id = ${user.id}
               `;
-            destinationImageUrls.push(
-              ...userDestinations.flatMap((destination) => destination.images),
-            );
+              destinationImageUrls.push(
+                ...userDestinations.flatMap(
+                  (destination) => destination.images,
+                ),
+              );
 
-            const destinationIds = userDestinations.map(
-              (destination) => destination.id,
-            );
+              const destinationIds = userDestinations.map(
+                (destination) => destination.id,
+              );
 
-            const destinationReviews: { image: string }[] = await sql`
+              const destinationReviews: { image: string }[] = await sql`
                 SELECT image FROM reviews
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            reviewImageUrls.push(
-              ...destinationReviews
-                .filter((review) => review.image)
-                .map((review) => review.image),
-            );
+              reviewImageUrls.push(
+                ...destinationReviews
+                  .filter((review) => review.image)
+                  .map((review) => review.image),
+              );
 
-            await sql`
+              await sql`
                 DELETE FROM reviews
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM user_favorites
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM weather_caches
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            const destinationKeywordIds: { keywordId: number }[] = await sql`
+              const destinationKeywordIds: { keywordId: number }[] = await sql`
                 SELECT keyword_id FROM destination_keywords
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM destination_keywords
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-            const keywordIds = destinationKeywordIds.map(
-              (keyword) => keyword.keywordId,
-            );
+              const keywordIds = destinationKeywordIds.map(
+                (keyword) => keyword.keywordId,
+              );
 
-            for (const keywordId of keywordIds) {
-              const [result]: { count: number }[] = await sql`
+              for (const keywordId of keywordIds) {
+                const [result]: { count: number }[] = await sql`
                   SELECT COUNT(*) FROM destination_keywords
                   WHERE keyword_id = ${keywordId}
                 `;
 
-              if (result && result.count === 0) {
-                await sql`
+                if (result && result.count === 0) {
+                  await sql`
                     DELETE FROM keywords
                     WHERE id = ${keywordId}
                   `;
+                }
               }
-            }
 
-            await sql`
+              await sql`
                 DELETE FROM user_favorites
                 WHERE user_id = ${user.id}
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM reviews
                 WHERE user_id = ${user.id}
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM destinations
                 WHERE user_id = ${user.id}
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM sessions
                 WHERE "userId" = ${user.id}
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM accounts
                 WHERE "userId" = ${user.id}
               `;
 
-            await sql`
+              await sql`
                 DELETE FROM users
                 WHERE id = ${user.id}
               `;
-          });
+            });
 
-          for (const imageUrl of destinationImageUrls) {
-            if (!imageUrl.startsWith(endpoint)) {
-              continue;
+            for (const imageUrl of destinationImageUrls) {
+              if (!imageUrl.startsWith(endpoint)) {
+                continue;
+              }
+
+              const params = {
+                Bucket: destinationsBucket,
+                Key: imageUrl.replace(
+                  endpoint + '/' + destinationsBucket + '/',
+                  '',
+                ),
+              };
+
+              const deleteCommand = new DeleteObjectCommand(params);
+
+              await s3.send(deleteCommand);
             }
 
-            const params = {
-              Bucket: destinationsBucket,
-              Key: imageUrl.replace(
-                endpoint + '/' + destinationsBucket + '/',
-                '',
-              ),
-            };
+            for (const imageUrl of reviewImageUrls) {
+              if (!imageUrl.startsWith(endpoint)) {
+                continue;
+              }
 
-            const deleteCommand = new DeleteObjectCommand(params);
+              const params = {
+                Bucket: reviewsBucket,
+                Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
+              };
 
-            await s3.send(deleteCommand);
-          }
+              const deleteCommand = new DeleteObjectCommand(params);
 
-          for (const imageUrl of reviewImageUrls) {
-            if (!imageUrl.startsWith(endpoint)) {
-              continue;
+              await s3.send(deleteCommand);
             }
 
-            const params = {
-              Bucket: reviewsBucket,
-              Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
-            };
-
-            const deleteCommand = new DeleteObjectCommand(params);
-
-            await s3.send(deleteCommand);
-          }
-
-          redirect('/signin');
-        }}
-        t={{
-          delete: t('delete'),
-          cancel: t('cancel'),
-          description: t('deleteConfirmation', {
-            name: user.name,
-          }),
-          buttonText: t('deleteUser'),
-        }}
-      />
+            redirect('/signin');
+          }}
+          t={{
+            delete: t('delete'),
+            cancel: t('cancel'),
+            description: t('deleteConfirmation', {
+              name: user.name,
+            }),
+            buttonText: t('deleteUser'),
+          }}
+        />
+      </div>
     </>
   );
 }

@@ -79,7 +79,7 @@ function ReviewCard({
               as={NextImage}
               alt={review.image}
               src={review.image}
-              width={112}
+              width={199}
               height={112}
             />
           </div>
