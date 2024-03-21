@@ -7,10 +7,6 @@
     "editDestination": "Rediger destinasjon",
     "newDestination": "Ny destinasjon"
   },
-  "ui": {
-    "page": "side",
-    "filters": "filtre"
-  },
   "layout": {
     "signIn": "Logg inn",
     "searchPlaceholder": "Skriv inn søk...",
@@ -55,7 +51,14 @@
     "title": "Topp destinasjoner",
     "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere.",
     "noReviews": "Ingen anmeldelser",
-    "rating": "Vurdering"
+    "rating": "Vurdering",
+    "page": "side",
+    "keywords": "Nøkkelord",
+    "worldRegion": "Verdensdel",
+    "worldRegionEnum": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",
+    "selectKeywords": "Velg nøkkelord",
+    "selectWorldRegion": "Velg verdensdel",
+    "filterTitle": "Filtrer destinasjoner"
   },
   "destination": {
     "readTime": "{count, plural, =0 {mindre enn ett minutt} one {# minutt} other {# minutter}} lesing",
