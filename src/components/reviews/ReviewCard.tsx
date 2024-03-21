@@ -4,44 +4,67 @@ import {
   CardFooter,
   CardHeader,
   Image,
+  User as UserAvatar,
 } from '@nextui-org/react';
 import NextImage from 'next/image';
 
-import { type Review, type User, sql } from '@/lib/db';
+import { type Review, type User } from '@/lib/db';
+import { getInitials } from '@/lib/utils';
 
 import { Time } from '@/components/reusables/Time';
 import { AuthorPopover } from '@/components/reviews/AuthorPopover';
 import { Rating } from '@/components/reviews/Rating';
 
-async function ReviewCard({ review }: { review: Review }) {
-  const [author]: (User & { contributions: number })[] = await sql`
-    SELECT users.*, COALESCE(reviews.review_count, 0) + COALESCE(destinations.destination_count, 0) as contributions
-    FROM users
-    LEFT JOIN (
-      SELECT user_id, COUNT(*) as review_count
-      FROM reviews
-      GROUP BY user_id
-    ) reviews ON users.id = reviews.user_id
-    LEFT JOIN (
-      SELECT user_id, COUNT(*) as destination_count
-      FROM destinations
-      GROUP BY user_id
-    ) destinations ON users.id = destinations.user_id
-    WHERE users.id = ${review.userId};
-  `;
+type ReviewCardProps = {
+  review: Review;
+  author: User & { contributions: number };
+  disablePopover?: boolean;
+  t: {
+    contributions: string;
+    modified: string;
+  };
+};
 
-  if (!author) {
-    throw new Error('Author not found');
-  }
-
+function ReviewCard({
+  review,
+  author,
+  disablePopover = false,
+  t,
+}: ReviewCardProps) {
   return (
     <Card>
       <CardHeader className='flex flex-col items-start justify-between gap-4 sm:flex-row'>
-        <AuthorPopover author={author} />
+        {disablePopover ? (
+          <UserAvatar
+            name={author.name}
+            description={author.contributions + ' ' + t.contributions}
+            avatarProps={{
+              classNames: {
+                name: 'font-arimo font-semibold',
+              },
+              ImgComponent: NextImage,
+              imgProps: {
+                width: 32,
+                height: 32,
+              },
+              size: 'sm',
+              name: getInitials(author.name ?? ''),
+              src: author.image,
+            }}
+          />
+        ) : (
+          <AuthorPopover
+            author={author}
+            t={{ contributions: t.contributions }}
+          />
+        )}
         <Time
           className='flex flex-col text-xs'
           createdAt={review.createdAt}
           modifiedAt={review.modifiedAt}
+          t={{
+            modified: t.modified,
+          }}
         />
       </CardHeader>
       <CardBody className='flex flex-col-reverse justify-between gap-4 sm:flex-row'>

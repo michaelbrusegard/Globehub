@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type Review, sql } from '@/lib/db';
+import { type Destination, type Review, type User, sql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
 import {
   DeleteObjectCommand,
@@ -40,268 +40,304 @@ export default async function Profile({
   const t = await getTranslations('profile');
   const session = await auth();
   const user = session?.user;
+
+  if (!user) {
+    redirect('/signin');
+    return null;
+  }
+
   const favorites: Destination[] = await sql`
     SELECT destinations.*
     FROM destinations
     INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
-    WHERE user_favorites.user_id = ${user?.id ?? 0};
+    WHERE user_favorites.user_id = ${user.id};
   `;
 
   const reviews: (Review & {
     name: string;
-    images: string[];
-    id: number;
   })[] = await sql`
-    SELECT R.comment, R.rating, R.created_at, D.name, D.images, D.id
-    FROM reviews AS R
-    JOIN destinations AS D ON R.destination_id = D.id
-    WHERE R.user_id = ${user?.id ?? 0}
-`;
+    SELECT reviews.*, destinations.name
+    FROM reviews
+    JOIN destinations ON reviews.destination_id = destinations.id
+    WHERE reviews.user_id = ${user.id}
+  `;
 
-  if (!user) {
-    redirect('/signin');
-  } else {
-    return (
-      <>
-        <h1 className='my-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
-          {t('myProfile')}
-        </h1>
-        <div className='mb-10 flex flex-col gap-0 sm:flex-row sm:gap-3'>
-          <Avatar
-            className='mx-auto h-40 w-40 shrink-0 sm:mx-0'
-            classNames={{
-              name: 'font-arimo font-semibold',
-            }}
-            ImgComponent={NextImage}
-            imgProps={{
-              width: 160,
-              height: 160,
-              fetchPriority: 'high',
-              loading: 'eager',
-            }}
-            src={user.image}
-            isBordered
-          />
-          <div className='mt-4 flex-grow'>
-            <div className='flex flex-row items-center justify-between'>
-              <h2 className='truncate text-2xl font-semibold'>{user.name}</h2>
-              <EditProfileModal
-                updateProfile={async (formData: FormData) => {
-                  'use server';
+  const [userContributions]: { contributions: number }[] = await sql`
+    SELECT COALESCE(reviews.review_count, 0) + COALESCE(destinations.destination_count, 0) as contributions
+    FROM users
+    LEFT JOIN (
+      SELECT user_id, COUNT(*) as review_count
+      FROM reviews
+      GROUP BY user_id
+    ) reviews ON users.id = reviews.user_id
+    LEFT JOIN (
+      SELECT user_id, COUNT(*) as destination_count
+      FROM destinations
+      GROUP BY user_id
+    ) destinations ON users.id = destinations.user_id
+    WHERE users.id = ${user.id};
+  `;
 
-                  if (!user) {
-                    throw new Error(
-                      'You must be signed in to perform this action',
-                    );
-                  }
+  const author = {
+    ...user,
+    contributions: userContributions?.contributions ?? 0,
+  };
 
-                  const parsed = validateProfile().safeParse(
-                    Object.fromEntries(formData) as { bio: string },
+  const destinations: Destination[] = await sql`
+    SELECT *
+    FROM destinations
+    WHERE user_id = ${user.id}
+  `;
+
+  return (
+    <>
+      <h1 className='my-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-4xl font-bold tracking-tight text-transparent lg:text-5xl'>
+        {t('myProfile')}
+      </h1>
+      <div className='mb-10 flex flex-col gap-0 sm:flex-row sm:gap-3'>
+        <Avatar
+          className='mx-auto h-40 w-40 shrink-0 sm:mx-0'
+          classNames={{
+            name: 'font-arimo font-semibold',
+          }}
+          ImgComponent={NextImage}
+          imgProps={{
+            width: 160,
+            height: 160,
+            fetchPriority: 'high',
+            loading: 'eager',
+          }}
+          src={user.image}
+          isBordered
+        />
+        <div className='mt-4 flex-grow'>
+          <div className='flex flex-row items-center justify-between'>
+            <h2 className='truncate text-2xl font-semibold'>{user.name}</h2>
+            <EditProfileModal
+              updateProfile={async (formData: FormData) => {
+                'use server';
+
+                if (!user) {
+                  throw new Error(
+                    'You must be signed in to perform this action',
                   );
+                }
 
-                  if (!parsed.success) {
-                    return;
-                  }
+                const parsed = validateProfile().safeParse(
+                  Object.fromEntries(formData) as { bio: string },
+                );
 
-                  await sql`
+                if (!parsed.success) {
+                  return;
+                }
+
+                await sql`
                     UPDATE users
                     SET bio = ${parsed.data.bio}
                     WHERE id = ${user.id}
                   `;
 
-                  revalidatePath(`/${locale}/profile`);
-                }}
-                profile={{
-                  bio: user.bio,
-                }}
-                t={{
-                  edit: t('edit'),
-                  editBio: t('editBio'),
-                  cancel: t('cancel'),
-                  update: t('update'),
-                  writeBio: t('writeBio'),
-                  bioTooLong: t('bioTooLong'),
-                }}
-              />
-            </div>
-            {user.bio ? (
-              <p className='mx-2 line-clamp-6 overflow-clip overflow-ellipsis sm:line-clamp-4'>
-                {user.bio}
-              </p>
-            ) : (
-              <p className='mx-2 italic text-default-400'>{t('emptyBio')}</p>
-            )}
+                revalidatePath(`/${locale}/profile`);
+              }}
+              profile={{
+                bio: user.bio,
+              }}
+              t={{
+                edit: t('edit'),
+                editBio: t('editBio'),
+                cancel: t('cancel'),
+                update: t('update'),
+                writeBio: t('writeBio'),
+                bioTooLong: t('bioTooLong'),
+              }}
+            />
           </div>
+          {user.bio ? (
+            <p className='mx-2 line-clamp-6 overflow-clip overflow-ellipsis sm:line-clamp-4'>
+              {user.bio}
+            </p>
+          ) : (
+            <p className='mx-2 italic text-default-400'>{t('emptyBio')}</p>
+          )}
         </div>
-        <div className='flex w-full flex-col'>
-          <ProfileTabs reviews={reviews} favorites={favorites} />
-        </div>
-        <DeleteModal
-          className='mt-10'
-          action={async () => {
-            'use server';
+      </div>
+      <ProfileTabs
+        destinations={destinations}
+        reviews={reviews}
+        user={author}
+        favorites={favorites}
+        t={{
+          reviews: t('reviews'),
+          favorites: t('favorites'),
+          noContent: t('noContent'),
+          destinations: t('destinations'),
+          goToDestination: t('goToDestination'),
+          contributions: t('contributions'),
+          views: t('views'),
+          modified: t('modified'),
+        }}
+      />
+      <DeleteModal
+        className='mt-10'
+        action={async () => {
+          'use server';
 
-            if (!user) {
-              throw new Error('You must be signed in to perform this action');
-            }
+          if (!user) {
+            throw new Error('You must be signed in to perform this action');
+          }
 
-            const reviewImageUrls: string[] = [];
-            const destinationImageUrls: string[] = [];
+          const reviewImageUrls: string[] = [];
+          const destinationImageUrls: string[] = [];
 
-            await sql.begin(async (sql): Promise<void> => {
-              const userReviews: { image: string }[] = await sql`
+          await sql.begin(async (sql): Promise<void> => {
+            const userReviews: { image: string }[] = await sql`
                 SELECT image FROM reviews
                 WHERE user_id = ${user.id}
               `;
-              reviewImageUrls.push(
-                ...userReviews.map((review) => review.image),
-              );
+            reviewImageUrls.push(...userReviews.map((review) => review.image));
 
-              const userDestinations: { id: number; images: string[] }[] =
-                await sql`
+            const userDestinations: { id: number; images: string[] }[] =
+              await sql`
                 SELECT id, images FROM destinations
                 WHERE user_id = ${user.id}
               `;
-              destinationImageUrls.push(
-                ...userDestinations.flatMap(
-                  (destination) => destination.images,
-                ),
-              );
+            destinationImageUrls.push(
+              ...userDestinations.flatMap((destination) => destination.images),
+            );
 
-              const destinationIds = userDestinations.map(
-                (destination) => destination.id,
-              );
+            const destinationIds = userDestinations.map(
+              (destination) => destination.id,
+            );
 
-              const destinationReviews: { image: string }[] = await sql`
+            const destinationReviews: { image: string }[] = await sql`
                 SELECT image FROM reviews
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              reviewImageUrls.push(
-                ...destinationReviews
-                  .filter((review) => review.image)
-                  .map((review) => review.image),
-              );
+            reviewImageUrls.push(
+              ...destinationReviews
+                .filter((review) => review.image)
+                .map((review) => review.image),
+            );
 
-              await sql`
+            await sql`
                 DELETE FROM reviews
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM user_favorites
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM weather_caches
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              const destinationKeywordIds: { keywordId: number }[] = await sql`
+            const destinationKeywordIds: { keywordId: number }[] = await sql`
                 SELECT keyword_id FROM destination_keywords
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM destination_keywords
                 WHERE destination_id = ANY(${sql.array(destinationIds)}::integer[])
               `;
 
-              const keywordIds = destinationKeywordIds.map(
-                (keyword) => keyword.keywordId,
-              );
+            const keywordIds = destinationKeywordIds.map(
+              (keyword) => keyword.keywordId,
+            );
 
-              for (const keywordId of keywordIds) {
-                const [result]: { count: number }[] = await sql`
+            for (const keywordId of keywordIds) {
+              const [result]: { count: number }[] = await sql`
                   SELECT COUNT(*) FROM destination_keywords
                   WHERE keyword_id = ${keywordId}
                 `;
 
-                if (result && result.count === 0) {
-                  await sql`
+              if (result && result.count === 0) {
+                await sql`
                     DELETE FROM keywords
                     WHERE id = ${keywordId}
                   `;
-                }
               }
+            }
 
-              await sql`
+            await sql`
                 DELETE FROM user_favorites
                 WHERE user_id = ${user.id}
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM reviews
                 WHERE user_id = ${user.id}
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM destinations
                 WHERE user_id = ${user.id}
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM sessions
                 WHERE "userId" = ${user.id}
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM accounts
                 WHERE "userId" = ${user.id}
               `;
 
-              await sql`
+            await sql`
                 DELETE FROM users
                 WHERE id = ${user.id}
               `;
-            });
+          });
 
-            for (const imageUrl of destinationImageUrls) {
-              if (!imageUrl.startsWith(endpoint)) {
-                continue;
-              }
-
-              const params = {
-                Bucket: destinationsBucket,
-                Key: imageUrl.replace(
-                  endpoint + '/' + destinationsBucket + '/',
-                  '',
-                ),
-              };
-
-              const deleteCommand = new DeleteObjectCommand(params);
-
-              await s3.send(deleteCommand);
+          for (const imageUrl of destinationImageUrls) {
+            if (!imageUrl.startsWith(endpoint)) {
+              continue;
             }
 
-            for (const imageUrl of reviewImageUrls) {
-              if (!imageUrl.startsWith(endpoint)) {
-                continue;
-              }
+            const params = {
+              Bucket: destinationsBucket,
+              Key: imageUrl.replace(
+                endpoint + '/' + destinationsBucket + '/',
+                '',
+              ),
+            };
 
-              const params = {
-                Bucket: reviewsBucket,
-                Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
-              };
+            const deleteCommand = new DeleteObjectCommand(params);
 
-              const deleteCommand = new DeleteObjectCommand(params);
+            await s3.send(deleteCommand);
+          }
 
-              await s3.send(deleteCommand);
+          for (const imageUrl of reviewImageUrls) {
+            if (!imageUrl.startsWith(endpoint)) {
+              continue;
             }
 
-            redirect('/signin');
-          }}
-          t={{
-            delete: t('delete'),
-            cancel: t('cancel'),
-            description: t('deleteConfirmation', {
-              name: user.name,
-            }),
-            buttonText: t('deleteUser'),
-          }}
-        />
-      </>
-    );
-  }
+            const params = {
+              Bucket: reviewsBucket,
+              Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
+            };
+
+            const deleteCommand = new DeleteObjectCommand(params);
+
+            await s3.send(deleteCommand);
+          }
+
+          redirect('/signin');
+        }}
+        t={{
+          delete: t('delete'),
+          cancel: t('cancel'),
+          description: t('deleteConfirmation', {
+            name: user.name,
+          }),
+          buttonText: t('deleteUser'),
+        }}
+      />
+    </>
+  );
 }

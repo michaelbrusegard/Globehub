@@ -4,7 +4,6 @@ import {
   PopoverTrigger,
   User as UserAvatar,
 } from '@nextui-org/react';
-import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 
 import { type User } from '@/lib/db';
@@ -14,17 +13,20 @@ import { UserCard } from '@/components/reviews/UserCard';
 
 function AuthorPopover({
   author,
+  t,
 }: {
   author: User & { contributions: number };
+  t: {
+    contributions: string;
+  };
 }) {
-  const t = useTranslations('reviews');
   return (
     <Popover showArrow shouldBlockScroll placement='bottom'>
       <PopoverTrigger className='shrink-0'>
         <UserAvatar
           as='button'
           name={author.name}
-          description={author.contributions + ' ' + t('contributions')}
+          description={author.contributions + ' ' + t.contributions}
           avatarProps={{
             classNames: {
               name: 'font-arimo font-semibold',

@@ -160,7 +160,7 @@ function ImageFormField({
         )}
       </div>
       <div>
-        <Card className='min-h-[136px]'>
+        <Card className='min-h-[168px]'>
           <CardBody
             className={cn(
               'flex flex-row flex-wrap gap-2',

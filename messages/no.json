@@ -42,7 +42,14 @@
     "reviews": "Vurderinger",
     "delete": "Slett",
     "deleteConfirmation": "Er du sikker på at du vil slette brukeren {name}? Dette kan ikke angres. Alle destinasjoner, anmeldser og bilder vil også bli slettet. Dette inkluderer også anmeldelser og bilder som andre brukere har lagt til på destinasjoner du har lagd. Prosessen kan ta noen minutter.",
-    "deleteUser": "Slett bruker"
+    "deleteUser": "Slett bruker",
+    "favorites": "Favoritter",
+    "noContent": "You don't have any reviews or favorites yet.",
+    "destinations": "Destinasjoner",
+    "goToDestination": "Gå til destinasjon",
+    "contributions": "bidrag",
+    "views": "Visninger",
+    "modified": "Sist endret"
   },
   "home": {
     "title": "Topp destinasjoner",
@@ -159,9 +166,7 @@
     "PngJpg1MbMax": "PNG eller JPG, maks 1MB",
     "uploadAFile": "Last opp valgfri fil",
     "orDragAndDrop": "eller dra og slipp",
-    "noBio": "Brukeren har ikke skrevet en biografi ennå."
-  },
-  "reusables": {
+    "noBio": "Brukeren har ikke skrevet en biografi ennå.",
     "modified": "Sist endret"
   }
 }

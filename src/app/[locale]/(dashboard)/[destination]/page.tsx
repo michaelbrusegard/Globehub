@@ -142,6 +142,9 @@ export default async function Destination({
             className='mb-6 text-lg'
             createdAt={destination.createdAt}
             modifiedAt={destination.modifiedAt}
+            t={{
+              modified: t('modified'),
+            }}
           />
         </div>
       </section>

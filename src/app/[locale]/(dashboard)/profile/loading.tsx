@@ -1,6 +1,8 @@
 import { Button, Skeleton } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 
+import { ProfileTabsSkeleton } from '@/components/profile/ProfileTabsSkeleton';
+
 export default function ProfileLoading() {
   const t = useTranslations('profile');
   return (
@@ -22,6 +24,13 @@ export default function ProfileLoading() {
           <Skeleton className='mx-2 my-2 h-4 w-4/5 rounded-full' />
         </div>
       </div>
+      <ProfileTabsSkeleton
+        t={{
+          destinations: t('destinations'),
+          reviews: t('reviews'),
+          favorites: t('favorites'),
+        }}
+      />
     </>
   );
 }

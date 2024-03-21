@@ -1,15 +1,18 @@
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter } from 'next-intl';
 
 function Time({
   className,
   createdAt,
   modifiedAt,
+  t,
 }: {
   className?: string;
   createdAt: Date;
   modifiedAt: Date | null;
+  t: {
+    modified: string;
+  };
 }) {
-  const t = useTranslations('reusables');
   const format = useFormatter();
   return (
     <div className={className}>
@@ -26,7 +29,7 @@ function Time({
         <>
           {' '}
           <span className='whitespace-nowrap italic text-default-500'>
-            {t('modified') + ': '}
+            {t.modified + ': '}
             <time dateTime={modifiedAt.toISOString()}>
               {format.dateTime(modifiedAt, {
                 year: 'numeric',
