@@ -9,12 +9,12 @@ import { formatRating } from '@/lib/utils';
 function DestinationCard({
   destination,
 }: {
-  destination: Destination & { averageRating: number | null };
+  destination: Destination & { averageRating: number };
 }) {
   const t = useTranslations('home');
   const rating =
-    destination.averageRating !== 0
-      ? formatRating(destination.averageRating!)
+    destination.averageRating > 0
+      ? formatRating(destination.averageRating)
       : null;
   return (
     <Card
@@ -31,7 +31,7 @@ function DestinationCard({
             aria-disabled='true'
           />
 
-          {destination.averageRating !== 0 ? (
+          {rating ? (
             <span className='self-end' aria-label={t('rating') + ': ' + rating}>
               {rating}
             </span>

@@ -26,7 +26,7 @@ type ThumbProps = {
 
 function Thumb({ selected, imageSrc, index, onClick }: ThumbProps) {
   return (
-    <div className='flex-shrink-0'>
+    <div className='shrink-0'>
       <Button
         className={cn(
           'm-0 block h-full w-fit gap-0 bg-transparent p-0 opacity-50 blur-[2px] transition-opacity data-[focus-visible=true]:opacity-hover',
@@ -38,7 +38,7 @@ function Thumb({ selected, imageSrc, index, onClick }: ThumbProps) {
         onPress={onClick}
       >
         <Image
-          className='h-14 w-full object-cover'
+          className='aspect-video h-14 object-cover'
           radius='md'
           as={NextImage}
           alt={index + ''}
@@ -152,12 +152,14 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
   }, [mainApi, onSelect, tweenParallax, setTweenNodes, setTweenFactor]);
 
   return (
-    <div className={cn('mx-auto max-w-3xl overflow-hidden', className)}>
+    <div
+      className={cn('mx-auto max-w-3xl overflow-hidden rounded-md', className)}
+    >
       <div ref={mainRef}>
         <div className='-ml-4 flex touch-manipulation'>
           {destination.images.map((imageSrc, index) => (
             <div className='w-full flex-none pl-4' key={index}>
-              <div className='overflow-hidden rounded-sm'>
+              <div className='overflow-hidden rounded-md'>
                 <div className='parallax'>
                   <Image
                     className='h-auto w-full'

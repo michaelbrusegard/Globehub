@@ -3,22 +3,35 @@ import { faker } from '@faker-js/faker';
 import { sql } from '@/lib/db';
 
 const SEED_RECORD_COUNT = 32;
-const WORLD_REGION_KEYWORDS = [
-  'Africa',
-  'Asia',
-  'Europe',
-  'Oceania',
-  'North America',
-  'South America',
+const WORLD_REGIONS = [
+  'africa',
+  'asia',
+  'europe',
+  'oceania',
+  'northAmerica',
+  'southAmerica',
 ];
-const KEYWORDS = [
-  'City',
-  'Nature',
-  'Beach',
-  'Mountain',
-  'Landmark',
-  'Culture',
-  'Skyline',
+const KEYWORD_NAMES = [
+  'By',
+  'Natur',
+  'Strand',
+  'Fjell',
+  'Landemerke',
+  'Kultur',
+  'Himmel',
+  'Eventyr',
+  'Historisk',
+  'Luksus',
+  'Budsjett',
+  'Familie',
+  'Alene',
+  'Natteliv',
+  'Mat',
+  'Butikk',
+  'Dyreliv',
+  'Fottur',
+  'Ski',
+  'Festival',
 ];
 
 function toCamelCase(str: string) {
@@ -44,8 +57,7 @@ async function seedUsers() {
 }
 
 async function seedKeywords() {
-  const keywords = [...WORLD_REGION_KEYWORDS, ...KEYWORDS];
-  for (const keyword of keywords) {
+  for (const keyword of KEYWORD_NAMES) {
     await sql`
       INSERT INTO keywords (name)
       VALUES (${keyword})
@@ -57,21 +69,15 @@ async function seedDestinations() {
   for (let i = 0; i < SEED_RECORD_COUNT; i++) {
     const name = faker.location.city();
     const userId = Math.ceil(Math.random() * SEED_RECORD_COUNT);
-    const content = faker.lorem.paragraphs(10);
-    const exclusiveContent = faker.lorem.paragraph();
+    const content = faker.lorem.paragraphs(20);
+    const exclusiveContent = faker.lorem.paragraphs(10);
     const latitude = faker.location.latitude();
     const longitude = faker.location.longitude();
-    const regionKeyword =
-      WORLD_REGION_KEYWORDS[
-        Math.floor(Math.random() * WORLD_REGION_KEYWORDS.length)
-      ];
-
-    const otherKeywords = KEYWORDS.filter(() => Math.random() < 0.5).slice(
-      0,
-      3,
-    );
-    const category =
-      toCamelCase(regionKeyword!) + ',' + toCamelCase(otherKeywords[0]!);
+    const worldRegion =
+      WORLD_REGIONS[Math.floor(Math.random() * WORLD_REGIONS.length)]!;
+    const categoryKeyword =
+      KEYWORD_NAMES[Math.floor(Math.random() * KEYWORD_NAMES.length)]!;
+    const category = worldRegion + ',' + toCamelCase(categoryKeyword);
     const images = Array.from(
       { length: Math.floor(Math.random() * 8) + 3 },
       () => faker.image.urlLoremFlickr({ category: category }),
@@ -80,17 +86,25 @@ async function seedDestinations() {
     const imagesArrayString = `{${images.map((image) => `"${image.replace(/"/g, '""')}"`).join(',')}}`;
 
     const [destination]: Array<{ id: number }> = await sql`
-        INSERT INTO destinations (user_id, name, content, exclusive_content, location, images)
-        VALUES (${userId}, ${name}, ${content}, ${exclusiveContent}, POINT(${latitude}, ${longitude}), ${imagesArrayString})
+        INSERT INTO destinations (user_id, name, content, exclusive_content, location, world_region, images)
+        VALUES (${userId}, ${name}, ${content}, ${exclusiveContent}, POINT(${latitude}, ${longitude}), ${worldRegion}, ${imagesArrayString})
         RETURNING id
       `;
 
     const destinationId = destination!.id;
 
-    const allKeywords = [regionKeyword, ...otherKeywords];
-    for (const keyword of allKeywords) {
+    const keywordsToAdd = [categoryKeyword];
+    for (let i = 0; i < 5; i++) {
+      const randomKeyword =
+        KEYWORD_NAMES[Math.floor(Math.random() * KEYWORD_NAMES.length)]!;
+      if (!keywordsToAdd.includes(randomKeyword)) {
+        keywordsToAdd.push(randomKeyword);
+      }
+    }
+
+    for (const keyword of keywordsToAdd) {
       const [keywordRecord]: Array<{ id: number }> = await sql`
-        SELECT id FROM keywords WHERE name = ${keyword!}
+        SELECT id FROM keywords WHERE name = ${keyword}
       `;
 
       if (keywordRecord) {

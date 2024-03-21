@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/react';
-import { Divider } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 

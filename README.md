@@ -12,6 +12,7 @@ Here is a list of documentation to get started:
 - [Next-themes](https://github.com/pacocoursey/next-themes) - Dark mode
 - [NextUI](https://nextui.org/docs/guide/introduction) - Reusable UI components
 - [Postgres.js](https://github.com/porsager/postgres) - This is a PostgreSQL client used to interact with the database using SQL.
+- [OpenWeatherMap](https://openweathermap.org/current) - Current Weather API used to get the current weather for a location.
 
 ### Other resources
 
@@ -93,6 +94,12 @@ For accesing the logs of the database you can run the following command:
 
 ```bash
 bun run db:logs
+```
+
+For toggling the role of your user with the specified email between admin and user you can run the following command:
+
+```bash
+bun run db:admin YOUR_USER_EMAIL
 ```
 
 ### Local storage

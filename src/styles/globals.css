@@ -14,4 +14,65 @@
   ::-moz-selection {
     @apply bg-secondary/50;
   }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.leaflet-bar {
+  @apply space-y-1 !border-none;
+}
+
+.leaflet-bar a {
+  @apply !size-10 select-none !rounded-medium !border-medium !border-default !bg-default-100 !text-default-foreground subpixel-antialiased !shadow-sm transition-transform-colors-opacity hover:opacity-hover focus:outline-none focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-focus active:scale-[0.97] motion-reduce:transition-none;
+}
+
+.leaflet-bar a:last-child {
+  border-bottom: var(--nextui-border-width-medium) solid
+    hsl(
+      var(--nextui-default) /
+        var(--nextui-default-opacity, var(--tw-border-opacity))
+    ) !important;
+}
+
+.leaflet-disabled {
+  @apply !cursor-default !opacity-disabled;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply !inline-flex !w-full !flex-col !items-center !justify-center !rounded-large !bg-content1 !p-1 !text-sm !text-content1-foreground subpixel-antialiased !shadow-medium outline-none;
+}
+
+.leaflet-popup-tip {
+  @apply !bg-content1 !shadow-small;
+}
+
+.leaflet-popup-close-button {
+  @apply select-none !rounded-md transition-transform focus:outline-none focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-focus active:scale-[0.97] motion-reduce:transition-none;
+}
+
+.leaflet-control-attribution {
+  @apply rounded-tl-md !bg-default-100 !text-default-foreground;
+}
+
+.leaflet-control-attribution a {
+  @apply !z-10 !inline-flex items-center rounded-medium !text-xs !text-primary !no-underline outline-none transition-opacity tap-highlight-transparent hover:!opacity-80 focus-visible:!z-10 focus-visible:!outline-2 focus-visible:!outline-focus active:!opacity-disabled;
+}
+
+.leaflet-bottom {
+  @apply !z-0;
+}
+
+.leaflet-pane,
+.leaflet-top {
+  @apply !z-0;
 }
