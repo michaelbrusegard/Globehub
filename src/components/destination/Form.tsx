@@ -78,6 +78,7 @@ type FormProps = {
     delete: string;
     deleteConfirmation: string;
     deleteDestination: string;
+    noKeywordsFound: string;
   };
 };
 
@@ -413,6 +414,7 @@ function Form({
               keywordDuplicate: t.keywordDuplicate,
               keywordNoSpaces: t.keywordNoSpaces,
               keywordFirstLetterCapital: t.keywordFirstLetterCapital,
+              noKeywordsFound: t.noKeywordsFound,
             }}
             errorMessage={
               submissionAttempts > 0 &&

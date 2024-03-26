@@ -442,6 +442,7 @@ export default async function EditDestination({
           name: destination.name,
         }),
         deleteDestination: t('deleteDestination'),
+        noKeywordsFound: t('noKeywordsFound'),
       }}
     />
   );

@@ -29,6 +29,7 @@ type KeywordFormFieldProps = {
     keywordNoSpaces: string;
     keywordDuplicate: string;
     keywordFirstLetterCapital: string;
+    noKeywordsFound: string;
   };
 };
 
@@ -86,6 +87,9 @@ function KeywordFormField({
           onBlur={handleBlur}
           allowsCustomValue
           inputValue={newKeyword}
+          listboxProps={{
+            emptyContent: t.noKeywordsFound,
+          }}
           onInputChange={(value) => {
             setNewKeyword(value);
             const result = validateKeyword({

@@ -111,7 +111,7 @@ export default async function Home({
             selectKeywords: t('selectKeywords'),
             selectWorldRegion: t('selectWorldRegion'),
             worldRegion: t('worldRegion'),
-            keywordSearchParam: t('keywords'),
+            noKeywordsFound: t('noKeywordsFound'),
           }}
         />
         <FilterGrid

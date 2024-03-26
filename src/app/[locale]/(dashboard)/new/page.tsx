@@ -268,6 +268,7 @@ export default async function NewDestination({
         delete: '',
         deleteConfirmation: '',
         deleteDestination: '',
+        noKeywordsFound: t('noKeywordsFound'),
       }}
     />
   );

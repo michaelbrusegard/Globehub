@@ -20,14 +20,14 @@ type FilterProps = {
     selectKeywords: string;
     selectWorldRegion: string;
     worldRegion: string;
-    keywordSearchParam: string;
+    noKeywordsFound: string;
   };
 };
 
 function Filters({ keywords, worldRegions, t }: FilterProps) {
   const [keyword, setKeyword] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useQueryState(
-    t.keywordSearchParam,
+    t.keywords,
     parseAsArrayOf<string>(parseAsString, ';')
       .withDefault([])
       .withOptions({ shallow: false, clearOnDefault: true }),
@@ -79,6 +79,9 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
         <Autocomplete
           className='w-full'
           label={t.keywords}
+          listboxProps={{
+            emptyContent: t.noKeywordsFound,
+          }}
           placeholder={t.selectKeywords}
           size='sm'
           inputValue={keyword}
