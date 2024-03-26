@@ -58,6 +58,13 @@ export default async function Home({
     {},
   );
 
+  const reversedWorldRegionTranslations = Object.entries(
+    worldRegionTranslations,
+  ).reduce((acc: Record<string, string>, [key, value]) => {
+    acc[value] = key;
+    return acc;
+  }, {});
+
   const [result]: { count: number }[] =
     await sql`SELECT COUNT(*) as count FROM destinations;`;
 
@@ -65,18 +72,17 @@ export default async function Home({
 
   const searchParamsCache = createSearchParamsCache({
     [t('page')]: parseAsInteger.withDefault(1),
-    [t('keywordSearchParam')]: parseAsArrayOf<string>(
-      parseAsString,
-      ';',
-    ).withDefault([]),
+    [t('keywords')]: parseAsArrayOf<string>(parseAsString, ';').withDefault([]),
     [t('worldRegion')]: parseAsString.withDefault(''),
   });
 
   searchParamsCache.parse(searchParams);
 
   const page = searchParamsCache.get(t('page')) as number;
-  const keywords = searchParamsCache.get(t('keywordSearchParam')) as string[];
+  const keywords = searchParamsCache.get(t('keywords')) as string[];
   const worldRegion = searchParamsCache.get(t('worldRegion')) as string;
+
+  const worldRegionKey = reversedWorldRegionTranslations[worldRegion];
 
   const pageSize = 5;
 
@@ -105,12 +111,12 @@ export default async function Home({
             selectKeywords: t('selectKeywords'),
             selectWorldRegion: t('selectWorldRegion'),
             worldRegion: t('worldRegion'),
-            keywordSearchParam: t('keywordSearchParam'),
+            keywordSearchParam: t('keywords'),
           }}
         />
         <FilterGrid
           filterKeywords={keywords}
-          filterWorldRegion={worldRegion}
+          filterWorldRegion={worldRegionKey}
           worldRegions={worldRegionTranslations}
           pageSize={pageSize}
         />

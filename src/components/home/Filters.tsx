@@ -30,11 +30,13 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
     t.keywordSearchParam,
     parseAsArrayOf<string>(parseAsString, ';')
       .withDefault([])
-      .withOptions({ shallow: false }),
+      .withOptions({ shallow: false, clearOnDefault: true }),
   );
   const [worldRegion, setWorldRegion] = useQueryState(
     t.worldRegion,
-    parseAsString.withDefault('').withOptions({ shallow: false }),
+    parseAsString
+      .withDefault('')
+      .withOptions({ shallow: false, clearOnDefault: true }),
   );
 
   function handleKeywordChange(key?: string) {
@@ -68,8 +70,8 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
           selectionMode='single'
           defaultSelectedKeys={worldRegion ? [worldRegion] : undefined}
         >
-          {Object.entries(worldRegions).map(([key, value]) => (
-            <SelectItem key={key} value={key}>
+          {Object.entries(worldRegions).map(([_, value]) => (
+            <SelectItem key={value} value={value}>
               {value}
             </SelectItem>
           ))}

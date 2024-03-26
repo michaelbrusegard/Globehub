@@ -11,13 +11,16 @@ type DestinationsPaginationProps = {
 function DestinationsPagination({ t, ...props }: DestinationsPaginationProps) {
   const [page, setPage] = useQueryState(
     t.page,
-    parseAsInteger.withDefault(1).withOptions({ shallow: false }),
+    parseAsInteger
+      .withDefault(1)
+      .withOptions({ shallow: false, clearOnDefault: true }),
   );
 
   return (
     <Pagination
       page={page}
       onChange={(page) => {
+        if (page === 0) return;
         void setPage(page);
       }}
       {...props}
