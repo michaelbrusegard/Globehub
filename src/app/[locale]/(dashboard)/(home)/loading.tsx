@@ -1,14 +1,14 @@
 import { Pagination, Skeleton } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 
-import { TopDestinationsGridSkeleton } from '@/components/home/TopDestinationsGridSkeleton';
+import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
 
 export default function HomeLoading() {
   const t = useTranslations('home');
   return (
     <>
       <div className='flex flex-col items-center'>
-        <TopDestinationsGridSkeleton />
+        <DestinationsGridSkeleton />
         <Pagination
           className='my-6'
           total={5}

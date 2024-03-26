@@ -8,10 +8,10 @@ import {
 
 import { type Keyword, sql } from '@/lib/db';
 
+import { DestinationsGrid } from '@/components/home/DestinationsGrid';
 import { DestinationsPagination } from '@/components/home/DestinationsPagination';
 import { FilterGrid } from '@/components/home/FilterGrid';
 import { Filters } from '@/components/home/Filters';
-import { TopDestinationsGrid } from '@/components/home/TopDestinationsGrid';
 
 export default async function Home({
   params: { locale },
@@ -89,7 +89,7 @@ export default async function Home({
   return (
     <>
       <div className='flex flex-col items-center'>
-        <TopDestinationsGrid page={page} pageSize={pageSize} />
+        <DestinationsGrid page={page} pageSize={pageSize} />
         <DestinationsPagination
           className='my-6'
           t={{ page: t('page') }}

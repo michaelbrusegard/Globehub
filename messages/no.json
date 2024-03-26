@@ -48,11 +48,11 @@
     "modified": "Sist endret"
   },
   "home": {
-    "title": "Topp destinasjoner",
-    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere.",
+    "title": "Alle destinasjoner",
+    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere eller alfabetisk.",
     "noReviews": "Ingen anmeldelser",
     "rating": "Vurdering",
-    "page": "side",
+    "page": "Side",
     "keywords": "Nøkkelord",
     "worldRegion": "Verdensdel",
     "worldRegionEnum": "{region, select, africa {Afrika} northAmerica {Nord-Amerika} asia {Asia} europe {Europa} oceania {Oseania} southAmerica {Sør-Amerika} other {Ukjent verdensdel}}",

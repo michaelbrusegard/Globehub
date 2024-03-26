@@ -1,9 +1,10 @@
 import { type Destination, sql } from '@/lib/db';
 import { cn } from '@/lib/utils';
+import { seededRandom } from '@/lib/utils';
 
 import { DestinationCard } from '@/components/home/DestinationCard';
 
-async function TopDestinationsGrid({
+async function DestinationsGrid({
   page,
   pageSize,
 }: {
@@ -29,8 +30,8 @@ async function TopDestinationsGrid({
     3: 4,
     4: 3,
   };
-  const randomXs = [0, 2, 4][Math.floor(Math.random() * 3)];
-  const randomSm = [0, 1, 3, 4][Math.floor(Math.random() * 4)];
+  const randomXs = [0, 2, 4][Math.floor(seededRandom(page) * 3)];
+  const randomSm = [0, 1, 3, 4][Math.floor(seededRandom(page + 1) * 4)];
   const randomSmNext =
     randomSmNextMap[randomSm as keyof typeof randomSmNextMap];
   return (
@@ -61,4 +62,4 @@ async function TopDestinationsGrid({
   );
 }
 
-export { TopDestinationsGrid };
+export { DestinationsGrid };

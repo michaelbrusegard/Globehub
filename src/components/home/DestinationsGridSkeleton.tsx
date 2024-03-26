@@ -1,16 +1,17 @@
 import { Skeleton } from '@nextui-org/react';
 
 import { cn } from '@/lib/utils';
+import { seededRandom } from '@/lib/utils';
 
-function TopDestinationsGridSkeleton() {
+function DestinationsGridSkeleton() {
   const randomSmNextMap = {
     0: 1,
     1: 0,
     3: 4,
     4: 3,
   };
-  const randomXs = [0, 2, 4][Math.floor(Math.random() * 3)];
-  const randomSm = [0, 1, 3, 4][Math.floor(Math.random() * 4)];
+  const randomXs = [0, 2, 4][Math.floor(seededRandom(1) * 3)];
+  const randomSm = [0, 1, 3, 4][Math.floor(seededRandom(2) * 4)];
   const randomSmNext =
     randomSmNextMap[randomSm as keyof typeof randomSmNextMap];
   return (
@@ -36,4 +37,4 @@ function TopDestinationsGridSkeleton() {
   );
 }
 
-export { TopDestinationsGridSkeleton };
+export { DestinationsGridSkeleton };

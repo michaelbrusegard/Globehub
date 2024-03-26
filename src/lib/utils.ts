@@ -23,4 +23,9 @@ function formatRating(rating: number): string {
     : formattedRating;
 }
 
-export { cn, getInitials, formatRating };
+function seededRandom(seed: number) {
+  const x = Math.sin(seed - 1) * 69000 - 420;
+  return x - Math.floor(x);
+}
+
+export { cn, getInitials, formatRating, seededRandom };
