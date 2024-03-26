@@ -44,8 +44,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Build
 
-Make sure when running build that `NODE_ENV` is set to `production` in the `.env`. This is to make sure that the build is optimized for production.
-
 When you build the project, you prerender all the Server Side Generated (SSG) pages. This makes the site load faster and perform better and behave like it will when it is deployed. When serving the built project it will not hot reload when you make changes to the code like it does in development mode.
 
 You can build the project with the following command:
@@ -180,7 +178,7 @@ We are using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.
 
 - To keep the code as consistent as possible use functions for react components or hooks instead of const variables with arrow function syntax. An exception is when using the forwardRef hook or when creating compound components.
 - Only use default export for pages or layouts etc. since it is required by Next.js. For everything else use named exports. This is to make it easier to find the components in the codebase or change them without ending up with different names for the same component.
-- Use `type` instead of `interface` for typescript types. This is to keep the code consistent and to make it easier to read. Aldso `type` is more flexible than `interface` since it can be used for unions and intersections.
+- Use `type` instead of `interface` for typescript types. This is to keep the code consistent and to make it easier to read. Also `type` is more flexible than `interface` since it can be used for unions and intersections.
 
 ## Scrum
 
