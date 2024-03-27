@@ -118,7 +118,7 @@ export default async function Home({
           filterKeywords={keywords}
           filterWorldRegion={worldRegionKey}
           worldRegions={worldRegionTranslations}
-          pageSize={pageSize}
+          pageSize={3}
         />
       </div>
     </>

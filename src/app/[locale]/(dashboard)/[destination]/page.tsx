@@ -14,11 +14,24 @@ import { Weather } from '@/components/destination/Weather';
 import { Time } from '@/components/reusables/Time';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
 
+export async function generateStaticParams() {
+  const destinations: { id: number }[] = await sql`
+    SELECT id 
+    FROM destinations
+  `;
+
+  return destinations.map(({ id }) => ({
+    destination: id.toString(),
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: { destination: string; locale: string };
 }) {
+  if (!Number.isInteger(Number(params.destination))) notFound();
+
   const [result]: { name: string }[] = await sql`
     SELECT name 
     FROM destinations 

@@ -6,6 +6,7 @@ import {
   Chip,
   Select,
   SelectItem,
+  Spacer,
 } from '@nextui-org/react';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import { useState } from 'react';
@@ -119,6 +120,7 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
             {keyword}
           </Chip>
         ))}
+        {selectedKeywords.length === 0 && <Spacer className='mb-[3px]' y={6} />}
       </div>
     </>
   );
