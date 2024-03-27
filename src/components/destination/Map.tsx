@@ -2,7 +2,11 @@
 
 import LocationOn from '@material-symbols/svg-400/outlined/location_on-fill.svg';
 import { useEventHandlers } from '@react-leaflet/core';
-import { type LeafletMouseEvent, type Map as MapType, divIcon } from 'leaflet';
+import L, {
+  type LeafletMouseEvent,
+  type Map as MapType,
+  divIcon,
+} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { renderToString } from 'react-dom/server';
@@ -54,10 +58,24 @@ function MinimapBounds({
 
   const [bounds, setBounds] = useState(parentMap.getBounds());
   const onChange = useCallback(() => {
-    setBounds(parentMap.getBounds());
+    let newBounds = parentMap.getBounds();
+    let west = newBounds.getWest();
+    let east = newBounds.getEast();
+
+    if (west < -180) {
+      west = -180;
+    }
+    if (east > 180) {
+      east = 180;
+    }
+    newBounds = new L.LatLngBounds(
+      new L.LatLng(newBounds.getSouth(), west),
+      new L.LatLng(newBounds.getNorth(), east),
+    );
+
+    setBounds(newBounds);
     minimap.setView(parentMap.getCenter(), zoom);
   }, [minimap, parentMap, zoom]);
-
   const handlers = useMemo(
     () => ({ move: onChange, zoom: onChange }),
     [onChange],
@@ -80,7 +98,7 @@ function MinimapBounds({
 function MinimapControl({ zoom }: { zoom?: number }) {
   const parentMap = useMap();
   const mapZoom = zoom ?? 0;
-
+  const center = parentMap.getCenter();
   useEffect(() => {
     const element = document.getElementById('minimap');
     if (element) {
@@ -91,8 +109,8 @@ function MinimapControl({ zoom }: { zoom?: number }) {
   const minimap = useMemo(
     () => (
       <MapContainer
-        className='h-20 w-20 rounded-md border-medium border-default-100 dark:bg-[#303030]'
-        center={parentMap.getCenter()}
+        className='size-20 rounded-md border-medium border-default-100 dark:bg-[#303030]'
+        center={center}
         zoom={mapZoom}
         dragging={false}
         doubleClickZoom={false}
@@ -100,15 +118,17 @@ function MinimapControl({ zoom }: { zoom?: number }) {
         attributionControl={false}
         zoomControl={false}
         id='minimap'
+        worldCopyJump={false}
       >
         <TileLayer
-          className='dark:brightness-[.6] dark:contrast-[3] dark:hue-rotate-[200deg] dark:invert dark:saturate-[.3] dark:filter'
+          className='-translate-y-6 dark:brightness-[.6] dark:contrast-[3] dark:hue-rotate-[200deg] dark:invert dark:saturate-[.3] dark:filter'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          noWrap
         />
         <MinimapBounds parentMap={parentMap} zoom={mapZoom} />
       </MapContainer>
     ),
-    [parentMap, mapZoom],
+    [center, mapZoom, parentMap],
   );
 
   return (
@@ -117,6 +137,7 @@ function MinimapControl({ zoom }: { zoom?: number }) {
     </div>
   );
 }
+
 function Map({ location, popup }: MapProps) {
   const coordinates = location.slice(1, -1).split(',');
   const [longitude, latitude] = coordinates.map((coordinate) =>
@@ -126,25 +147,28 @@ function Map({ location, popup }: MapProps) {
   const markerIcon = divIcon({
     html: renderToString(
       <LocationOn
-        className='size-10 fill-danger transition-transform active:scale-[0.9]'
+        className='size-10 -translate-y-1/2 fill-danger transition-transform active:scale-[0.9]'
         aria-hidden='true'
       />,
     ),
     className:
       'size-10 rounded-medium focus:outline-none focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus',
     iconSize: [40, 40],
-    iconAnchor: [20, 40],
+    iconAnchor: [20, -2],
   });
   return (
     <MapContainer
       className='aspect-video w-full rounded-md focus:outline-none focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus dark:bg-[#303030]'
       center={[latitude!, longitude!]}
       zoom={10}
+      minZoom={2}
+      worldCopyJump={false}
     >
       <TileLayer
         className='dark:brightness-[.6] dark:contrast-[3] dark:hue-rotate-[200deg] dark:invert dark:saturate-[.3] dark:filter'
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        noWrap
       />
       <SetViewOnClick animateRef={animateRef} />
       <MinimapControl />

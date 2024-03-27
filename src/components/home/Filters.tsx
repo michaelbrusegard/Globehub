@@ -82,7 +82,6 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
           ))}
         </Select>
         <Autocomplete
-          className='w-full'
           label={t.keywords}
           listboxProps={{
             emptyContent: t.noKeywordsFound,
