@@ -29,9 +29,9 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
   const [keyword, setKeyword] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useQueryState(
     t.keywords,
-    parseAsArrayOf<string>(parseAsString, ';')
-      .withDefault([])
-      .withOptions({ shallow: false, clearOnDefault: true }),
+    parseAsArrayOf<string>(parseAsString, ';').withOptions({
+      shallow: false,
+    }),
   );
   const [worldRegion, setWorldRegion] = useQueryState(
     t.worldRegion,
@@ -46,6 +46,10 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
       return;
     }
     void setSelectedKeywords((prev) => {
+      if (prev === null) {
+        return [newKeyword];
+      }
+
       if (!prev.includes(newKeyword)) {
         return [...prev, newKeyword];
       }
@@ -107,20 +111,23 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
         </Autocomplete>
       </div>
       <div className='flex w-full flex-wrap gap-2'>
-        {selectedKeywords.map((keyword) => (
+        {selectedKeywords?.map((keyword) => (
           <Chip
             key={keyword}
             size='md'
             onClose={() => {
               void setSelectedKeywords((prev) => {
-                return prev.filter((k) => k !== keyword);
+                const newKeywords = prev?.filter((k) => k !== keyword);
+                return newKeywords && newKeywords.length > 0
+                  ? newKeywords
+                  : null;
               });
             }}
           >
             {keyword}
           </Chip>
         ))}
-        {selectedKeywords.length === 0 && <Spacer className='mb-[3px]' y={6} />}
+        {!selectedKeywords && <Spacer className='mb-[3px]' y={6} />}
       </div>
     </>
   );
