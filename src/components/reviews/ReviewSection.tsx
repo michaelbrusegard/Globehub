@@ -41,8 +41,8 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
     `;
 
   return (
-    <section>
-      <div className='flex flex-row justify-between'>
+    <section id={t('title')}>
+      <div className='flex flex-col justify-between sm:flex-row'>
         <span className='prose dark:prose-invert'>
           <h1 className='mb-2'>{t('title')}</h1>
         </span>

@@ -2,6 +2,7 @@
 
 import { Pagination, type PaginationProps } from '@nextui-org/react';
 import { parseAsInteger, useQueryState } from 'nuqs';
+import { useEffect, useState } from 'react';
 
 type DestinationsPaginationProps = {
   t: {
@@ -15,6 +16,19 @@ function DestinationsPagination({ t, ...props }: DestinationsPaginationProps) {
       .withDefault(1)
       .withOptions({ shallow: false, clearOnDefault: true }),
   );
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    function checkWindowSize() {
+      setIsCompact(window.matchMedia('(max-width: 768px)').matches);
+    }
+
+    checkWindowSize();
+    window.addEventListener('resize', checkWindowSize);
+    return () => {
+      window.removeEventListener('resize', checkWindowSize);
+    };
+  }, []);
 
   return (
     <Pagination
@@ -23,6 +37,7 @@ function DestinationsPagination({ t, ...props }: DestinationsPaginationProps) {
         if (page === 0) return;
         void setPage(page);
       }}
+      isCompact={isCompact}
       {...props}
     />
   );

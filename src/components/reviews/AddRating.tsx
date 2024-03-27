@@ -48,7 +48,7 @@ function AddRating({
           return (
             <>
               <div
-                className='h-6 w-3 cursor-pointer outline-none'
+                className='h-7 w-3.5 cursor-pointer outline-none'
                 key={index}
                 role='button'
                 tabIndex={0}
@@ -75,7 +75,7 @@ function AddRating({
                   (starIndex <= (focus || hover || rating) ? (
                     <StarFill
                       className={cn(
-                        'size-6 rounded-md',
+                        'size-7 rounded-md',
                         starIndex === hover && 'bg-default-100',
                         starIndex === focus &&
                           'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
@@ -85,7 +85,7 @@ function AddRating({
                   ) : starIndex === (focus || hover || rating) + 1 ? (
                     <StarHalfFill
                       className={cn(
-                        'size-6 rounded-md',
+                        'size-7 rounded-md',
                         starIndex - 1 === hover && 'bg-default-100',
                         starIndex - 1 === focus &&
                           'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
@@ -93,7 +93,7 @@ function AddRating({
                       aria-hidden='true'
                     />
                   ) : (
-                    <Star className='size-6 rounded-md' aria-hidden='true' />
+                    <Star className='size-7 rounded-md' aria-hidden='true' />
                   ))}
               </>
             );

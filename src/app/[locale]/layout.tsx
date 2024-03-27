@@ -1,3 +1,4 @@
+import type { Viewport } from 'next';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { Arimo, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -25,11 +26,21 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  colorScheme: 'dark light',
+  themeColor: '#004493',
+};
+
 export async function generateMetadata({
   params: { locale },
 }: Omit<LocalelayoutProps, 'children'>) {
   const t = await getTranslations({ locale, namespace: 'meta' });
   return {
+    applicationName: t('title'),
     title: {
       template: '%s | ' + t('title'),
       default: t('title'),

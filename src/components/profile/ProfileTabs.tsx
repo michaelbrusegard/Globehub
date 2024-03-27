@@ -78,6 +78,7 @@ function ProfileTabs({
                     goToDestination: t.goToDestination,
                     contributions: t.contributions,
                     modified: t.modified,
+                    reviews: t.reviews,
                   }}
                 />
               </li>

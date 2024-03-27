@@ -6,8 +6,8 @@ export default function DestinationLoading() {
   return (
     <article className='mt-12'>
       <section>
-        <div className='mb-12'>
-          <Skeleton className='mx-auto my-[3px] h-[30px] w-1/2 rounded-lg md:mx-0 md:my-0 md:h-[60px] lg:h-[72px]' />
+        <div className='mb-14 pt-0.5 md:pt-0'>
+          <Skeleton className='mx-auto my-[3px] h-[30px] w-1/2 rounded-lg md:mx-0 md:my-0 md:h-[60px] lg:h-[72px] ' />
         </div>
         <SubHeaderSkeleton className='hidden md:mb-12 md:inline-flex' />
         <div className='mb-4'>

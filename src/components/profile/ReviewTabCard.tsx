@@ -11,6 +11,7 @@ type ReviewTabCardProps = {
     goToDestination: string;
     contributions: string;
     modified: string;
+    reviews: string;
   };
 };
 
@@ -22,7 +23,7 @@ function ReviewTabCard({ review, author, t }: ReviewTabCardProps) {
           {review.name}
         </h3>
         <Link
-          href={`/${review.destinationId}`}
+          href={`/${review.destinationId}#${t.reviews}`}
           underline='hover'
           showAnchorIcon
         >

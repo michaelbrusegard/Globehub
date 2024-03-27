@@ -9,6 +9,7 @@ import { type Destination, type User, sql } from '@/lib/db';
 import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
 import { ImageCarousel } from '@/components/destination/ImageCarousel';
+import { ScrollToHash } from '@/components/destination/ScrollToHash';
 import { SubHeader } from '@/components/destination/SubHeader';
 import { Weather } from '@/components/destination/Weather';
 import { Time } from '@/components/reusables/Time';
@@ -98,6 +99,7 @@ export default async function Destination({
 
   return (
     <article className='my-12'>
+      <ScrollToHash />
       <section>
         <h1 className='mb-14 text-center text-3xl font-bold leading-tight tracking-tighter md:text-left md:text-6xl md:leading-none lg:text-7xl'>
           {destination.name}
