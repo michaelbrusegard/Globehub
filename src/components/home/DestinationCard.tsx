@@ -51,9 +51,9 @@ function Subtitle({ destination, order }: DestinationCardProps) {
           {destination.views > 0 ? (
             <span
               className='self-end'
-              aria-label={t('views') + ': ' + destination.views}
+              aria-label={t('views') + ': ' + format.number(destination.views)}
             >
-              {destination.views}
+              {format.number(destination.views)}
             </span>
           ) : (
             <span className='self-end italic'>{t('noViews')}</span>

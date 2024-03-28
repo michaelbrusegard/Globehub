@@ -5,10 +5,12 @@ import {
   parseAsInteger,
   parseAsString,
 } from 'nuqs/server';
+import { Suspense } from 'react';
 
 import { type Keyword, sql } from '@/lib/db';
 
 import { DestinationsGrid } from '@/components/home/DestinationsGrid';
+import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
 import { DestinationsPagination } from '@/components/home/DestinationsPagination';
 import { DestinationsTabs } from '@/components/home/DestinationsTabs';
 import { FilterGrid } from '@/components/home/FilterGrid';
@@ -119,7 +121,9 @@ export default async function Home({
             order: t('order'),
           }}
         />
-        <DestinationsGrid order={orderKey!} page={page} pageSize={pageSize} />
+        <Suspense fallback={<DestinationsGridSkeleton />}>
+          <DestinationsGrid order={orderKey!} page={page} pageSize={pageSize} />
+        </Suspense>
         <DestinationsPagination
           className='my-6'
           t={{ page: t('page') }}

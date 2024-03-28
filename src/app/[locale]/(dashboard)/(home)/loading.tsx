@@ -2,12 +2,16 @@ import { Pagination, Skeleton } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 
 import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
+import { DestinationsTabsSkeleton } from '@/components/home/DestinationsTabsSkeleton';
 
 export default function HomeLoading() {
   const t = useTranslations('home');
   return (
     <>
       <div className='flex flex-col items-center'>
+        <DestinationsTabsSkeleton
+          orderCriteria={['rating', 'alphabetic', 'newest', 'views']}
+        />
         <DestinationsGridSkeleton />
         <Pagination
           className='my-6'
