@@ -10,6 +10,7 @@ import { type Keyword, sql } from '@/lib/db';
 
 import { DestinationsGrid } from '@/components/home/DestinationsGrid';
 import { DestinationsPagination } from '@/components/home/DestinationsPagination';
+import { DestinationsTabs } from '@/components/home/DestinationsTabs';
 import { FilterGrid } from '@/components/home/FilterGrid';
 import { Filters } from '@/components/home/Filters';
 
@@ -65,23 +66,45 @@ export default async function Home({
     return acc;
   }, {});
 
+  const orderCriteria = ['rating', 'alphabetic', 'newest', 'views'];
+
+  const orderCriteriaTranslations = orderCriteria.reduce(
+    (acc: Record<string, string>, criteria) => {
+      acc[criteria] = t('orderCriteriaEnum', { criteria });
+      return acc;
+    },
+    {},
+  );
+
+  const reversedCriteriaTranslations = Object.entries(
+    orderCriteriaTranslations,
+  ).reduce((acc: Record<string, string>, [key, value]) => {
+    acc[value] = key;
+    return acc;
+  }, {});
+
   const [result]: { count: number }[] =
     await sql`SELECT COUNT(*) as count FROM destinations;`;
 
   const totalDestinations = result ? result.count : 0;
 
   const searchParamsCache = createSearchParamsCache({
+    [t('order')]: parseAsString.withDefault(
+      Object.values(orderCriteriaTranslations)[0]!,
+    ),
     [t('page')]: parseAsInteger.withDefault(1),
-    [t('keywords')]: parseAsArrayOf<string>(parseAsString, ';').withDefault([]),
+    [t('keywords')]: parseAsArrayOf<string>(parseAsString, ';'),
     [t('worldRegion')]: parseAsString.withDefault(''),
   });
 
   searchParamsCache.parse(searchParams);
 
+  const order = searchParamsCache.get(t('order')) as string;
   const page = searchParamsCache.get(t('page')) as number;
   const keywords = searchParamsCache.get(t('keywords')) as string[];
   const worldRegion = searchParamsCache.get(t('worldRegion')) as string;
 
+  const orderKey = reversedCriteriaTranslations[order];
   const worldRegionKey = reversedWorldRegionTranslations[worldRegion];
 
   const pageSize = 5;
@@ -89,7 +112,14 @@ export default async function Home({
   return (
     <>
       <div className='flex flex-col items-center'>
-        <DestinationsGrid page={page} pageSize={pageSize} />
+        <DestinationsTabs
+          orderCriteria={orderCriteriaTranslations}
+          t={{
+            orderDestinationsBy: t('orderDestinationsBy'),
+            order: t('order'),
+          }}
+        />
+        <DestinationsGrid order={orderKey!} page={page} pageSize={pageSize} />
         <DestinationsPagination
           className='my-6'
           t={{ page: t('page') }}

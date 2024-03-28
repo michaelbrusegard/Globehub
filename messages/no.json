@@ -49,7 +49,7 @@
   },
   "home": {
     "title": "Alle destinasjoner",
-    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene er rangert etter anmeldelser fra brukere eller alfabetisk.",
+    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene kan rangeres etter vurdering, nyeste, visninger og alfabetisk rekkefølge.",
     "noReviews": "Ingen anmeldelser",
     "rating": "Vurdering",
     "page": "Side",
@@ -60,7 +60,12 @@
     "selectWorldRegion": "Velg verdensdel",
     "filterTitle": "Filtrer destinasjoner",
     "new": "Ny",
-    "noKeywordsFound": "Ingen nøkkelord funnet."
+    "noKeywordsFound": "Ingen nøkkelord funnet.",
+    "orderDestinationsBy": "Sorter destinasjoner etter",
+    "order": "Rangering",
+    "orderCriteriaEnum": "{criteria, select, rating {Vurdering} alphabetic {Alfabetisk} newest {Nyeste} views {Visninger} other {Ukjent rangering}}",
+    "views": "Visninger",
+    "noViews": "Ingen visninger"
   },
   "destination": {
     "readTime": "{count, plural, =0 {mindre enn ett minutt} one {# minutt} other {# minutter}} lesing",

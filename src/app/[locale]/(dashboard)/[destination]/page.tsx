@@ -1,5 +1,6 @@
 import { Chip, cn } from '@nextui-org/react';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 
@@ -128,10 +129,10 @@ export default async function Destination({
                   className='self-end'
                   averageRating={destination.averageRating}
                 />
-                <span className='self-center'>
+                <Link className='self-center' href={`#${t('reviews')}`}>
                   {destination.reviewCount + ' '}
                   <small>{t('reviews')}</small>
-                </span>
+                </Link>
               </>
             ) : (
               <span className='self-end text-xl font-semibold italic'>

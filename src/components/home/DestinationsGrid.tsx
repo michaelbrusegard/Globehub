@@ -5,20 +5,29 @@ import { seededRandom } from '@/lib/utils';
 import { DestinationCard } from '@/components/home/DestinationCard';
 
 async function DestinationsGrid({
+  order,
   page,
   pageSize,
 }: {
+  order: string;
   page: number;
   pageSize: number;
 }) {
   const destinations: (Destination & { averageRating: number })[] = await sql`
+    SELECT * FROM (
       SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
       FROM destinations
       LEFT JOIN reviews ON destinations.id = reviews.destination_id
       GROUP BY destinations.id
-      ORDER BY average_rating DESC
-      LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
-    `;
+    ) as subquery
+    ORDER BY 
+      CASE WHEN ${order} = 'rating' THEN average_rating END DESC,
+      CASE WHEN ${order} = 'alphabetic' THEN name END ASC,
+      CASE WHEN ${order} = 'newest' THEN created_at END DESC,
+      CASE WHEN ${order} = 'views' THEN views END DESC,
+      CASE WHEN ${order} NOT IN ('alphabetic', 'rating', 'newest', 'views') THEN average_rating END DESC
+    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
+  `;
 
   if (!destinations) {
     throw new Error('Destinations not found');
@@ -55,7 +64,7 @@ async function DestinationsGrid({
             index === randomSmNext && 'sm:col-span-5',
           )}
         >
-          <DestinationCard destination={destination} />
+          <DestinationCard destination={destination} order={order} />
         </div>
       ))}
     </div>

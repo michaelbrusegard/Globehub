@@ -41,7 +41,7 @@ export default async function HomeHeader({
           </Button>
         )}
       </div>
-      <p className='my-4 text-content2-foreground'>{t('description')}</p>
+      <p className='mb-4 text-content2-foreground'>{t('description')}</p>
       {children}
     </>
   );
