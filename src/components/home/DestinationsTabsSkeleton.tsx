@@ -12,7 +12,7 @@ function DestinationsTabsSkeleton({
   orderCriteria,
 }: DestinationsTabsSkeletonProps) {
   return (
-    <Tabs className='mx-8 mb-2 self-start' size='sm' isDisabled>
+    <Tabs className='mx-8 mb-2 self-auto sm:self-start' size='sm' isDisabled>
       {orderCriteria.map((key) => (
         <Tab
           key={key}

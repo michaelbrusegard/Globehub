@@ -23,7 +23,7 @@ function DestinationsTabs({ orderCriteria, t }: DestinationsTabsProps) {
 
   return (
     <Tabs
-      className='mx-8 mb-2 self-start'
+      className='mx-8 mb-2 self-auto sm:self-start'
       size='sm'
       selectedKey={orderCriteria[order]}
       onSelectionChange={(key) => {

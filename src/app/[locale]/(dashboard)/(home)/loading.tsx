@@ -1,7 +1,8 @@
-import { Pagination, Skeleton } from '@nextui-org/react';
+import { Skeleton } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 
 import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
+import { DestinationsPaginationSkeleton } from '@/components/home/DestinationsPaginationSkeleton';
 import { DestinationsTabsSkeleton } from '@/components/home/DestinationsTabsSkeleton';
 
 export default function HomeLoading() {
@@ -13,13 +14,7 @@ export default function HomeLoading() {
           orderCriteria={['rating', 'alphabetic', 'newest', 'views']}
         />
         <DestinationsGridSkeleton />
-        <Pagination
-          className='my-6'
-          total={5}
-          showControls
-          isDisabled
-          color='secondary'
-        />
+        <DestinationsPaginationSkeleton />
       </div>
       <div className='mb-12'>
         <h2 className='my-4 bg-gradient-to-br from-primary to-secondary bg-clip-text font-arimo text-3xl font-bold tracking-tight text-transparent lg:text-4xl'>

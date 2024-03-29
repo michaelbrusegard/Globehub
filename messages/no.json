@@ -49,7 +49,7 @@
   },
   "home": {
     "title": "Alle destinasjoner",
-    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene kan rangeres etter vurdering, nyeste, visninger og alfabetisk rekkefølge.",
+    "description": "Utforsk de mest populære destinasjonene i verden. Destinasjonene kan rangeres etter vurdering, alfabetisk, nyeste og antall visninger.",
     "noReviews": "Ingen anmeldelser",
     "rating": "Vurdering",
     "page": "Side",
