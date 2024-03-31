@@ -5,12 +5,19 @@ import {
   CardFooter,
   CardHeader,
 } from '@nextui-org/react';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter } from 'next-intl';
 
 import type { User } from '@/lib/db';
 
-function UserCard({ user }: { user: User }) {
-  const t = useTranslations('reviews');
+type UserCardProps = {
+  user: User;
+  t: {
+    memberSince: string;
+    noBio: string;
+  };
+};
+
+function UserCard({ user, t }: UserCardProps) {
   const format = useFormatter();
 
   return (
@@ -23,7 +30,7 @@ function UserCard({ user }: { user: User }) {
               {user.name}
             </h4>
             <h5 className='text-xs tracking-tight text-default-500'>
-              {t('memberSince')}{' '}
+              {t.memberSince}{' '}
               {format.dateTime(user.createdAt, {
                 year: 'numeric',
                 month: 'short',
@@ -37,9 +44,7 @@ function UserCard({ user }: { user: User }) {
         {user.bio ? (
           <p className='pl-px text-small text-default-500'>{user.bio}</p>
         ) : (
-          <p className='pl-px text-small italic text-default-500'>
-            {t('noBio')}
-          </p>
+          <p className='pl-px text-small italic text-default-500'>{t.noBio}</p>
         )}
       </CardBody>
       <CardFooter />

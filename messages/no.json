@@ -178,6 +178,8 @@
     "uploadAFile": "Last opp valgfri fil",
     "orDragAndDrop": "eller dra og slipp",
     "noBio": "Brukeren har ikke skrevet en biografi ennå.",
-    "modified": "Sist endret"
+    "modified": "Sist endret",
+    "loadMore": "Last inn flere",
+    "loadingMoreReviews": "Laster flere anmeldelser..."
   }
 }

@@ -3,16 +3,13 @@ import { useTranslations } from 'next-intl';
 
 import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
 import { DestinationsPaginationSkeleton } from '@/components/home/DestinationsPaginationSkeleton';
-import { DestinationsTabsSkeleton } from '@/components/home/DestinationsTabsSkeleton';
 
 export default function HomeLoading() {
   const t = useTranslations('home');
   return (
     <>
       <div className='flex flex-col items-center'>
-        <DestinationsTabsSkeleton
-          orderCriteria={['rating', 'alphabetic', 'newest', 'views']}
-        />
+        <Skeleton className='mx-8 mb-2 h-9 w-52 self-auto rounded-medium p-1 sm:self-start' />
         <DestinationsGridSkeleton />
         <DestinationsPaginationSkeleton />
       </div>

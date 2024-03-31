@@ -22,6 +22,8 @@ type ReviewCardProps = {
   t: {
     contributions: string;
     modified: string;
+    memberSince?: string;
+    noBio?: string;
   };
 };
 
@@ -55,7 +57,11 @@ function ReviewCard({
         ) : (
           <AuthorPopover
             author={author}
-            t={{ contributions: t.contributions }}
+            t={{
+              contributions: t.contributions,
+              memberSince: t.memberSince ?? '',
+              noBio: t.noBio ?? '',
+            }}
           />
         )}
         <Time

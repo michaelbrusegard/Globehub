@@ -1,64 +1,110 @@
-import { getTranslations } from 'next-intl/server';
+'use client';
 
-import { type Destination, type Review, type User } from '@/lib/db';
-import { sql } from '@/lib/db';
+import { Button, Spinner } from '@nextui-org/react';
+import { useEffect, useState, useTransition } from 'react';
+
+import { type Review, type User } from '@/lib/db';
 
 import { ReviewCard } from '@/components/reviews/ReviewCard';
 
-async function Reviews({ destination }: { destination: Destination }) {
-  const t = await getTranslations('reviews');
-  const reviews: Review[] = await sql`
-    SELECT *
-    FROM reviews
-    WHERE destination_id = ${destination.id}
-    ORDER BY created_at DESC;
-  `;
+type ReviewsProps = {
+  initialReviews: Review[];
+  initialAuthors: (User & { contributions: number })[];
+  getReviews: (page: number) => Promise<{
+    reviews: Review[];
+    authors: (User & { contributions: number })[];
+  }>;
+  totalReviews: number;
+  t: {
+    noReviews: string;
+    contributions: string;
+    modified: string;
+    memberSince: string;
+    noBio: string;
+    loadMore: string;
+    loadingMoreReviews: string;
+  };
+};
 
-  if (reviews.length === 0) {
-    return <span className='italic text-default-500'>{t('noReviews')}</span>;
+function Reviews({
+  initialReviews,
+  initialAuthors,
+  totalReviews,
+  getReviews,
+  t,
+}: ReviewsProps) {
+  const [page, setPage] = useState(2);
+  const [isPending, startTransition] = useTransition();
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [authors, setAuthors] =
+    useState<(User & { contributions: number })[]>(initialAuthors);
+
+  useEffect(() => {
+    setReviews(initialReviews);
+    setAuthors(initialAuthors);
+    setPage(2);
+  }, [initialReviews, initialAuthors]);
+
+  if (totalReviews === 0) {
+    return <span className='italic text-default-500'>{t.noReviews}</span>;
   }
 
-  const authorIds = reviews.map((review) => review.userId);
+  async function fetchReviews() {
+    startTransition(async () => {
+      const { reviews: newReviews, authors: newAuthors } =
+        await getReviews(page);
 
-  const authors: (User & { contributions: number })[] = await sql`
-    SELECT users.*, COALESCE(reviews.review_count, 0) + COALESCE(destinations.destination_count, 0) as contributions
-    FROM users
-    LEFT JOIN (
-      SELECT user_id, COUNT(*) as review_count
-      FROM reviews
-      GROUP BY user_id
-    ) reviews ON users.id = reviews.user_id
-    LEFT JOIN (
-      SELECT user_id, COUNT(*) as destination_count
-      FROM destinations
-      GROUP BY user_id
-    ) destinations ON users.id = destinations.user_id
-    WHERE users.id = ANY(${sql.array(authorIds)}::integer[]);
-  `;
+      setReviews((prevReviews) => [...prevReviews, ...newReviews]);
+      setAuthors((prevAuthors) => [...prevAuthors, ...newAuthors]);
+
+      setPage((prevPage) => prevPage + 1);
+    });
+  }
 
   return (
-    <ul className='flex flex-col gap-2'>
-      {reviews.map((review) => {
-        const author = authors.find((author) => author.id === review.userId);
+    <>
+      <ul className='flex flex-col gap-2'>
+        {reviews.map((review) => {
+          const author = authors.find((author) => author.id === review.userId);
 
-        if (!author) {
-          throw new Error('Author not found');
-        }
+          if (!author) {
+            throw new Error('Author not found');
+          }
 
-        return (
-          <li key={`${review.userId}-${review.destinationId}`}>
-            <ReviewCard
-              review={review}
-              author={author}
-              t={{
-                contributions: t('contributions'),
-                modified: t('modified'),
+          return (
+            <li key={`${review.userId}-${review.destinationId}`}>
+              <ReviewCard
+                review={review}
+                author={author}
+                t={{
+                  contributions: t.contributions,
+                  modified: t.modified,
+                  memberSince: t.memberSince,
+                  noBio: t.noBio,
+                }}
+              />
+            </li>
+          );
+        })}
+      </ul>
+      <div className='m-4 flex min-h-56 flex-col justify-start gap-2'>
+        {isPending ? (
+          <Spinner color='primary' label={t.loadingMoreReviews} />
+        ) : (
+          totalReviews > reviews.length && (
+            <Button
+              className='sm:mx-auto'
+              variant='faded'
+              onPress={async () => {
+                await fetchReviews();
               }}
-            />
-          </li>
-        );
-      })}
-    </ul>
+            >
+              {t.loadMore}
+            </Button>
+          )
+        )}
+      </div>
+    </>
   );
 }
 

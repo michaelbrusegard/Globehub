@@ -18,6 +18,8 @@ function AuthorPopover({
   author: User & { contributions: number };
   t: {
     contributions: string;
+    memberSince: string;
+    noBio: string;
   };
 }) {
   return (
@@ -43,7 +45,13 @@ function AuthorPopover({
         />
       </PopoverTrigger>
       <PopoverContent className='p-1'>
-        <UserCard user={author} />
+        <UserCard
+          user={author}
+          t={{
+            memberSince: t.memberSince,
+            noBio: t.noBio,
+          }}
+        />
       </PopoverContent>
     </Popover>
   );
