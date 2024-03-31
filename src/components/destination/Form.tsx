@@ -204,7 +204,7 @@ function Form({
               label={t.worldRegion}
               selectionMode='single'
               placeholder={t.worldRegionPlaceholder}
-              defaultSelectedKeys={[state.value]}
+              defaultSelectedKeys={state.value ? [state.value] : undefined}
               onChange={(e) => {
                 handleChange(e.target.value);
               }}

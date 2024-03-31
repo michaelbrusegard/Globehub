@@ -1,20 +1,33 @@
+import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
+import Visibility from '@material-symbols/svg-400/outlined/visibility.svg';
 import { Card, CardBody, CardHeader, Image, Link } from '@nextui-org/react';
+import { useFormatter } from 'next-intl';
 import NextImage from 'next/image';
 
 import { type Destination } from '@/lib/db';
+import { formatRating } from '@/lib/utils';
 
 import { Time } from '@/components/reusables/Time';
 
 type DestinationTabCardProps = {
-  destination: Destination;
+  destination: Destination & { averageRating: number };
   t: {
     goToDestination: string;
     views: string;
     modified: string;
+    noViews: string;
+    rating: string;
+    noReviews: string;
   };
 };
 
 function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
+  const format = useFormatter();
+  const rating =
+    destination.averageRating > 0
+      ? formatRating(destination.averageRating)
+      : null;
+
   return (
     <Card>
       <CardHeader className='flex items-center justify-between gap-1'>
@@ -35,7 +48,34 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
           height={112}
         />
         <div className='space-y-2'>
-          <p>{t.views + ': ' + destination.views}</p>
+          <p className='fill-default-500 text-default-500'>
+            <div className='flex gap-1'>
+              <Visibility className='size-5 self-center' aria-disabled='true' />
+              {destination.views > 0 ? (
+                <span
+                  className='self-end'
+                  aria-label={t.views + ': ' + format.number(destination.views)}
+                >
+                  {format.number(destination.views)}
+                </span>
+              ) : (
+                <span className='self-end italic'>{t.noViews}</span>
+              )}
+            </div>
+            <div className='flex gap-1'>
+              <HotelClass className='size-5 self-start' aria-disabled='true' />
+              {rating ? (
+                <span
+                  className='self-end'
+                  aria-label={t.rating + ': ' + rating}
+                >
+                  {rating}
+                </span>
+              ) : (
+                <span className='self-end italic'>{t.noReviews}</span>
+              )}
+            </div>
+          </p>
           <Time
             className='text-xs'
             createdAt={destination.createdAt}

@@ -45,7 +45,10 @@
     "goToDestination": "Gå til destinasjon",
     "contributions": "bidrag",
     "views": "Visninger",
-    "modified": "Sist endret"
+    "noViews":"Ingen visninger",
+    "modified": "Sist endret",
+    "rating": "Vurdering",
+    "noReviews": "Ingen anmeldelser"
   },
   "home": {
     "title": "Alle destinasjoner",

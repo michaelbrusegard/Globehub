@@ -46,11 +46,13 @@ export default async function Profile({
     return null;
   }
 
-  const favorites: Destination[] = await sql`
-    SELECT destinations.*
+  const favorites: (Destination & { averageRating: number })[] = await sql`
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
     FROM destinations
     INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
-    WHERE user_favorites.user_id = ${user.id};
+    LEFT JOIN reviews ON destinations.id = reviews.destination_id
+    WHERE user_favorites.user_id = ${user.id}
+    GROUP BY destinations.id;
   `;
 
   const reviews: (Review & {
@@ -83,10 +85,12 @@ export default async function Profile({
     contributions: userContributions?.contributions ?? 0,
   };
 
-  const destinations: Destination[] = await sql`
-    SELECT *
+  const destinations: (Destination & { averageRating: number })[] = await sql`
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
     FROM destinations
-    WHERE user_id = ${user.id}
+    LEFT JOIN reviews ON destinations.id = reviews.destination_id
+    WHERE destinations.user_id = ${user.id}
+    GROUP BY destinations.id;
   `;
 
   return (
@@ -175,6 +179,9 @@ export default async function Profile({
           contributions: t('contributions'),
           views: t('views'),
           modified: t('modified'),
+          noViews: t('noViews'),
+          rating: t('rating'),
+          noReviews: t('noReviews'),
         }}
       />
       <div className='flex w-full justify-center'>
