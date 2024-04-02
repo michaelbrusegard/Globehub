@@ -8,9 +8,12 @@ import { DestinationTabCard } from '@/components/profile/DestinationTabCard';
 import { ReviewTabCard } from '@/components/profile/ReviewTabCard';
 
 type ProfileTabsProps = {
-  destinations: (Destination & { averageRating: number })[];
+  destinations: (Destination & {
+    averageRating: number;
+    favoriteCount: number;
+  })[];
   reviews: (Review & { name: string })[];
-  favorites: (Destination & { averageRating: number })[];
+  favorites: (Destination & { averageRating: number; favoriteCount: number })[];
   user: User & { contributions: number };
   t: {
     reviews: string;
@@ -21,7 +24,6 @@ type ProfileTabsProps = {
     goToDestination: string;
     views: string;
     modified: string;
-    noViews: string;
     noReviews: string;
     rating: string;
   };
@@ -64,9 +66,9 @@ function ProfileTabs({
                     goToDestination: t.goToDestination,
                     views: t.views,
                     modified: t.modified,
-                    noViews: t.noViews,
                     rating: t.rating,
                     noReviews: t.noReviews,
+                    favorites: t.favorites,
                   }}
                 />
               </li>
@@ -101,9 +103,9 @@ function ProfileTabs({
                     goToDestination: t.goToDestination,
                     views: t.views,
                     modified: t.modified,
-                    noViews: t.noViews,
                     rating: t.rating,
                     noReviews: t.noReviews,
+                    favorites: t.favorites,
                   }}
                 />
               </li>

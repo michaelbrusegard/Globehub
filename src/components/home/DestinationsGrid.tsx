@@ -13,11 +13,15 @@ async function DestinationsGrid({
   page: number;
   pageSize: number;
 }) {
-  const destinations: (Destination & { averageRating: number })[] = await sql`
+  const destinations: (Destination & {
+    averageRating: number;
+    favoriteCount: number;
+  })[] = await sql`
     SELECT * FROM (
-      SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
+      SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
       FROM destinations
       LEFT JOIN reviews ON destinations.id = reviews.destination_id
+      LEFT JOIN user_favorites ON destinations.id = user_favorites.destination_id
       GROUP BY destinations.id
     ) as subquery
     ORDER BY 
@@ -25,6 +29,7 @@ async function DestinationsGrid({
       CASE WHEN ${order} = 'alphabetic' THEN name END ASC,
       CASE WHEN ${order} = 'newest' THEN created_at END DESC,
       CASE WHEN ${order} = 'views' THEN views END DESC,
+      CASE WHEN ${order} = 'favorite' THEN favorite_count END DESC,
       CASE WHEN ${order} NOT IN ('alphabetic', 'rating', 'newest', 'views') THEN average_rating END DESC
     LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
   `;

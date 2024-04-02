@@ -1,3 +1,4 @@
+import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
 import Schedule from '@material-symbols/svg-400/outlined/schedule.svg';
 import Visibility from '@material-symbols/svg-400/outlined/visibility.svg';
@@ -9,7 +10,7 @@ import type { Destination } from '@/lib/db';
 import { formatRating } from '@/lib/utils';
 
 type DestinationCardProps = {
-  destination: Destination & { averageRating: number };
+  destination: Destination & { averageRating: number; favoriteCount: number };
   order: string;
 };
 
@@ -48,16 +49,29 @@ function Subtitle({ destination, order }: DestinationCardProps) {
             className='size-4 self-center fill-default-500'
             aria-disabled='true'
           />
-          {destination.views > 0 ? (
-            <span
-              className='self-end'
-              aria-label={t('views') + ': ' + format.number(destination.views)}
-            >
-              {format.number(destination.views)}
-            </span>
-          ) : (
-            <span className='self-end italic'>{t('noViews')}</span>
-          )}
+          <span
+            className='self-end'
+            aria-label={t('views') + ': ' + format.number(destination.views)}
+          >
+            {format.number(destination.views)}
+          </span>
+        </>
+      );
+    case 'favorite':
+      return (
+        <>
+          <Favorite
+            className='size-4 self-center fill-default-500'
+            aria-disabled='true'
+          />
+          <span
+            className='self-end'
+            aria-label={
+              t('favorites') + ': ' + format.number(destination.favoriteCount)
+            }
+          >
+            {format.number(destination.favoriteCount)}
+          </span>
         </>
       );
     default:

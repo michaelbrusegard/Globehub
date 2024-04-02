@@ -71,8 +71,6 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
   `
       : [];
 
-  console.log(initialReviews);
-
   return (
     <section id={t('title')}>
       <div className='flex flex-col justify-between sm:flex-row'>

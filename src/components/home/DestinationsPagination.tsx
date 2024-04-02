@@ -20,7 +20,7 @@ function DestinationsPagination({ t, ...props }: DestinationsPaginationProps) {
 
   useEffect(() => {
     function checkWindowSize() {
-      setIsCompact(window.matchMedia('(max-width: 768px)').matches);
+      setIsCompact(window.matchMedia('(max-width: 640px)').matches);
     }
 
     checkWindowSize();

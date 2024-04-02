@@ -68,7 +68,7 @@ export default async function Home({
     return acc;
   }, {});
 
-  const orderCriteria = ['rating', 'alphabetic', 'newest', 'views'];
+  const orderCriteria = ['rating', 'alphabetic', 'newest', 'views', 'favorite'];
 
   const orderCriteriaTranslations = orderCriteria.reduce(
     (acc: Record<string, string>, criteria) => {

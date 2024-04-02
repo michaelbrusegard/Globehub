@@ -46,8 +46,11 @@ export default async function Profile({
     return null;
   }
 
-  const favorites: (Destination & { averageRating: number })[] = await sql`
-    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
+  const favorites: (Destination & {
+    averageRating: number;
+    favoriteCount: number;
+  })[] = await sql`
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
     FROM destinations
     INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
     LEFT JOIN reviews ON destinations.id = reviews.destination_id
@@ -85,10 +88,14 @@ export default async function Profile({
     contributions: userContributions?.contributions ?? 0,
   };
 
-  const destinations: (Destination & { averageRating: number })[] = await sql`
-    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating
+  const destinations: (Destination & {
+    averageRating: number;
+    favoriteCount: number;
+  })[] = await sql`
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
     FROM destinations
     LEFT JOIN reviews ON destinations.id = reviews.destination_id
+    LEFT JOIN user_favorites ON destinations.id = user_favorites.destination_id
     WHERE destinations.user_id = ${user.id}
     GROUP BY destinations.id;
   `;
@@ -179,7 +186,6 @@ export default async function Profile({
           contributions: t('contributions'),
           views: t('views'),
           modified: t('modified'),
-          noViews: t('noViews'),
           rating: t('rating'),
           noReviews: t('noReviews'),
         }}

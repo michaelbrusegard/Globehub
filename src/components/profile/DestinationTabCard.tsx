@@ -1,3 +1,4 @@
+import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
 import Visibility from '@material-symbols/svg-400/outlined/visibility.svg';
 import { Card, CardBody, CardHeader, Image, Link } from '@nextui-org/react';
@@ -10,14 +11,14 @@ import { formatRating } from '@/lib/utils';
 import { Time } from '@/components/reusables/Time';
 
 type DestinationTabCardProps = {
-  destination: Destination & { averageRating: number };
+  destination: Destination & { averageRating: number; favoriteCount: number };
   t: {
     goToDestination: string;
     views: string;
     modified: string;
-    noViews: string;
     rating: string;
     noReviews: string;
+    favorites: string;
   };
 };
 
@@ -50,19 +51,6 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
         <div className='space-y-2'>
           <p className='fill-default-500 text-default-500'>
             <div className='flex gap-1'>
-              <Visibility className='size-5 self-center' aria-disabled='true' />
-              {destination.views > 0 ? (
-                <span
-                  className='self-end'
-                  aria-label={t.views + ': ' + format.number(destination.views)}
-                >
-                  {format.number(destination.views)}
-                </span>
-              ) : (
-                <span className='self-end italic'>{t.noViews}</span>
-              )}
-            </div>
-            <div className='flex gap-1'>
               <HotelClass className='size-5 self-start' aria-disabled='true' />
               {rating ? (
                 <span
@@ -74,6 +62,26 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
               ) : (
                 <span className='self-end italic'>{t.noReviews}</span>
               )}
+            </div>
+            <div className='flex gap-1'>
+              <Visibility className='size-5 self-center' aria-disabled='true' />
+              <span
+                className='self-end'
+                aria-label={t.views + ': ' + format.number(destination.views)}
+              >
+                {format.number(destination.views)}
+              </span>
+            </div>
+            <div className='flex gap-1'>
+              <Favorite className='size-5 self-center' aria-disabled='true' />
+              <span
+                className='self-end'
+                aria-label={
+                  t.favorites + ': ' + format.number(destination.favoriteCount)
+                }
+              >
+                {format.number(destination.favoriteCount)}
+              </span>
             </div>
           </p>
           <Time

@@ -1,6 +1,6 @@
 'use client';
 
-import HeartIcon from '@material-symbols/svg-400/outlined/favorite.svg';
+import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import { Button } from '@nextui-org/react';
 import { startTransition, useOptimistic } from 'react';
 
@@ -41,7 +41,7 @@ function FavoriteButton({ favorite, updateFavorite, t }: FavoriteButtonProps) {
       aria-label={t.favorite}
       onPress={handlePress}
     >
-      <HeartIcon
+      <Favorite
         className={cn(
           'size-5',
           optimisticFavorite

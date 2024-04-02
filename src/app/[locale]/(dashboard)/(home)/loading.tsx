@@ -9,7 +9,7 @@ export default function HomeLoading() {
   return (
     <>
       <div className='flex flex-col items-center'>
-        <Skeleton className='mx-8 mb-2 h-9 w-52 self-auto rounded-medium p-1 sm:self-start' />
+        <Skeleton className='mx-8 mb-2 h-9 w-[260px] self-auto rounded-medium p-1 sm:self-start' />
         <DestinationsGridSkeleton />
         <DestinationsPaginationSkeleton />
       </div>

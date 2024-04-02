@@ -1,3 +1,4 @@
+import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import Schedule from '@material-symbols/svg-400/outlined/schedule.svg';
 import SortByAlpha from '@material-symbols/svg-400/outlined/sort_by_alpha.svg';
 import Star from '@material-symbols/svg-400/outlined/star.svg';
@@ -16,6 +17,8 @@ function OrderIcon({
       return <Schedule {...props} />;
     case 'views':
       return <Visibility {...props} />;
+    case 'favorite':
+      return <Favorite {...props} />;
   }
 }
 
