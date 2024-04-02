@@ -18,11 +18,15 @@ async function DestinationsGrid({
     favoriteCount: number;
   })[] = await sql`
     SELECT * FROM (
-      SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
+      SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(favorites.favorite_count, 0) as favorite_count
       FROM destinations
       LEFT JOIN reviews ON destinations.id = reviews.destination_id
-      LEFT JOIN user_favorites ON destinations.id = user_favorites.destination_id
-      GROUP BY destinations.id
+      LEFT JOIN (
+        SELECT destination_id, COUNT(*) as favorite_count
+        FROM user_favorites
+        GROUP BY destination_id
+      ) favorites ON destinations.id = favorites.destination_id
+      GROUP BY destinations.id, favorites.favorite_count
     ) as subquery
     ORDER BY 
       CASE WHEN ${order} = 'rating' THEN average_rating END DESC,
@@ -33,7 +37,6 @@ async function DestinationsGrid({
       CASE WHEN ${order} NOT IN ('alphabetic', 'rating', 'newest', 'views') THEN average_rating END DESC
     LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
   `;
-
   if (!destinations) {
     throw new Error('Destinations not found');
   }

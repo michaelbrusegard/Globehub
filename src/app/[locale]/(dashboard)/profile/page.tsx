@@ -50,12 +50,17 @@ export default async function Profile({
     averageRating: number;
     favoriteCount: number;
   })[] = await sql`
-    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(favorites.favorite_count, 0) as favorite_count
     FROM destinations
     INNER JOIN user_favorites ON destinations.id = user_favorites.destination_id
     LEFT JOIN reviews ON destinations.id = reviews.destination_id
+    LEFT JOIN (
+      SELECT destination_id, COUNT(*) as favorite_count
+      FROM user_favorites
+      GROUP BY destination_id
+    ) favorites ON destinations.id = favorites.destination_id
     WHERE user_favorites.user_id = ${user.id}
-    GROUP BY destinations.id;
+    GROUP BY destinations.id, favorites.favorite_count;
   `;
 
   const reviews: (Review & {
@@ -92,12 +97,16 @@ export default async function Profile({
     averageRating: number;
     favoriteCount: number;
   })[] = await sql`
-    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(COUNT(user_favorites.destination_id), 0) as favorite_count
+    SELECT destinations.*, COALESCE(AVG(reviews.rating), 0) as average_rating, COALESCE(favorites.favorite_count, 0) as favorite_count
     FROM destinations
     LEFT JOIN reviews ON destinations.id = reviews.destination_id
-    LEFT JOIN user_favorites ON destinations.id = user_favorites.destination_id
+    LEFT JOIN (
+      SELECT destination_id, COUNT(*) as favorite_count
+      FROM user_favorites
+      GROUP BY destination_id
+    ) favorites ON destinations.id = favorites.destination_id
     WHERE destinations.user_id = ${user.id}
-    GROUP BY destinations.id;
+    GROUP BY destinations.id, favorites.favorite_count;
   `;
 
   return (
