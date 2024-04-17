@@ -182,7 +182,7 @@ function Form({
         )}
       </Field>
       <div>
-        <h2 className='mb-1 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
+        <h2 className="mb-1 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased after:ml-0.5 after:text-danger after:content-['*']">
           {t.details}
         </h2>
         <Field
@@ -216,6 +216,7 @@ function Form({
                 state.meta.errors[0].split(', ')[0]
               }
               isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
+              isRequired
             >
               {Object.entries(worldRegions).map(([key, value]) => (
                 <SelectItem key={key} value={key}>
@@ -427,7 +428,7 @@ function Form({
         )}
       </Field>
       <div>
-        <h2 className='mb-1.5 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased'>
+        <h2 className="mb-1.5 max-w-full overflow-hidden text-ellipsis text-small text-foreground subpixel-antialiased after:ml-0.5 after:text-danger after:content-['*']">
           {t.images}
         </h2>
         <Field

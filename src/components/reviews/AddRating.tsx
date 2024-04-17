@@ -31,73 +31,75 @@ function AddRating({
 
   return (
     <div className='flex gap-2'>
-      <input type='hidden' name='rating' value={rating} />
-      <div
-        className={cn(
-          'relative inline-flex rounded-md',
-          isInvalid && 'bg-danger-50',
-        )}
-        aria-describedby={isInvalid ? 'image-files-error' : undefined}
-        aria-invalid={isInvalid}
-        aria-valuenow={rating}
-        aria-valuemin={0}
-        aria-valuemax={10}
-      >
-        {[...Array<undefined>(10)].map((_, index) => {
-          const starIndex = index + 1;
-          return (
-            <>
-              <div
-                className='h-7 w-3.5 cursor-pointer outline-none'
-                key={index}
-                role='button'
-                tabIndex={0}
-                onMouseEnter={() => setHover(starIndex)}
-                onMouseLeave={() => setHover(0)}
-                onClick={() => setRating(starIndex)}
-                onKeyDown={(event) => handleKeyDown(event, starIndex)}
-                onMouseDown={(event) => event.preventDefault()}
-                onFocus={() => setFocus(starIndex)}
-                onBlur={() => {
-                  setFocus(0);
-                  handleBlur();
-                }}
-              />
-            </>
-          );
-        })}
-        <div className='pointer-events-none absolute inline-flex fill-warning'>
+      <div className="flex after:ml-0.5 after:text-danger after:content-['*']">
+        <input type='hidden' name='rating' value={rating} />
+        <div
+          className={cn(
+            'relative inline-flex rounded-md',
+            isInvalid && 'bg-danger-50',
+          )}
+          aria-describedby={isInvalid ? 'image-files-error' : undefined}
+          aria-invalid={isInvalid}
+          aria-valuenow={rating}
+          aria-valuemin={0}
+          aria-valuemax={10}
+        >
           {[...Array<undefined>(10)].map((_, index) => {
             const starIndex = index + 1;
             return (
               <>
-                {starIndex % 2 === 0 &&
-                  (starIndex <= (focus || hover || rating) ? (
-                    <StarFill
-                      className={cn(
-                        'size-7 rounded-md',
-                        starIndex === hover && 'bg-default-100',
-                        starIndex === focus &&
-                          'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
-                      )}
-                      aria-hidden='true'
-                    />
-                  ) : starIndex === (focus || hover || rating) + 1 ? (
-                    <StarHalfFill
-                      className={cn(
-                        'size-7 rounded-md',
-                        starIndex - 1 === hover && 'bg-default-100',
-                        starIndex - 1 === focus &&
-                          'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
-                      )}
-                      aria-hidden='true'
-                    />
-                  ) : (
-                    <Star className='size-7 rounded-md' aria-hidden='true' />
-                  ))}
+                <div
+                  className='h-7 w-3.5 cursor-pointer outline-none'
+                  key={index}
+                  role='button'
+                  tabIndex={0}
+                  onMouseEnter={() => setHover(starIndex)}
+                  onMouseLeave={() => setHover(0)}
+                  onClick={() => setRating(starIndex)}
+                  onKeyDown={(event) => handleKeyDown(event, starIndex)}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onFocus={() => setFocus(starIndex)}
+                  onBlur={() => {
+                    setFocus(0);
+                    handleBlur();
+                  }}
+                />
               </>
             );
           })}
+          <div className='pointer-events-none absolute inline-flex fill-warning'>
+            {[...Array<undefined>(10)].map((_, index) => {
+              const starIndex = index + 1;
+              return (
+                <>
+                  {starIndex % 2 === 0 &&
+                    (starIndex <= (focus || hover || rating) ? (
+                      <StarFill
+                        className={cn(
+                          'size-7 rounded-md',
+                          starIndex === hover && 'bg-default-100',
+                          starIndex === focus &&
+                            'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
+                        )}
+                        aria-hidden='true'
+                      />
+                    ) : starIndex === (focus || hover || rating) + 1 ? (
+                      <StarHalfFill
+                        className={cn(
+                          'size-7 rounded-md',
+                          starIndex - 1 === hover && 'bg-default-100',
+                          starIndex - 1 === focus &&
+                            'z-10 ring-2 ring-focus ring-offset-2 ring-offset-default-50',
+                        )}
+                        aria-hidden='true'
+                      />
+                    ) : (
+                      <Star className='size-7 rounded-md' aria-hidden='true' />
+                    ))}
+                </>
+              );
+            })}
+          </div>
         </div>
       </div>
       {isInvalid && (

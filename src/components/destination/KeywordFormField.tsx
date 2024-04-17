@@ -80,6 +80,11 @@ function KeywordFormField({
       <div className='flex items-end justify-between gap-4'>
         <input type='hidden' name='keywords' value={JSON.stringify(keywords)} />
         <Autocomplete
+          inputProps={{
+            classNames: {
+              label: "after:content-['*'] after:text-danger after:ml-0.5",
+            },
+          }}
           label={t.keywordsLabel}
           placeholder={t.keywordsPlaceholder}
           size='md'
