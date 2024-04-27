@@ -21,6 +21,7 @@ type ImageFormFieldProps = {
     PngJpg1MbMax: string;
     uploadAFile: string;
     orDragAndDrop: string;
+    uploadedImage: string;
   };
 };
 
@@ -123,7 +124,10 @@ function ImageFormField({
                     setImageUrl('');
                     setImageFile(undefined);
                   }}
-                  t={{ removeImage: t.removeImage }}
+                  t={{
+                    removeImage: t.removeImage,
+                    uploadedImage: t.uploadedImage,
+                  }}
                 />
               </div>
             )}

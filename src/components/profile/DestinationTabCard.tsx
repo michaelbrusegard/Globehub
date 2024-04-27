@@ -19,6 +19,7 @@ type DestinationTabCardProps = {
     rating: string;
     noReviews: string;
     favorites: string;
+    imageOf: string;
   };
 };
 
@@ -43,7 +44,7 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
         <Image
           className='aspect-video h-28 object-cover object-center'
           as={NextImage}
-          alt={destination.images[0]}
+          alt={t.imageOf + ' ' + destination.name}
           src={destination.images[0]}
           width={199}
           height={112}

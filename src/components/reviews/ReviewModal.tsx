@@ -47,6 +47,7 @@ type ReviewModalProps = {
     PngJpg1MbMax: string;
     uploadAFile: string;
     orDragAndDrop: string;
+    uploadedImage: string;
   };
 };
 
@@ -73,6 +74,7 @@ type FormProps = {
     PngJpg1MbMax: string;
     uploadAFile: string;
     orDragAndDrop: string;
+    uploadedImage: string;
   };
 };
 
@@ -174,6 +176,7 @@ function Form({ updateReview, deleteReview, onClose, review, t }: FormProps) {
                     PngJpg1MbMax: t.PngJpg1MbMax,
                     uploadAFile: t.uploadAFile,
                     orDragAndDrop: t.orDragAndDrop,
+                    uploadedImage: t.uploadedImage,
                   }}
                 />
               )}
@@ -316,6 +319,7 @@ function ReviewModal({
                   PngJpg1MbMax: t.PngJpg1MbMax,
                   uploadAFile: t.uploadAFile,
                   orDragAndDrop: t.orDragAndDrop,
+                  uploadedImage: t.uploadedImage,
                 }}
               />
             </>

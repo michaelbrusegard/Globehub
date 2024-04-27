@@ -166,7 +166,7 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
                     shadow='sm'
                     radius='none'
                     as={NextImage}
-                    alt={destination.name + '' + index}
+                    alt={destination.name + ' ' + index}
                     src={imageSrc}
                     priority
                     width={1300}

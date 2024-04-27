@@ -1,5 +1,6 @@
 import EditAttributes from '@material-symbols/svg-400/outlined/edit_attributes.svg';
 import { Card, CardBody, CardHeader, Image, Link } from '@nextui-org/react';
+import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 
 import type { Destination } from '@/lib/db';
@@ -10,6 +11,7 @@ type FilterCardProps = {
 };
 
 function FilterCard({ destination, worldRegions }: FilterCardProps) {
+  const t = useTranslations('home');
   return (
     <Card
       className='group size-[300px] py-4'
@@ -36,7 +38,7 @@ function FilterCard({ destination, worldRegions }: FilterCardProps) {
           <Image
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
-            alt={destination.name}
+            alt={t('imageOf') + ' ' + destination.name}
             src={destination.images[0]}
             sizes='(max-width: 768px) 100vw, 33vw'
             fill

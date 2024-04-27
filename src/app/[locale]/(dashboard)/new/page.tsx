@@ -269,6 +269,7 @@ export default async function NewDestination({
         deleteConfirmation: '',
         deleteDestination: '',
         noKeywordsFound: t('noKeywordsFound'),
+        uploadedImage: t('uploadedImage'),
       }}
     />
   );

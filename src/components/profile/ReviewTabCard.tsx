@@ -12,6 +12,7 @@ type ReviewTabCardProps = {
     contributions: string;
     modified: string;
     reviews: string;
+    reviewImage: string;
   };
 };
 
@@ -35,7 +36,11 @@ function ReviewTabCard({ review, author, t }: ReviewTabCardProps) {
           review={review}
           author={author}
           disablePopover
-          t={{ contributions: t.contributions, modified: t.modified }}
+          t={{
+            contributions: t.contributions,
+            modified: t.modified,
+            reviewImage: t.reviewImage,
+          }}
         />
       </CardBody>
     </Card>

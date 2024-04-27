@@ -443,6 +443,7 @@ export default async function EditDestination({
         }),
         deleteDestination: t('deleteDestination'),
         noKeywordsFound: t('noKeywordsFound'),
+        uploadedImage: t('uploadedImage'),
       }}
     />
   );

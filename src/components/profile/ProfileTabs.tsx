@@ -26,6 +26,8 @@ type ProfileTabsProps = {
     modified: string;
     noReviews: string;
     rating: string;
+    imageOf: string;
+    reviewImage: string;
   };
 };
 
@@ -69,6 +71,7 @@ function ProfileTabs({
                     rating: t.rating,
                     noReviews: t.noReviews,
                     favorites: t.favorites,
+                    imageOf: t.imageOf,
                   }}
                 />
               </li>
@@ -87,6 +90,7 @@ function ProfileTabs({
                     contributions: t.contributions,
                     modified: t.modified,
                     reviews: t.reviews,
+                    reviewImage: t.reviewImage,
                   }}
                 />
               </li>
@@ -106,6 +110,7 @@ function ProfileTabs({
                     rating: t.rating,
                     noReviews: t.noReviews,
                     favorites: t.favorites,
+                    imageOf: t.imageOf,
                   }}
                 />
               </li>

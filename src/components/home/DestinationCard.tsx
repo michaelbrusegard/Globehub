@@ -94,6 +94,7 @@ function Subtitle({ destination, order }: DestinationCardProps) {
 }
 
 function DestinationCard({ destination, order }: DestinationCardProps) {
+  const t = useTranslations('home');
   return (
     <Card
       className='group h-[300px] w-full py-4'
@@ -112,7 +113,7 @@ function DestinationCard({ destination, order }: DestinationCardProps) {
           <Image
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
-            alt={destination.name}
+            alt={t('imageOf') + ' ' + destination.name}
             src={destination.images[0]}
             sizes='(max-width: 768px) 100vw, 33vw'
             fill

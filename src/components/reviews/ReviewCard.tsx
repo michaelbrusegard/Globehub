@@ -24,6 +24,7 @@ type ReviewCardProps = {
     modified: string;
     memberSince?: string;
     noBio?: string;
+    reviewImage: string;
   };
 };
 
@@ -83,7 +84,7 @@ function ReviewCard({
             <Image
               className='aspect-video h-28 object-cover object-center'
               as={NextImage}
-              alt={review.image}
+              alt={t.reviewImage}
               src={review.image}
               width={199}
               height={112}

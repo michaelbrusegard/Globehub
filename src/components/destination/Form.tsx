@@ -79,6 +79,7 @@ type FormProps = {
     deleteConfirmation: string;
     deleteDestination: string;
     noKeywordsFound: string;
+    uploadedImage: string;
   };
 };
 
@@ -477,6 +478,7 @@ function Form({
                     imageTypeInvalid: t.imageTypeInvalid,
                     imageSizeTooLarge: t.imageSizeTooLarge,
                     tooManyImages: t.tooManyImages,
+                    uploadedImage: t.uploadedImage,
                   }}
                 />
               )}

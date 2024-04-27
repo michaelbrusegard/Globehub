@@ -197,6 +197,8 @@ export default async function Profile({
           modified: t('modified'),
           rating: t('rating'),
           noReviews: t('noReviews'),
+          imageOf: t('imageOf'),
+          reviewImage: t('reviewImage'),
         }}
       />
       <div className='flex w-full justify-center'>

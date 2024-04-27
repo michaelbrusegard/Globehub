@@ -47,7 +47,9 @@
     "views": "Visninger",
     "modified": "Sist endret",
     "rating": "Vurdering",
-    "noReviews": "Ingen anmeldelser"
+    "noReviews": "Ingen anmeldelser",
+    "imageOf": "Bilde av",
+    "reviewImage": "Bilde til anmeldelsen"
   },
   "home": {
     "title": "Alle destinasjoner",
@@ -67,7 +69,8 @@
     "order": "Rangering",
     "orderCriteriaEnum": "{criteria, select, rating {Vurdering} alphabetic {Alfabetisk} newest {Nyeste} views {Visninger} favorite {favoritt} other {Ukjent rangering}}",
     "views": "Visninger",
-    "favorites": "Favoritter"
+    "favorites": "Favoritter",
+    "imageOf": "Bilde av"
   },
   "destination": {
     "readTime": "{count, plural, =0 {mindre enn ett minutt} one {# minutt} other {# minutter}} lesing",
@@ -152,7 +155,8 @@
       "deleteConfirmation": "Er du sikker på at du vil slette destinasjonen {name}? Dette kan ikke angres. Alle anmeldelser og bilder vil også bli slettet.",
       "deleteDestination": "Slett destinasjon",
       "create": "Opprett",
-      "noKeywordsFound": "Ingen nøkkelord funnet."
+      "noKeywordsFound": "Ingen nøkkelord funnet.",
+      "uploadedImage": "Opplastet bilde"
     }
   },
   "reviews": {
@@ -182,6 +186,8 @@
     "noBio": "Brukeren har ikke skrevet en biografi ennå.",
     "modified": "Sist endret",
     "loadMore": "Last inn flere",
-    "loadingMoreReviews": "Laster flere anmeldelser..."
+    "loadingMoreReviews": "Laster flere anmeldelser...",
+    "uploadedImage": "Opplastet bilde",
+    "reviewImage": "Bilde til anmeldelsen"
   }
 }

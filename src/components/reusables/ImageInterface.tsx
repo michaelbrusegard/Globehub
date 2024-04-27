@@ -7,6 +7,7 @@ type ImageInterfaceProps = {
   onPress: () => void;
   t: {
     removeImage: string;
+    uploadedImage: string;
   };
 } & ImageProps;
 
@@ -21,7 +22,7 @@ function ImageInterface({
       <Image
         className='aspect-video h-36 object-cover object-center'
         as={NextImage}
-        alt={imageUrl}
+        alt={t.uploadedImage}
         src={imageUrl}
         width={228}
         height={128}

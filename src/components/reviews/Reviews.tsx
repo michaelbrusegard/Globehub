@@ -23,6 +23,7 @@ type ReviewsProps = {
     noBio: string;
     loadMore: string;
     loadingMoreReviews: string;
+    reviewImage: string;
   };
 };
 
@@ -81,6 +82,7 @@ function Reviews({
                   modified: t.modified,
                   memberSince: t.memberSince,
                   noBio: t.noBio,
+                  reviewImage: t.reviewImage,
                 }}
               />
             </li>

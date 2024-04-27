@@ -26,6 +26,7 @@ type ImageFormFieldProps = {
     imageTypeInvalid: string;
     imageSizeTooLarge: string;
     tooManyImages: string;
+    uploadedImage: string;
   };
 };
 
@@ -181,6 +182,7 @@ function ImageFormField({
                 }}
                 t={{
                   removeImage: t.removeImage,
+                  uploadedImage: t.uploadedImage,
                 }}
               />
             ))}
@@ -196,6 +198,7 @@ function ImageFormField({
                 }}
                 t={{
                   removeImage: t.removeImage,
+                  uploadedImage: t.uploadedImage,
                 }}
               />
             ))}

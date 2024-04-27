@@ -227,6 +227,7 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
               PngJpg1MbMax: t('PngJpg1MbMax'),
               uploadAFile: t('uploadAFile'),
               orDragAndDrop: t('orDragAndDrop'),
+              uploadedImage: t('uploadedImage'),
             }}
           />
         )}
@@ -274,6 +275,7 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
           noBio: t('noBio'),
           loadMore: t('loadMore'),
           loadingMoreReviews: t('loadingMoreReviews'),
+          reviewImage: t('reviewImage'),
         }}
       />
     </section>
