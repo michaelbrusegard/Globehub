@@ -1,15 +1,21 @@
 version: "3.9"
 services:
   app:
-    depends_on:
-      - db
-      - s3
-    build: 
+    restart: unless-stopped
+    build:
       context: .
-      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV}
+        AUTH_URL: ${AUTH_URL}
+        AUTH_SECRET: ${AUTH_SECRET}
+        DATABASE_URL: ${DATABASE_URL}
+        STORAGE_URL: ${STORAGE_URL}
+        STORAGE_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
+        STORAGE_SECRET_KEY: ${STORAGE_SECRET_KEY}
     ports:
-      - "3000:3000"
+      - "3069:3000"
   db:
+    restart: unless-stopped
     image: postgres:15
     environment:
       POSTGRES_USER: ${DATABASE_USER}
@@ -19,8 +25,9 @@ services:
       - ./data/db:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
-      - "5432:5432"
+      - "5469:5432"
   s3:
+    restart: unless-stopped
     image: bitnami/minio:2024
     environment:
       MINIO_ROOT_USER: ${STORAGE_USER}
@@ -29,4 +36,4 @@ services:
     volumes:
       - ./data/s3:/bitnami/minio/data
     ports:
-      - "9000:9000"
+      - "9069:9000"

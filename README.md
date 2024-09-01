@@ -1,4 +1,4 @@
-# GlobeHub
+# Globehub
 
 ## Documentation
 

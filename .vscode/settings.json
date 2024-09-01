@@ -23,7 +23,7 @@
     {
       "previewLimit": 50,
       "server": "localhost",
-      "port": 5432,
+      "port": 5469,
       "driver": "PostgreSQL",
       "name": "local",
       "database": "database",
