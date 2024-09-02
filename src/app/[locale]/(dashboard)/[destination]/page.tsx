@@ -18,9 +18,11 @@ import { ReviewSection } from '@/components/reviews/ReviewSection';
 
 export async function generateStaticParams() {
   const destinations: { id: number }[] = await sql`
-    SELECT id 
+    SELECT id
     FROM destinations
   `;
+
+  if (!destinations) return [];
 
   return destinations.map(({ id }) => ({
     destination: id.toString(),
@@ -35,12 +37,12 @@ export async function generateMetadata({
   if (!Number.isInteger(Number(params.destination))) notFound();
 
   const [result]: { name: string }[] = await sql`
-    SELECT name 
-    FROM destinations 
+    SELECT name
+    FROM destinations
     WHERE id = ${params.destination}
   `;
 
-  if (!result) return;
+  if (!result) return {};
 
   return {
     title: result.name,
@@ -83,8 +85,8 @@ export default async function Destination({
   }
 
   const [author]: User[] = await sql`
-    SELECT * 
-    FROM users 
+    SELECT *
+    FROM users
     WHERE id = ${destination.userId}
   `;
 
