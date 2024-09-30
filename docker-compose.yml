@@ -9,8 +9,8 @@ services:
     restart: unless-stopped
     ports:
       - '3000:3000'
-    # networks:
-    # - nginx_default
+    networks:
+      - nginx_default
   db:
     image: postgres:15
     restart: unless-stopped
