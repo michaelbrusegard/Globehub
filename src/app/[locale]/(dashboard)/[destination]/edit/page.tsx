@@ -7,7 +7,6 @@ import {
   DeleteObjectCommand,
   PutObjectCommand,
   destinationsBucket,
-  endpoint,
   reviewsBucket,
   s3,
 } from '@/lib/s3';
@@ -178,16 +177,13 @@ export default async function EditDestination({
         const newImageUrls = [];
 
         for (const oldImageUrl of oldImageUrls) {
-          if (!oldImageUrl.startsWith(endpoint)) {
+          if (!oldImageUrl.startsWith(destinationsBucket)) {
             continue;
           }
 
           const params = {
             Bucket: destinationsBucket,
-            Key: oldImageUrl.replace(
-              endpoint + '/' + destinationsBucket + '/',
-              '',
-            ),
+            Key: oldImageUrl.replace(destinationsBucket + '/', ''),
           };
 
           const deleteCommand = new DeleteObjectCommand(params);
@@ -210,9 +206,7 @@ export default async function EditDestination({
 
           await s3.send(command);
 
-          newImageUrls.push(
-            endpoint + '/' + destinationsBucket + '/' + params.Key,
-          );
+          newImageUrls.push(destinationsBucket + '/' + params.Key);
         }
 
         parsed.data.imageUrls = [...parsed.data.imageUrls, ...newImageUrls];
@@ -297,16 +291,13 @@ export default async function EditDestination({
         }
 
         for (const imageUrl of destination.images) {
-          if (!imageUrl.startsWith(endpoint)) {
+          if (!imageUrl.startsWith(destinationsBucket)) {
             continue;
           }
 
           const params = {
             Bucket: destinationsBucket,
-            Key: imageUrl.replace(
-              endpoint + '/' + destinationsBucket + '/',
-              '',
-            ),
+            Key: imageUrl.replace(destinationsBucket + '/', ''),
           };
 
           const deleteCommand = new DeleteObjectCommand(params);
@@ -321,13 +312,13 @@ export default async function EditDestination({
         `;
 
         for (const review of reviews) {
-          if (!review.image.startsWith(endpoint)) {
+          if (!review.image.startsWith(reviewsBucket)) {
             continue;
           }
 
           const params = {
             Bucket: reviewsBucket,
-            Key: review.image.replace(endpoint + '/' + reviewsBucket + '/', ''),
+            Key: review.image.replace(reviewsBucket + '/', ''),
           };
 
           const deleteCommand = new DeleteObjectCommand(params);

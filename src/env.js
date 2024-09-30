@@ -20,7 +20,6 @@ const env = createEnv({
       const commaCount = (value.match(/,/g) ?? []).length;
       return commaCount === 1;
     }),
-    STORAGE_PATH: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
@@ -58,7 +57,6 @@ const env = createEnv({
     STORAGE_USER: process.env.STORAGE_USER,
     STORAGE_PASSWORD: process.env.STORAGE_PASSWORD,
     STORAGE_NAME: process.env.STORAGE_NAME,
-    STORAGE_PATH: process.env.STORAGE_PATH,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_URL: process.env.AUTH_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,

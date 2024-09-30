@@ -5,7 +5,6 @@ import { type Destination, type Review, type User, sql } from '@/lib/db';
 import {
   DeleteObjectCommand,
   PutObjectCommand,
-  endpoint,
   reviewsBucket,
   s3,
 } from '@/lib/s3';
@@ -121,14 +120,11 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
 
               if (
                 newImageUrl !== oldImageUrl &&
-                oldImageUrl?.startsWith(endpoint)
+                oldImageUrl?.startsWith(reviewsBucket)
               ) {
                 const params = {
                   Bucket: reviewsBucket,
-                  Key: oldImageUrl.replace(
-                    endpoint + '/' + reviewsBucket + '/',
-                    '',
-                  ),
+                  Key: oldImageUrl.replace(reviewsBucket + '/', ''),
                 };
 
                 const deleteCommand = new DeleteObjectCommand(params);
@@ -151,7 +147,7 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
 
                 await s3.send(command);
 
-                newImageUrl = `${endpoint}/${reviewsBucket}/${params.Key}`;
+                newImageUrl = `${reviewsBucket}/${params.Key}`;
               }
 
               if (!review) {
@@ -191,13 +187,10 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
                   WHERE destination_id = ${destination.id} AND user_id = ${user.id}
                 `;
 
-              if (reviewImage && reviewImage.startsWith(endpoint)) {
+              if (reviewImage && reviewImage.startsWith(reviewsBucket)) {
                 const params = {
                   Bucket: reviewsBucket,
-                  Key: reviewImage.replace(
-                    endpoint + '/' + reviewsBucket + '/',
-                    '',
-                  ),
+                  Key: reviewImage.replace(reviewsBucket + '/', ''),
                 };
 
                 const deleteCommand = new DeleteObjectCommand(params);

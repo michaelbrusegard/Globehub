@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
 import { sql } from '@/lib/db';
-import { PutObjectCommand, destinationsBucket, endpoint, s3 } from '@/lib/s3';
+import { PutObjectCommand, destinationsBucket, s3 } from '@/lib/s3';
 import { validateDestination } from '@/lib/validation';
 
 import { Form } from '@/components/destination/Form';
@@ -37,11 +37,11 @@ export default async function NewDestination({
   const worldRegions: {
     enumlabel: string;
   }[] = await sql`
-    SELECT enumlabel 
-    FROM pg_enum 
+    SELECT enumlabel
+    FROM pg_enum
     WHERE enumtypid = (
-      SELECT oid 
-      FROM pg_type 
+      SELECT oid
+      FROM pg_type
       WHERE typname = 'world_regions'
     )
   `;
@@ -61,7 +61,7 @@ export default async function NewDestination({
   );
 
   const result: { name: string }[] = await sql`
-    SELECT name 
+    SELECT name
     FROM keywords
   `;
 
@@ -202,9 +202,7 @@ export default async function NewDestination({
 
           await s3.send(command);
 
-          imageUrls.push(
-            endpoint + '/' + destinationsBucket + '/' + params.Key,
-          );
+          imageUrls.push(destinationsBucket + '/' + params.Key);
         }
 
         await sql`

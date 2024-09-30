@@ -9,7 +9,6 @@ import { redirect } from '@/lib/navigation';
 import {
   DeleteObjectCommand,
   destinationsBucket,
-  endpoint,
   reviewsBucket,
   s3,
 } from '@/lib/s3';
@@ -324,16 +323,13 @@ export default async function Profile({
             });
 
             for (const imageUrl of destinationImageUrls) {
-              if (!imageUrl.startsWith(endpoint)) {
+              if (!imageUrl.startsWith(destinationsBucket)) {
                 continue;
               }
 
               const params = {
                 Bucket: destinationsBucket,
-                Key: imageUrl.replace(
-                  endpoint + '/' + destinationsBucket + '/',
-                  '',
-                ),
+                Key: imageUrl.replace(destinationsBucket + '/', ''),
               };
 
               const deleteCommand = new DeleteObjectCommand(params);
@@ -342,13 +338,13 @@ export default async function Profile({
             }
 
             for (const imageUrl of reviewImageUrls) {
-              if (!imageUrl.startsWith(endpoint)) {
+              if (!imageUrl.startsWith(reviewsBucket)) {
                 continue;
               }
 
               const params = {
                 Bucket: reviewsBucket,
-                Key: imageUrl.replace(endpoint + '/' + reviewsBucket + '/', ''),
+                Key: imageUrl.replace(reviewsBucket + '/', ''),
               };
 
               const deleteCommand = new DeleteObjectCommand(params);

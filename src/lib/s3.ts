@@ -29,8 +29,6 @@ async function setPublicBucketPolicy(bucketName: string) {
 
 const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
 
-const path: string = env.STORAGE_PATH;
-
 const config: S3ClientConfig = {
   credentials: {
     accessKeyId: env.STORAGE_USER,
@@ -55,7 +53,6 @@ void (async () => {
 
 export {
   s3,
-  path as endpoint,
   destinationsBucket,
   reviewsBucket,
   PutObjectCommand,
