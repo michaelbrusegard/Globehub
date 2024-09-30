@@ -28,13 +28,7 @@ async function UserCard({ user }: { user: User }) {
             isBordered
             radius='full'
             size='md'
-            src={
-              env.NEXT_PUBLIC_SITE_URL +
-              '/' +
-              env.NEXT_PUBLIC_STORAGE_PATH +
-              '/' +
-              user.image
-            }
+            src={env.NEXT_PUBLIC_SITE_URL + '/' + user.image}
           />
           <div className='flex flex-col items-start justify-center'>
             <h4 className='text-small font-semibold leading-none text-default-600'>

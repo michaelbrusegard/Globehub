@@ -20,6 +20,7 @@ const env = createEnv({
       const commaCount = (value.match(/,/g) ?? []).length;
       return commaCount === 1;
     }),
+    STORAGE_PATH: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
@@ -38,7 +39,6 @@ const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_STORAGE_PATH: z.string(),
     NEXT_PUBLIC_SITE_URL: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
@@ -58,6 +58,7 @@ const env = createEnv({
     STORAGE_USER: process.env.STORAGE_USER,
     STORAGE_PASSWORD: process.env.STORAGE_PASSWORD,
     STORAGE_NAME: process.env.STORAGE_NAME,
+    STORAGE_PATH: process.env.STORAGE_PATH,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_URL: process.env.AUTH_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
@@ -66,7 +67,6 @@ const env = createEnv({
     AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     OPEN_WEATHER_API_KEY: process.env.OPEN_WEATHER_API_KEY,
-    NEXT_PUBLIC_STORAGE_PATH: process.env.NEXT_PUBLIC_STORAGE_PATH,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

@@ -24,13 +24,7 @@ function ImageInterface({
         className='aspect-video h-36 object-cover object-center'
         as={NextImage}
         alt={t.uploadedImage}
-        src={
-          env.NEXT_PUBLIC_SITE_URL +
-          '/' +
-          env.NEXT_PUBLIC_STORAGE_PATH +
-          '/' +
-          imageUrl
-        }
+        src={env.NEXT_PUBLIC_SITE_URL + '/' + imageUrl}
         width={228}
         height={128}
         {...props}

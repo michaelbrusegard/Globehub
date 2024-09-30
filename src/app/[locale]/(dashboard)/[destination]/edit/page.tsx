@@ -370,7 +370,7 @@ export default async function EditDestination({
                 WHERE keyword_id = ${keyword.id}
               `;
 
-              if (result && result.count === 0) {
+              if (result && result.count === 1) {
                 await sql`
                   DELETE FROM keywords
                   WHERE id = ${keyword.id}

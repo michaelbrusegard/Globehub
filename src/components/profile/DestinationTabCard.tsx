@@ -46,13 +46,7 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
           className='aspect-video h-28 object-cover object-center'
           as={NextImage}
           alt={t.imageOf + ' ' + destination.name}
-          src={
-            env.NEXT_PUBLIC_SITE_URL +
-            '/' +
-            env.NEXT_PUBLIC_STORAGE_PATH +
-            '/' +
-            destination.images[0]
-          }
+          src={env.NEXT_PUBLIC_SITE_URL + '/' + destination.images[0]}
           width={199}
           height={112}
         />

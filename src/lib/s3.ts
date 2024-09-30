@@ -31,7 +31,7 @@ async function setPublicBucketPolicy(bucketName: string) {
 
 const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
 
-const path: string = env.NEXT_PUBLIC_STORAGE_PATH;
+const path: string = env.STORAGE_PATH;
 
 const config: S3ClientConfig = {
   credentials: {
