@@ -38,8 +38,8 @@ const config = {
         hostname: 'loremflickr.com',
       },
       {
-        protocol: 'http',
-        hostname: 'localhost',
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_SITE_URL ?? '',
       },
     ],
   },
