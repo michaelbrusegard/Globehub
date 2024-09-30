@@ -7,8 +7,8 @@ services:
       s3:
         condition: service_healthy
     restart: unless-stopped
-    # networks:
-    #   - nginx_default
+    networks:
+      - nginx_default
   db:
     image: postgres:15
     restart: unless-stopped
@@ -24,12 +24,10 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
-    ports:
-      - 5432:5432
-    # networks:
-    #   nginx_default:
-    #     aliases:
-    #       - globehub-db
+    networks:
+      nginx_default:
+        aliases:
+          - globehub-db
   s3:
     image: bitnami/minio:2024
     restart: unless-stopped
@@ -45,12 +43,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 2
-    ports:
-      - 9000:9000
-    # networks:
-    #   nginx_default:
-    #     aliases:
-    #       - globehub-s3
+    networks:
+      nginx_default:
+        aliases:
+          - globehub-s3
 networks:
   nginx_default:
     external: true
