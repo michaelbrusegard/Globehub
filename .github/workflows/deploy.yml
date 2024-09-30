@@ -1,4 +1,4 @@
-name: Deploy to espresso
+name: Deploy
 
 on:
   push:
@@ -20,5 +20,5 @@ jobs:
           script: |
             cd /data/Globehub
             git pull
-            docker-compose down
-            docker-compose up -d
+            docker compose down
+            docker compose up -d
