@@ -1,31 +1,10 @@
 import { env } from '@/env';
 import {
   DeleteObjectCommand,
-  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
   type S3ClientConfig,
 } from '@aws-sdk/client-s3';
-
-async function setPublicBucketPolicy(bucketName: string) {
-  const params = {
-    Bucket: bucketName,
-    Policy: JSON.stringify({
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Sid: 'PublicReadGetObject',
-          Effect: 'Allow',
-          Principal: '*',
-          Action: ['s3:GetObject'],
-          Resource: [`arn:aws:s3:::${bucketName}/*`],
-        },
-      ],
-    }),
-  };
-
-  await s3.send(new PutBucketPolicyCommand(params));
-}
 
 const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
 
@@ -45,11 +24,6 @@ const buckets = env.STORAGE_NAME.split(',');
 
 const destinationsBucket = buckets[0]!;
 const reviewsBucket = buckets[1]!;
-
-void (async () => {
-  await setPublicBucketPolicy(destinationsBucket);
-  await setPublicBucketPolicy(reviewsBucket);
-})();
 
 export {
   s3,
