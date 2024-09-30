@@ -7,8 +7,6 @@ import {
   type S3ClientConfig,
 } from '@aws-sdk/client-s3';
 
-let isBucketPolicySet = false;
-
 async function setPublicBucketPolicy(bucketName: string) {
   const params = {
     Bucket: bucketName,
@@ -51,11 +49,8 @@ const destinationsBucket = buckets[0]!;
 const reviewsBucket = buckets[1]!;
 
 void (async () => {
-  if (!isBucketPolicySet) {
-    await setPublicBucketPolicy(destinationsBucket);
-    await setPublicBucketPolicy(reviewsBucket);
-    isBucketPolicySet = true;
-  }
+  await setPublicBucketPolicy(destinationsBucket);
+  await setPublicBucketPolicy(reviewsBucket);
 })();
 
 export {
