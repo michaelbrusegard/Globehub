@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env';
 import Photo from '@material-symbols/svg-400/outlined/photo.svg';
 import { Card, CardBody, CardFooter } from '@nextui-org/react';
 import { useState } from 'react';
@@ -118,7 +119,9 @@ function ImageFormField({
               <div className='relative mt-1 flex size-40 w-full justify-center'>
                 <ImageInterface
                   imageUrl={
-                    imageFile ? URL.createObjectURL(imageFile) : imageUrl
+                    imageFile
+                      ? URL.createObjectURL(imageFile)
+                      : env.NEXT_PUBLIC_SITE_URL + imageUrl
                   }
                   onPress={() => {
                     setImageUrl('');

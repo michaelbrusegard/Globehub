@@ -284,7 +284,7 @@ export default async function Profile({
                   WHERE keyword_id = ${keywordId}
                 `;
 
-                if (result && result.count === 1) {
+                if (result && result.count === 0) {
                   await sql`
                     DELETE FROM keywords
                     WHERE id = ${keywordId}

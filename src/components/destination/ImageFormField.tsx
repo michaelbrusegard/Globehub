@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env';
 import Photo from '@material-symbols/svg-400/outlined/photo.svg';
 import { Card, CardBody, CardFooter } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
@@ -173,7 +174,7 @@ function ImageFormField({
             {imageUrls.map((image) => (
               <ImageInterface
                 key={image}
-                imageUrl={image}
+                imageUrl={env.NEXT_PUBLIC_SITE_URL + image}
                 onPress={() => {
                   updateState(
                     imageFiles,
