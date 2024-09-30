@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import EditAttributes from '@material-symbols/svg-400/outlined/edit_attributes.svg';
 import { Card, CardBody, CardHeader, Image, Link } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
@@ -39,7 +40,13 @@ function FilterCard({ destination, worldRegions }: FilterCardProps) {
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
             alt={t('imageOf') + ' ' + destination.name}
-            src={destination.images[0]}
+            src={
+              env.NEXT_PUBLIC_SITE_URL +
+              '/' +
+              env.NEXT_PUBLIC_STORAGE_PATH +
+              '/' +
+              destination.images[0]
+            }
             sizes='(max-width: 768px) 100vw, 33vw'
             fill
             removeWrapper

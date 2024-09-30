@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import {
   Card,
   CardBody,
@@ -85,7 +86,13 @@ function ReviewCard({
               className='aspect-video h-28 object-cover object-center'
               as={NextImage}
               alt={t.reviewImage}
-              src={review.image}
+              src={
+                env.NEXT_PUBLIC_SITE_URL +
+                '/' +
+                env.NEXT_PUBLIC_STORAGE_PATH +
+                '/' +
+                review.image
+              }
               width={199}
               height={112}
             />

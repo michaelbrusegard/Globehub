@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env';
 import { Button, Image } from '@nextui-org/react';
 import { type EmblaCarouselType, type EmblaEventType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
@@ -167,7 +168,13 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
                     radius='none'
                     as={NextImage}
                     alt={destination.name + ' ' + index}
-                    src={imageSrc}
+                    src={
+                      env.NEXT_PUBLIC_SITE_URL +
+                      '/' +
+                      env.NEXT_PUBLIC_STORAGE_PATH +
+                      '/' +
+                      imageSrc
+                    }
                     priority
                     width={1300}
                     height={630}
@@ -188,7 +195,13 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
               }}
               selected={index === selectedIndex}
               index={index}
-              imageSrc={imageSrc}
+              imageSrc={
+                env.NEXT_PUBLIC_SITE_URL +
+                '/' +
+                env.NEXT_PUBLIC_STORAGE_PATH +
+                '/' +
+                imageSrc
+              }
             />
           ))}
         </div>

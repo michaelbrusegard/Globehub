@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
 import Schedule from '@material-symbols/svg-400/outlined/schedule.svg';
@@ -114,7 +115,13 @@ function DestinationCard({ destination, order }: DestinationCardProps) {
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
             alt={t('imageOf') + ' ' + destination.name}
-            src={destination.images[0]}
+            src={
+              env.NEXT_PUBLIC_SITE_URL +
+              '/' +
+              env.NEXT_PUBLIC_STORAGE_PATH +
+              '/' +
+              destination.images[0]
+            }
             sizes='(max-width: 768px) 100vw, 33vw'
             fill
             priority

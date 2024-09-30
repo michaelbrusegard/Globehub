@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import Favorite from '@material-symbols/svg-400/outlined/favorite.svg';
 import HotelClass from '@material-symbols/svg-400/outlined/hotel_class.svg';
 import Visibility from '@material-symbols/svg-400/outlined/visibility.svg';
@@ -45,7 +46,13 @@ function DestinationTabCard({ destination, t }: DestinationTabCardProps) {
           className='aspect-video h-28 object-cover object-center'
           as={NextImage}
           alt={t.imageOf + ' ' + destination.name}
-          src={destination.images[0]}
+          src={
+            env.NEXT_PUBLIC_SITE_URL +
+            '/' +
+            env.NEXT_PUBLIC_STORAGE_PATH +
+            '/' +
+            destination.images[0]
+          }
           width={199}
           height={112}
         />

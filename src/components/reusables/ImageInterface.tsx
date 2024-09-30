@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import Close from '@material-symbols/svg-400/outlined/close.svg';
 import { Button, Image, type ImageProps } from '@nextui-org/react';
 import NextImage from 'next/image';
@@ -23,7 +24,13 @@ function ImageInterface({
         className='aspect-video h-36 object-cover object-center'
         as={NextImage}
         alt={t.uploadedImage}
-        src={imageUrl}
+        src={
+          env.NEXT_PUBLIC_SITE_URL +
+          '/' +
+          env.NEXT_PUBLIC_STORAGE_PATH +
+          '/' +
+          imageUrl
+        }
         width={228}
         height={128}
         {...props}
