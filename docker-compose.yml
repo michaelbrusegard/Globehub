@@ -25,7 +25,9 @@ services:
       timeout: 30s
       retries: 3
     networks:
-      - nginx_default
+      nginx_default:
+        aliases:
+          - globehub-db
   s3:
     image: bitnami/minio:2024
     restart: unless-stopped
@@ -42,7 +44,9 @@ services:
       timeout: 5s
       retries: 2
     networks:
-      - nginx_default
+      nginx_default:
+        aliases:
+          - globehub-s3
 networks:
   nginx_default:
     external: true
