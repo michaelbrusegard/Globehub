@@ -1,18 +1,19 @@
 services:
   app:
-    restart: unless-stopped
-    build:
-      context: .
-      args:
-        NODE_ENV: ${NODE_ENV}
+    build: .
     depends_on:
-      - db
-      - s3
-    ports:
-      - '3069:3000'
-  db:
+      db:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
     restart: unless-stopped
+    ports:
+      - '3000:3000'
+    # networks:
+    # - nginx_default
+  db:
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -20,16 +21,26 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    ports:
-      - '5469:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $DATABASE_USER -d $DATABASE_NAME']
+      interval: 30s
+      timeout: 30s
+      retries: 3
   s3:
-    restart: unless-stopped
     image: bitnami/minio:2024
+    restart: unless-stopped
     environment:
       MINIO_ROOT_USER: ${STORAGE_USER}
       MINIO_ROOT_PASSWORD: ${STORAGE_PASSWORD}
       MINIO_DEFAULT_BUCKETS: ${STORAGE_NAME}
     volumes:
       - ./data/s3:/bitnami/minio/data
-    ports:
-      - '9069:9000'
+    healthcheck:
+      test: timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
+      start_period: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 2
+networks:
+  nginx_default:
+    external: true

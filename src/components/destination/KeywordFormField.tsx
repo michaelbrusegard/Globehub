@@ -18,7 +18,7 @@ type KeywordFormFieldProps = {
   allKeywords: string[];
   setKeywords: (keywords: string[]) => void;
   handleBlur: () => void;
-  errorMessage: string | false | undefined;
+  errorMessage: string | false | null | undefined;
   isInvalid: boolean;
   t: {
     keywordsLabel: string;

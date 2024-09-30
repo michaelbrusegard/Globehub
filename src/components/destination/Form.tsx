@@ -112,7 +112,7 @@ function Form({
   worldRegions,
   t,
 }: FormProps) {
-  const coordinates = destination?.location.slice(1, -1).split(',');
+  const coordinates = destination?.location.slice(1, -1)?.split(',');
   const [longitude, latitude] = coordinates ?? ['', ''];
 
   const { Field, handleSubmit, useStore } = useForm({
@@ -173,8 +173,7 @@ function Form({
             value={state.value}
             errorMessage={
               submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0] &&
               state.meta.errors[0].split(', ')[0]
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -212,8 +211,7 @@ function Form({
               onBlur={handleBlur}
               errorMessage={
                 submissionAttempts > 0 &&
-                state.meta.errors &&
-                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0] &&
                 state.meta.errors[0].split(', ')[0]
               }
               isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -249,16 +247,16 @@ function Form({
               size='md'
               label={t.latitude}
               placeholder={t.latitudePlaceholder}
-              type='number'
+              type='text'
               onChange={(e) => {
+                e.target.value = e.target.value.replace(',', '.');
                 handleChange(e.target.value);
               }}
               onBlur={handleBlur}
               value={state.value}
               errorMessage={
                 submissionAttempts > 0 &&
-                state.meta.errors &&
-                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0] &&
                 state.meta.errors[0].split(', ')[0]
               }
               isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -286,16 +284,16 @@ function Form({
               size='md'
               placeholder={t.longitudePlaceholder}
               label={t.longitude}
-              type='number'
+              type='text'
               onChange={(e) => {
+                e.target.value = e.target.value.replace(',', '.');
                 handleChange(e.target.value);
               }}
               onBlur={handleBlur}
               value={state.value}
               errorMessage={
                 submissionAttempts > 0 &&
-                state.meta.errors &&
-                typeof state.meta.errors[0] === 'string' &&
+                state.meta.errors[0] &&
                 state.meta.errors[0].split(', ')[0]
               }
               isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -335,8 +333,7 @@ function Form({
             description={t.youCanUseMarkdown}
             errorMessage={
               submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0] &&
               state.meta.errors[0].split(', ')[0]
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -375,8 +372,7 @@ function Form({
             description={t.youCanUseMarkdown}
             errorMessage={
               submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0] &&
               state.meta.errors[0].split(', ')[0]
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}
@@ -420,8 +416,7 @@ function Form({
             }}
             errorMessage={
               submissionAttempts > 0 &&
-              state.meta.errors &&
-              typeof state.meta.errors[0] === 'string' &&
+              state.meta.errors[0] &&
               state.meta.errors[0].split(', ')[0]
             }
             isInvalid={submissionAttempts > 0 && state.meta.errors.length > 0}

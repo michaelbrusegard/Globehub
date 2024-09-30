@@ -38,11 +38,11 @@ export default async function Home({
   const worldRegions: {
     enumlabel: string;
   }[] = await sql`
-    SELECT enumlabel 
-    FROM pg_enum 
+    SELECT enumlabel
+    FROM pg_enum
     WHERE enumtypid = (
-      SELECT oid 
-      FROM pg_type 
+      SELECT oid
+      FROM pg_type
       WHERE typname = 'world_regions'
     )
   `;

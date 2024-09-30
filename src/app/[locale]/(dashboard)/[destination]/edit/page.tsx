@@ -56,8 +56,8 @@ export default async function EditDestination({
   }
 
   const [author]: User[] = await sql`
-    SELECT * 
-    FROM users 
+    SELECT *
+    FROM users
     WHERE id = ${destination.userId}
   `;
 
@@ -72,11 +72,11 @@ export default async function EditDestination({
   const worldRegions: {
     enumlabel: string;
   }[] = await sql`
-    SELECT enumlabel 
-    FROM pg_enum 
+    SELECT enumlabel
+    FROM pg_enum
     WHERE enumtypid = (
-      SELECT oid 
-      FROM pg_type 
+      SELECT oid
+      FROM pg_type
       WHERE typname = 'world_regions'
     )
   `;
@@ -96,7 +96,7 @@ export default async function EditDestination({
   );
 
   const result: { name: string }[] = await sql`
-    SELECT name 
+    SELECT name
     FROM keywords
   `;
 
