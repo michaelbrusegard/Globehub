@@ -5,7 +5,6 @@ import { GoHomeButton } from '@/components/error/GoHomeButton';
 
 export default function NotFound() {
   const t = useTranslations('error');
-  throw new Error('Not found');
   return (
     <div className='flex min-h-screen flex-col items-center justify-center px-4'>
       <HardDrive className='mb-6 size-16 text-primary xs:mb-8 xs:size-24' />
