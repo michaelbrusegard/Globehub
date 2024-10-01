@@ -1,3 +1,5 @@
+'use client';
+
 import HardDrive from '@material-symbols/svg-400/outlined/hard_drive.svg';
 import { Button } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
