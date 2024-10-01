@@ -39,8 +39,6 @@ async function ReviewSection({ user, destination }: ReviewSectionProps) {
     WHERE destination_id = ${destination.id};
   `;
 
-  console.log(totalReviews);
-
   const initialReviews: Review[] = totalReviews?.count
     ? await sql`
     SELECT *

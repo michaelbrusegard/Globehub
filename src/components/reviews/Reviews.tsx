@@ -46,6 +46,8 @@ function Reviews({
     setPage(2);
   }, [initialReviews, initialAuthors]);
 
+  console.log(totalReviews);
+
   if (totalReviews === 0) {
     return <span className='italic text-default-500'>{t.noReviews}</span>;
   }
@@ -57,7 +59,6 @@ function Reviews({
 
       setReviews((prevReviews) => [...prevReviews, ...newReviews]);
       setAuthors((prevAuthors) => [...prevAuthors, ...newAuthors]);
-
       setPage((prevPage) => prevPage + 1);
     });
   }
