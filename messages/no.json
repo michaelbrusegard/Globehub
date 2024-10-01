@@ -22,6 +22,14 @@
     "profileMenu": "Profilmeny",
     "chooseOption": "Velg et alternativ"
   },
+  "error": {
+    "notFound": "404 - Side ikke funnet",
+    "notFoundDescription": "Siden du forsøkte å nå finnes ikke.",
+    "serverError": "500 - Uventet serverfeil",
+    "serverErrorDescription": "En uventet feil oppstod. Prøv igjen senere.",
+    "goToHome": "Gå til startsiden"
+
+  },
   "signIn": {
     "signInWith": "Logg inn med {provider}"
   },
@@ -67,7 +75,7 @@
     "noKeywordsFound": "Ingen nøkkelord funnet.",
     "orderDestinationsBy": "Sorter destinasjoner etter",
     "order": "Rangering",
-    "orderCriteriaEnum": "{criteria, select, rating {Vurdering} alphabetic {Alfabetisk} newest {Nyeste} views {Visninger} favorite {favoritt} other {Ukjent rangering}}",
+    "orderCriteriaEnum": "{criteria, select, rating {Vurdering} alphabetic {Alfabetisk} newest {Nyeste} views {Visninger} favorite {Favoritt} other {Ukjent rangering}}",
     "views": "Visninger",
     "favorites": "Favoritter",
     "imageOf": "Bilde av"
