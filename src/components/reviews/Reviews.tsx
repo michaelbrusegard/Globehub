@@ -57,15 +57,9 @@ function Reviews({
     });
   }
 
-  if (
-    totalReviews === 0 ||
-    totalReviews === undefined ||
-    totalReviews === null
-  ) {
-    return <span className='italic text-default-500'>{t.noReviews}</span>;
-  }
-
-  return (
+  return totalReviews === 0 ? (
+    <span className='italic text-default-500'>{t.noReviews}</span>
+  ) : (
     <>
       <ul className='flex flex-col gap-2'>
         {reviews.map((review) => {
