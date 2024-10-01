@@ -31,7 +31,7 @@ const config = {
       },
       {
         protocol: 'https',
-        hostname: 'tile.openstreetmap.org',
+        hostname: 'b.tile.openstreetmap.org',
       },
       {
         protocol: 'https',

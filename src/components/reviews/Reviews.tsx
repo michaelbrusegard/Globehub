@@ -46,6 +46,12 @@ function Reviews({
     setPage(2);
   }, [initialReviews, initialAuthors]);
 
+  console.log(totalReviews);
+
+  if (totalReviews === 0) {
+    return <span className='italic text-default-500'>{t.noReviews}</span>;
+  }
+
   async function fetchReviews() {
     startTransition(async () => {
       const { reviews: newReviews, authors: newAuthors } =
@@ -57,9 +63,7 @@ function Reviews({
     });
   }
 
-  return totalReviews === 0 ? (
-    <span className='italic text-default-500'>{t.noReviews}</span>
-  ) : (
+  return (
     <>
       <ul className='flex flex-col gap-2'>
         {reviews.map((review) => {
