@@ -23,10 +23,6 @@ const config = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cloudflare-ipfs.com',
-      },
-      {
-        protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
       {
@@ -35,11 +31,7 @@ const config = {
       },
       {
         protocol: 'https',
-        hostname: 'loremflickr.com',
-      },
-      {
-        protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_SITE_URL ?? '',
+        hostname: 'globehub.michaelbrusegard.com',
       },
     ],
   },
