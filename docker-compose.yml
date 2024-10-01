@@ -8,7 +8,9 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - nginx_default
+      nginx_default:
+        aliases:
+          - globehub-app
   db:
     image: postgres:15
     restart: unless-stopped

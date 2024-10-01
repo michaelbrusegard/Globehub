@@ -40,7 +40,7 @@ function FilterCard({ destination, worldRegions }: FilterCardProps) {
             className='object-cover object-center transition-transform duration-150 group-hover:scale-125'
             as={NextImage}
             alt={t('imageOf') + ' ' + destination.name}
-            src={env.NEXT_PUBLIC_SITE_URL + '/' + destination.images[0]}
+            src={env.NEXT_PUBLIC_STORAGE_URL + '/' + destination.images[0]}
             sizes='(max-width: 768px) 100vw, 33vw'
             fill
             removeWrapper

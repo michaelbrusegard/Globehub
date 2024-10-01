@@ -86,7 +86,7 @@ function ReviewCard({
               className='aspect-video h-28 object-cover object-center'
               as={NextImage}
               alt={t.reviewImage}
-              src={env.NEXT_PUBLIC_SITE_URL + '/' + review.image}
+              src={env.NEXT_PUBLIC_STORAGE_URL + '/' + review.image}
               width={199}
               height={112}
             />

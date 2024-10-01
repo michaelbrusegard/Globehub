@@ -168,7 +168,7 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
                     radius='none'
                     as={NextImage}
                     alt={destination.name + ' ' + index}
-                    src={env.NEXT_PUBLIC_SITE_URL + '/' + imageSrc}
+                    src={env.NEXT_PUBLIC_STORAGE_URL + '/' + imageSrc}
                     priority
                     width={1300}
                     height={630}
@@ -189,7 +189,7 @@ function ImageCarousel({ className, destination }: ImageCarouselProps) {
               }}
               selected={index === selectedIndex}
               index={index}
-              imageSrc={env.NEXT_PUBLIC_SITE_URL + '/' + imageSrc}
+              imageSrc={env.NEXT_PUBLIC_STORAGE_URL + '/' + imageSrc}
             />
           ))}
         </div>

@@ -121,7 +121,7 @@ function ImageFormField({
                   imageUrl={
                     imageFile
                       ? URL.createObjectURL(imageFile)
-                      : env.NEXT_PUBLIC_SITE_URL + imageUrl
+                      : env.NEXT_PUBLIC_STORAGE_URL + imageUrl
                   }
                   onPress={() => {
                     setImageUrl('');

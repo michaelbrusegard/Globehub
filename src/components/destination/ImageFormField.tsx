@@ -174,7 +174,7 @@ function ImageFormField({
             {imageUrls.map((image) => (
               <ImageInterface
                 key={image}
-                imageUrl={env.NEXT_PUBLIC_SITE_URL + '/' + image}
+                imageUrl={env.NEXT_PUBLIC_STORAGE_URL + '/' + image}
                 onPress={() => {
                   updateState(
                     imageFiles,
