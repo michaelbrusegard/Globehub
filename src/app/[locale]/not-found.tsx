@@ -1,10 +1,7 @@
-'use client';
-
 import HardDrive from '@material-symbols/svg-400/outlined/hard_drive.svg';
-import { Button } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 
-import { Link } from '@/lib/navigation';
+import { GoHomeButton } from '@/components/error/GoHomeButton';
 
 export default function NotFound() {
   const t = useTranslations('error');
@@ -17,9 +14,7 @@ export default function NotFound() {
       <p className='mb-6 text-lg text-default-200 xs:mb-8 xs:text-xl'>
         {t('notFoundDescription')}
       </p>
-      <Button className='w-full xs:w-auto' as={Link} href='/'>
-        {t('goToHome')}
-      </Button>
+      <GoHomeButton t={{ goToHome: t('goToHome') }} />
     </div>
   );
 }

@@ -1,11 +1,10 @@
 'use client';
 
 import Warning from '@material-symbols/svg-400/outlined/warning.svg';
-import { Button } from '@nextui-org/react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
-import { Link } from '@/lib/navigation';
+import { GoHomeButton } from '@/components/error/GoHomeButton';
 
 export default function Error({ error }: { error: Error }) {
   const t = useTranslations('error');
@@ -21,9 +20,7 @@ export default function Error({ error }: { error: Error }) {
       <p className='mb-6 text-lg text-default-200 xs:mb-8 xs:text-xl'>
         {t('serverErrorDescription')}
       </p>
-      <Button className='w-full xs:w-auto' as={Link} href='/'>
-        {t('goToHome')}
-      </Button>
+      <GoHomeButton t={{ goToHome: t('goToHome') }} />
     </div>
   );
 }
