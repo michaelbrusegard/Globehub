@@ -31,6 +31,10 @@ const config = {
       },
       {
         protocol: 'https',
+        hostname: 'tile.openstreetmap.org',
+      },
+      {
+        protocol: 'https',
         hostname: 'globehub.michaelbrusegard.com',
       },
     ],

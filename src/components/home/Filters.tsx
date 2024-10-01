@@ -65,7 +65,7 @@ function Filters({ keywords, worldRegions, t }: FilterProps) {
     <>
       <div className='mb-2 flex flex-col gap-2 sm:flex-row'>
         <Select
-          className='w-2/3'
+          className='w-full sm:w-2/3'
           label={t.worldRegion}
           placeholder={t.selectWorldRegion}
           size='sm'

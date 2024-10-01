@@ -46,12 +46,6 @@ function Reviews({
     setPage(2);
   }, [initialReviews, initialAuthors]);
 
-  console.log(totalReviews);
-
-  if (totalReviews === 0) {
-    return <span className='italic text-default-500'>{t.noReviews}</span>;
-  }
-
   async function fetchReviews() {
     startTransition(async () => {
       const { reviews: newReviews, authors: newAuthors } =
@@ -61,6 +55,14 @@ function Reviews({
       setAuthors((prevAuthors) => [...prevAuthors, ...newAuthors]);
       setPage((prevPage) => prevPage + 1);
     });
+  }
+
+  if (
+    totalReviews === 0 ||
+    totalReviews === undefined ||
+    totalReviews === null
+  ) {
+    return <span className='italic text-default-500'>{t.noReviews}</span>;
   }
 
   return (
