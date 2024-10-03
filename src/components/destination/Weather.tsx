@@ -9,7 +9,7 @@ import Thermostat from '@material-symbols/svg-400/outlined/thermostat.svg';
 import Umbrella from '@material-symbols/svg-400/outlined/umbrella.svg';
 import { getTranslations } from 'next-intl/server';
 
-import { type WeatherCache, type WeatherData, sql } from '@/lib/db';
+import { type WeatherCache, type WeatherData, getSql } from '@/lib/db';
 
 import { WeatherIcon } from '@/components/destination/WeatherIcon';
 import {
@@ -31,6 +31,7 @@ function getWindDirection(deg: number) {
 
 async function Weather({ locale, location, destinationId }: WeatherProps) {
   const t = await getTranslations('destination.weather');
+  const sql = getSql();
   const coordinates = location.slice(1, -1).split(',');
   const [longitude, latitude] = coordinates;
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${env.OPEN_WEATHER_API_KEY}&units=metric&lang=${locale}`;
@@ -45,9 +46,9 @@ async function Weather({ locale, location, destinationId }: WeatherProps) {
       const data: WeatherData = (await response.json()) as WeatherData;
 
       [weather] = await sql`
-        INSERT INTO weather_caches (destination_id, weather_data, created_at) 
-        VALUES (${destinationId}, ${JSON.stringify(data)}, NOW()) 
-        ON CONFLICT (destination_id) DO UPDATE 
+        INSERT INTO weather_caches (destination_id, weather_data, created_at)
+        VALUES (${destinationId}, ${JSON.stringify(data)}, NOW())
+        ON CONFLICT (destination_id) DO UPDATE
         SET weather_data = ${JSON.stringify(data)}, created_at = NOW()
         RETURNING *
       `;

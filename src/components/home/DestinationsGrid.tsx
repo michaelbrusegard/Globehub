@@ -1,4 +1,4 @@
-import { type Destination, sql } from '@/lib/db';
+import { type Destination, getSql } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { seededRandom } from '@/lib/utils';
 
@@ -13,6 +13,8 @@ async function DestinationsGrid({
   page: number;
   pageSize: number;
 }) {
+  const sql = getSql();
+
   const destinations: (Destination & {
     averageRating: number;
     favoriteCount: number;
@@ -28,7 +30,7 @@ async function DestinationsGrid({
       ) favorites ON destinations.id = favorites.destination_id
       GROUP BY destinations.id, favorites.favorite_count
     ) as subquery
-    ORDER BY 
+    ORDER BY
       CASE WHEN ${order} = 'rating' THEN average_rating END DESC,
       CASE WHEN ${order} = 'alphabetic' THEN name END ASC,
       CASE WHEN ${order} = 'newest' THEN created_at END DESC,

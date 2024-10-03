@@ -11,7 +11,7 @@ import NextImage from 'next/image';
 import readingTime from 'reading-time';
 
 import { type User } from '@/lib/db';
-import { type Destination, sql } from '@/lib/db';
+import { type Destination, getSql } from '@/lib/db';
 import { cn, getInitials } from '@/lib/utils';
 
 import { EditButton } from '@/components/destination/EditButton';
@@ -100,6 +100,7 @@ function SubHeader({ className, user, author, destination }: SubHeaderProps) {
 
 async function Buttons({ user, author, destination, t }: ButtonProps) {
   const locale = await getLocale();
+  const sql = getSql();
 
   if (!user) {
     return null;
@@ -107,8 +108,8 @@ async function Buttons({ user, author, destination, t }: ButtonProps) {
 
   const [result]: { exists: boolean }[] = await sql`
     SELECT EXISTS (
-      SELECT 1 
-      FROM user_favorites 
+      SELECT 1
+      FROM user_favorites
       WHERE user_id = ${user.id} AND destination_id = ${destination.id}
     ) as "exists"
   `;

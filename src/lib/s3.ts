@@ -35,7 +35,7 @@ const destinationsBucket = buckets[0]!;
 const reviewsBucket = buckets[1]!;
 
 export {
-  getS3 as s3,
+  getS3,
   destinationsBucket,
   reviewsBucket,
   PutObjectCommand,

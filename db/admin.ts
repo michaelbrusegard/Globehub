@@ -1,4 +1,6 @@
-import { sql } from '@/lib/db';
+import { getSql } from '@/lib/db';
+
+const sql = getSql();
 
 async function toggleUserRole(email: string) {
   const [user]: { role: string }[] = await sql`

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type User, sql } from '@/lib/db';
+import { type Destination, type User, getSql } from '@/lib/db';
 
 import { AverageRating } from '@/components/destination/AverageRating';
 import { Map } from '@/components/destination/DynamicMap';
@@ -22,6 +22,7 @@ export async function generateMetadata({
   params: { destination: string; locale: string };
 }) {
   if (!Number.isInteger(Number(params.destination))) notFound();
+  const sql = getSql();
 
   const [result]: { name: string }[] = await sql`
     SELECT name
@@ -43,6 +44,7 @@ export default async function Destination({
 }) {
   unstable_setRequestLocale(params.locale);
   const t = await getTranslations('destination');
+  const sql = getSql();
   const session = await auth();
   const user = session?.user;
 

@@ -4,13 +4,13 @@ import { revalidatePath } from 'next/cache';
 import NextImage from 'next/image';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type Review, sql } from '@/lib/db';
+import { type Destination, type Review, getSql } from '@/lib/db';
 import { redirect } from '@/lib/navigation';
 import {
   DeleteObjectCommand,
   destinationsBucket,
+  getS3,
   reviewsBucket,
-  s3,
 } from '@/lib/s3';
 import { validateProfile } from '@/lib/validation';
 
@@ -38,6 +38,8 @@ export default async function Profile({
   unstable_setRequestLocale(locale);
   const t = await getTranslations('profile');
   const session = await auth();
+  const sql = getSql();
+  const s3 = getS3();
   const user = session?.user;
 
   if (!user) {

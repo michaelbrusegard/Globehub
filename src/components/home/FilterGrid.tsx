@@ -1,4 +1,4 @@
-import { type Destination, sql } from '@/lib/db';
+import { type Destination, getSql } from '@/lib/db';
 
 import { FilterCard } from '@/components/home/FilterCard';
 
@@ -15,6 +15,8 @@ async function FilterGrid({
   pageSize,
   worldRegions,
 }: FilterGridProps) {
+  const sql = getSql();
+
   let filteredDestinations: (Destination & { keywords: string[] })[] = [];
 
   if (!filterWorldRegion && !filterKeywords) {
