@@ -1,4 +1,3 @@
-import { env } from '@/env';
 import {
   Avatar,
   Card,
