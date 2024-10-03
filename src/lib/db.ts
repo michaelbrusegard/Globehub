@@ -1,22 +1,14 @@
 import { env } from '@/env';
-import postgres, { type Sql } from 'postgres';
+import postgres from 'postgres';
 
-let sql: Sql | undefined;
-
-function getSql() {
-  if (!sql) {
-    sql = postgres({
-      host: env.DATABASE_HOST,
-      port: Number(env.DATABASE_PORT),
-      database: env.DATABASE_NAME,
-      username: env.DATABASE_USER,
-      password: env.DATABASE_PASSWORD,
-      transform: postgres.toCamel,
-    });
-  }
-
-  return sql;
-}
+const sql = postgres({
+  host: env.DATABASE_HOST,
+  port: Number(env.DATABASE_PORT),
+  database: env.DATABASE_NAME,
+  username: env.DATABASE_USER,
+  password: env.DATABASE_PASSWORD,
+  transform: postgres.toCamel,
+});
 
 type Role = 'user' | 'admin';
 
@@ -126,7 +118,7 @@ type WeatherCache = {
 };
 
 export {
-  getSql as sql,
+  sql,
   type User,
   type Destination,
   type Review,
