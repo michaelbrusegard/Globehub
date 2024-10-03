@@ -1,12 +1,12 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 import { revalidatePath } from 'next/cache';
 
-import { type Destination, type Review, type User, getSql } from '@/lib/db';
+import { type Destination, type Review, type User, sql } from '@/lib/db';
 import {
   DeleteObjectCommand,
   PutObjectCommand,
-  getS3,
   reviewsBucket,
+  s3,
 } from '@/lib/s3';
 import { validateReview } from '@/lib/validation';
 
@@ -21,8 +21,6 @@ type ReviewSectionProps = {
 async function ReviewSection({ user, destination }: ReviewSectionProps) {
   const t = await getTranslations('reviews');
   const locale = await getLocale();
-  const s3 = getS3();
-  const sql = getSql();
   const pageSize = 5;
 
   let review: Review | undefined = undefined;

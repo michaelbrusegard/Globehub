@@ -1,6 +1,4 @@
-import { getSql } from '@/lib/db';
-
-const sql = getSql();
+import { sql } from '@/lib/db';
 
 async function resetDatabase() {
   await sql`TRUNCATE TABLE verification_token RESTART IDENTITY CASCADE`;

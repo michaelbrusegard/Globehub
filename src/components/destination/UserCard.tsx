@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import {
   Avatar,
   Card,
@@ -7,12 +8,11 @@ import {
 } from '@nextui-org/react';
 import { getFormatter, getTranslations } from 'next-intl/server';
 
-import { getSql } from '@/lib/db';
+import { sql } from '@/lib/db';
 import type { User } from '@/lib/db';
 
 async function UserCard({ user }: { user: User }) {
   const t = await getTranslations('destination');
-  const sql = getSql();
   const format = await getFormatter();
   const [result]: { count: number }[] = await sql`
     SELECT COUNT(*)

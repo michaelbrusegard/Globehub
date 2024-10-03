@@ -2,13 +2,13 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
-import { type Destination, type Keyword, type User, getSql } from '@/lib/db';
+import { type Destination, type Keyword, type User, sql } from '@/lib/db';
 import {
   DeleteObjectCommand,
   PutObjectCommand,
   destinationsBucket,
-  getS3,
   reviewsBucket,
+  s3,
 } from '@/lib/s3';
 import { validateDestination } from '@/lib/validation';
 
@@ -34,8 +34,6 @@ export default async function EditDestination({
   unstable_setRequestLocale(params.locale);
   const t = await getTranslations('destination.write');
   const session = await auth();
-  const sql = getSql();
-  const s3 = getS3();
   const user = session?.user;
 
   const [destination]: (Destination & {

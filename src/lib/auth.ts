@@ -6,7 +6,7 @@ import google from 'next-auth/providers/google';
 import type postgres from 'postgres';
 
 import { defaultLocale, pathnames } from '@/lib/config';
-import { type User, getSql } from '@/lib/db';
+import { type User, sql } from '@/lib/db';
 
 declare module 'next-auth' {
   interface Session {
@@ -26,7 +26,6 @@ function createPgWrapper(sqlClient: postgres.Sql<Record<string, unknown>>) {
   };
 }
 
-const sql = getSql();
 const client = createPgWrapper(sql);
 
 export const authConfig = {

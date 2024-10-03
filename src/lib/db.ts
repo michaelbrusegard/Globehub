@@ -126,7 +126,7 @@ type WeatherCache = {
 };
 
 export {
-  getSql,
+  getSql as sql,
   type User,
   type Destination,
   type Review,

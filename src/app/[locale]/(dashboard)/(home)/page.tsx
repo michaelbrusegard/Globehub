@@ -7,7 +7,7 @@ import {
 } from 'nuqs/server';
 import { Suspense } from 'react';
 
-import { type Keyword, getSql } from '@/lib/db';
+import { type Keyword, sql } from '@/lib/db';
 
 import { DestinationsGrid } from '@/components/home/DestinationsGrid';
 import { DestinationsGridSkeleton } from '@/components/home/DestinationsGridSkeleton';
@@ -29,7 +29,6 @@ export default async function Home({
 }) {
   unstable_setRequestLocale(locale);
   const t = await getTranslations('home');
-  const sql = getSql();
 
   const allKeywords: Keyword[] = await sql`
     SELECT * FROM keywords

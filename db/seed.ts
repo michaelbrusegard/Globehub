@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { getSql } from '@/lib/db';
-
-const sql = getSql();
+import { sql } from '@/lib/db';
 
 const SEED_RECORD_COUNT = 32;
 const WORLD_REGIONS = [

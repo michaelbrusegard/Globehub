@@ -2,8 +2,8 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { notFound, redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth';
-import { getSql } from '@/lib/db';
-import { PutObjectCommand, destinationsBucket, getS3 } from '@/lib/s3';
+import { sql } from '@/lib/db';
+import { PutObjectCommand, destinationsBucket, s3 } from '@/lib/s3';
 import { validateDestination } from '@/lib/validation';
 
 import { Form } from '@/components/destination/Form';
@@ -28,8 +28,6 @@ export default async function NewDestination({
   unstable_setRequestLocale(params.locale);
   const t = await getTranslations('destination.write');
   const session = await auth();
-  const sql = getSql();
-  const s3 = getS3();
   const user = session?.user;
 
   if (!user) {
