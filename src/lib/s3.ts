@@ -6,14 +6,14 @@ import {
   type S3ClientConfig,
 } from '@aws-sdk/client-s3';
 
-// const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
+const endpoint: string = 'http://' + env.STORAGE_HOST + ':' + env.STORAGE_PORT;
 
 const config: S3ClientConfig = {
   credentials: {
     accessKeyId: env.STORAGE_USER,
     secretAccessKey: env.STORAGE_PASSWORD,
   },
-  endpoint: env.NEXT_PUBLIC_STORAGE_URL,
+  endpoint: endpoint,
   forcePathStyle: true,
   region: 'eu-north-1',
 };
