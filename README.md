@@ -1,5 +1,62 @@
 # Globehub
 
+## Table of Contents
+
+- [Requirements](#requirements)
+  - [Extra requirements (arrived later)](#extra-requirements-arrived-later)
+- [Documentation](#documentation)
+- [Screenshots](#screenshots)
+- [What I Have Learned](#what-i-have-learned)
+- [Development Setup](#development-setup)
+  - [Build](#build)
+- [Docker](#docker)
+  - [Local Database Setup](#local-database-setup)
+  - [Local Storage](#local-storage)
+  - [Dockerized Build](#dockerized-build)
+- [Check Linting and Formatting](#check-linting-and-formatting)
+- [Commit Messages](#commit-messages)
+- [Code Quality](#code-quality)
+- [Scrum](#scrum)
+
+## Requirements
+
+- [x] Admin should be able to add travel destinations to the service so that more travel destinations can be shared with the users of the service
+- [x] All who come to the service should get a nice and clear page of travel destinations
+- [x] Users should be able to have their own user profile
+- [x] Dark mode should be offered to users who prefer this
+- [ ] If this becomes a commercial product, the service will offer space on the website for advertising
+- [x] Logged in users can leave a review of travel destinations. In this connection, it must also be possible to see an overview of reviews one has made and change these afterwards if one wishes
+- [x] Logged in users should be able to filter travel destinations so that they only see travel destinations that suit the user's preferences
+- [x] Logged in users should be able to see more detailed information about a travel destination
+- [x] Logged in users should have the opportunity to mark travel destinations they have been to
+
+### Extra requirements (arrived later)
+
+- [x] The weather at the travel destination now, so that users have some idea of temperature
+- [x] Users can add travel destination, and admin can delete unwanted destinations
+- [ ] Recommended for you, get a destination recommended based on your preferences through your interactions on the page (add favorite continent, things you have liked/favorites/commented)
+- [x] Admin should be able to delete and edit travel destinations (all fields)
+
+## Screenshots
+
+## What I Have Learned
+
+1. **Sometimes what is best for the project is not the best for the developer**.
+
+- Now I always wanted to use the best technologies for the product I am building, which is why we used Next.js, a Postgres database and s3 storage in Docker containers. But as the only experienced developer in the team, it was a bad decision to choose more intricate technologies when we could have just used Firebase. In the end, I feel like I learned a lot from this project, but because of these choices, I had to do almost all the work myself. Choosing a more complex stack was not beneficial for the grade either, but it was a good learning experience. Also scaling using Docker and a self-hosted database is much easier than using Firebase and way more realistic for a professional project.
+
+2. **You can't force someone to learn**.
+
+- To help teach the rest of the team, we had workshops and meetings where I tried to explain React and Next.js concepts to the team. I also showed how to implement a feature. But in the end, even with how much praise the team gave for these workshops it did not feel like it helped much. It does not really matter how many times I would explain and go through a concept if nobody was motivated enough to sit down and learn it alone. I think that most learning comes from reading documentation and trying and failing. I think this was very frustrating for everyone. Looking back I fee like this was caused by an issue in the course itself. Learning Scrum should not be done at the same time as learning web development.
+
+3. **We should have used an ORM**.
+
+- Now to somewhat ease the use of the database, I thought it was a good idea to omit the use of an ORM. The reason for this was to avoid yet another dependency the team had to learn. Also most team members had the database course at the same time so writing raw SQL would not be a problem I thought. However, I think this was not the best decision. Writing raw SQL can be hard since you do not get any help from the IDE in form of autocompletion and syntax highlighting and types. It is also hard to debug since you have to manually check the SQL statement and the result. Also I think I overestimated the skill level of the team when it comes to SQL.
+
+4. **Mutations and Queries should have been placed in separate files**.
+
+- Now to save time, instead of setting up an API layer we utilized the React 19 Server Components and Server Actions that Next.js provides. Now there is nothing inherently wrong with this approach, except maybe if you needed to use the same API for another app. But the way we did it was writing all the backend code directly in the server components and server actions where they were used. This lead to difficult to navigate code and repeated code in some places. Instead this should have been moved into its own folder with multiple files and functions for each query and mutation.
+
 ## Documentation
 
 Here is a list of documentation to get started:
