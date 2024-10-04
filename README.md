@@ -39,6 +39,14 @@
 
 ## Screenshots
 
+<img width="1656" alt="Screenshot 2024-10-04 at 05 40 20-min" src="https://github.com/user-attachments/assets/aea9a473-cb49-4d6f-b044-1f5fc739ad50">
+<img width="1656" alt="Screenshot 2024-10-04 at 05 35 15-min" src="https://github.com/user-attachments/assets/a1cb9ec0-29a6-40c5-9676-c8f6e8a0fe38">
+<img width="1656" alt="Screenshot 2024-10-04 at 05 34 45-min" src="https://github.com/user-attachments/assets/cc3f8fe7-c03f-43f0-a433-c8079c00ec24">
+<img width="1656" alt="Screenshot 2024-10-04 at 05 34 36-min" src="https://github.com/user-attachments/assets/bce4ef68-930e-49d0-9bcf-85ebb8ac4af2">
+<img width="1656" alt="Screenshot 2024-10-04 at 05 34 12-min" src="https://github.com/user-attachments/assets/52df8d0c-1dee-49e1-8433-967a0607b966">
+<img width="1656" alt="Screenshot 2024-10-04 at 05 33 49-min" src="https://github.com/user-attachments/assets/74c426e0-ca2a-43aa-b814-e7582e8f2ac3">
+![Tokyo  Globehub-min](https://github.com/user-attachments/assets/b7788153-dfc6-486b-9e25-cf8180d63be9)
+
 ## What I Have Learned
 
 1. **Sometimes what is best for the project is not the best for the developer**.
