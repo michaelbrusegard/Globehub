@@ -32,20 +32,19 @@ const config = {
     ],
   },
   output: 'standalone',
-  async redirects() {
-    return [
-      {
-        source: '/s3/:path*',
-        destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
-        statusCode: 301,
-      },
-      {
-        source: '/test-google',
-        destination: 'https://www.google.com',
-        statusCode: 301,
-      },
-    ];
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/s3/:path*',
+          destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
+          basePath: false,
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 
-export default withNextIntl(config);
+export default config;
