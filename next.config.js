@@ -36,6 +36,19 @@ const config = {
     ],
   },
   output: 'standalone',
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/s3/:path*',
+          destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
+          basePath: false,
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
 };
 
 export default withNextIntl(config);
