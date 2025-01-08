@@ -33,17 +33,13 @@ const config = {
   },
   output: 'standalone',
   async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/s3/:path*',
-          destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
-          basePath: false,
-        },
-      ],
-      afterFiles: [],
-      fallback: [],
-    };
+    return [
+      {
+        source: '/test',
+        destination: '/api/test',
+        basePath: false,
+      },
+    ];
   },
 };
 
