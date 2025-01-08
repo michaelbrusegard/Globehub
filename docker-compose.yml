@@ -8,9 +8,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      nginx_default:
-        aliases:
-          - globehub-app
+      - nginx_default
   db:
     image: postgres:15
     restart: unless-stopped
@@ -27,9 +25,7 @@ services:
       timeout: 30s
       retries: 3
     networks:
-      nginx_default:
-        aliases:
-          - globehub-db
+      - nginx_default
   s3:
     image: bitnami/minio:2024
     restart: unless-stopped
