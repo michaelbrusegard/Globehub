@@ -33,6 +33,7 @@ const config = {
   },
   output: 'standalone',
   async rewrites() {
+    console.log('REWRITES FUNCTION CALLED');
     return {
       beforeFiles: [
         {
@@ -47,4 +48,4 @@ const config = {
   },
 };
 
-export default config;
+export default withNextIntl(config);
