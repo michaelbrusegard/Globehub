@@ -29,10 +29,6 @@ const config = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'globehub.michaelbrusegard.com',
-      },
     ],
   },
   output: 'standalone',
