@@ -33,6 +33,11 @@ const config = {
   },
   output: 'standalone',
   async rewrites() {
+    console.log('Storage configuration:', {
+      host: process.env.STORAGE_HOST,
+      port: process.env.STORAGE_PORT,
+      fullUrl: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}`,
+    });
     return {
       beforeFiles: [
         {
