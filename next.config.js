@@ -40,11 +40,6 @@ const config = {
           destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
           basePath: false,
         },
-        {
-          source: '/test-google',
-          destination: 'https://www.google.com',
-          basePath: false,
-        },
       ],
       afterFiles: [],
       fallback: [],
