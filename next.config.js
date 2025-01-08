@@ -32,12 +32,17 @@ const config = {
     ],
   },
   output: 'standalone',
-  async rewrites() {
+  async redirects() {
     return [
       {
-        source: '/test',
-        destination: '/api/test',
-        basePath: false,
+        source: '/s3/:path*',
+        destination: `http://${process.env.STORAGE_HOST}:${process.env.STORAGE_PORT}/:path*`,
+        statusCode: 301,
+      },
+      {
+        source: '/test-google',
+        destination: 'https://www.google.com',
+        statusCode: 301,
       },
     ];
   },
