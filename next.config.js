@@ -33,7 +33,6 @@ const config = {
   },
   output: 'standalone',
   async rewrites() {
-    console.log('REWRITES FUNCTION CALLED');
     return {
       beforeFiles: [
         {
